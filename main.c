@@ -1,5 +1,6 @@
 #include <stdio.h>
+#include "lib/greet.h"
 
 int main(){
-    printf("Hello, world!");
+    greet("Bondowoso");
 }

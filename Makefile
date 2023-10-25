@@ -19,12 +19,22 @@ ID = $1
 ADT = $(call RECURSIVE_WILDCARD,lib/ADT,*.c,IGNORE_TEST)
 OBJ_ADT = $(call SRC_TO_OBJ,$(ADT))
 
-TEST_PATH = lib/adt/test
+TEST_PATH = lib/ADT/test
 TEST_BASE = $(TEST_PATH)/test.c
+TEST_BIN = bin/test
 OBJ_TEST_BASE = $(call SRC_TO_OBJ,$(TEST_BASE))
 
 TEST = $(call RECURSIVE_WILDCARD,lib/ADT,*_test.c,ID)
 OBJ_TEST = $(foreach f,$(TEST),$(call OBJ_FUN,$f))
+
+.PRECIOUS: bin/o/lib/ADT/test/test.o $(OBJ_TEST)
+
+$(TEST_BIN)/%: $(OBJ_TEST_BASE) $(OBJ_ADT) $(OBJ_PATH)/$(TEST_PATH)/%_test.o 
+	mkdir -p $(TEST_BIN)
+	$(CC) $(CFLAGS) -o $(TEST_BIN)/$* $(OBJ_TEST_BASE) $(OBJ_ADT) $(OBJ_PATH)/$(TEST_PATH)/$*_test.o
+
+%.test: $(TEST_BIN)/%
+	$(TEST_BIN)/$*
 
 $(OBJ_PATH)/%.o: %.c
 	mkdir -p $(@D)

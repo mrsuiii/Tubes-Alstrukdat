@@ -27,27 +27,27 @@ OBJ_TEST_BASE = $(call SRC_TO_OBJ,$(TEST_BASE))
 TEST = $(call RECURSIVE_WILDCARD,lib/ADT,*_test.c,ID)
 OBJ_TEST = $(foreach f,$(TEST),$(call OBJ_FUN,$f))
 
-.PRECIOUS: bin/o/lib/ADT/test/test.o $(OBJ_TEST)
-.PHONY: %.test build run clean all recompile
+.SECONDARY:
+.PHONY: build run clean all recompile
 
-$(TEST_BIN)/%: $(OBJ_TEST_BASE) $(OBJ_ADT) $(OBJ_PATH)/$(TEST_PATH)/%_test.o 
+$(TEST_BIN)/% : $(OBJ_PATH)/$(TEST_PATH)/%_test.o $(OBJ_TEST_BASE) $(OBJ_ADT) 
 	mkdir -p $(TEST_BIN)
 	$(CC) $(CFLAGS) -o $(TEST_BIN)/$* $(OBJ_TEST_BASE) $(OBJ_ADT) $(OBJ_PATH)/$(TEST_PATH)/$*_test.o
 
-$(OBJ_PATH)/%.o: %.c
+$(OBJ_PATH)/%.o : %.c
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(MAIN_OUT): $(OBJ_LIB)
+$(MAIN_OUT) :: $(OBJ_LIB)
 	$(CC) $(CFLAGS) -o $@ $(OBJ_LIB)
 
-%.test: $(TEST_BIN)/%
+%.test : $(TEST_BIN)/%
 	$(TEST_BIN)/$*
 
 build: $(MAIN_OUT)
 
 run:
-	./bin/main
+	$(MAIN_OUT)
 
 clean:
 	rm -rf $(BIN_PATH)

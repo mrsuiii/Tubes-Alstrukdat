@@ -23,13 +23,6 @@ Menggunakan Struktur-Struktur Data berbasis ADT (Abstact Data Types) yang sudah 
 - [Links](#links)
 - [Licensing](#licensing)
 
-## Quick Links
-- [Getting Started](#getting-started)
-- [Features](#features)
-- [Contributing](#contributing)
-- [Links](#links)
-- [Licensing](#licensing)
-
 ## External Links
 
 - [Link Drive Pusat](https://drive.google.com/drive/folders/1D6GTJ9Fq_8P79lhSrxI7DJDdBFtoojR0)
@@ -41,10 +34,10 @@ Menggunakan Struktur-Struktur Data berbasis ADT (Abstact Data Types) yang sudah 
 
 ## Instruction
 
-`make build`: To build from source to binary into bin/main  
-`make all`: Run binary directly after building  
-`make clean`: Remove all build generated files
-`make ADT.test`: Running test for ADT test file, for example (`make time.test`)
+`make build` : To build from source to binary into bin/main  
+`make all` : Run binary directly after building   
+`make clean` : Remove all build generated files  
+`make ADT.test` : Running test for ADT test file, for example ( `make time.test` )  
 
 <h4 align="center"><a href="#readme-top">back to top</a></h4>
 
@@ -64,9 +57,6 @@ description
 
 &ensp;&ensp;
 description
-<h4 align="center"><a href="#readme-top">back to top</a></h4>
-
-
 <h4 align="center"><a href="#readme-top">back to top</a></h4>
 
 ## Pembagian Tugas

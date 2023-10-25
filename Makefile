@@ -8,16 +8,17 @@ BIN_PATH = bin
 OBJ_PATH = $(BIN_PATH)/o
 
 
+FUNCTION_COMPOSITION = $(call $1,$(call $2,$3))
 RECURSIVE_WILDCARD=$(foreach f,$(wildcard $1$2),$(call $3,$f)) $(foreach d,$(wildcard $1*),$(call RECURSIVE_WILDCARD,$d/,$2,$3))
-ITERATE_SRC = $(call RECURSIVE_WILDCARD,,*.c,$1)
 
-ID = $1
-SRC_ALL = $(call ITERATE_SRC,ID)
-OBJ = $(OBJ_PATH)/$(patsubst %.c,%.o,$1) 
-OBJ_ALL = $(call ITERATE_SRC,OBJ)
+IGNORE_TEST = $(patsubst %test.c,,$1)
+OBJ_FUN = $(OBJ_PATH)/$(patsubst %.c,%.o,$1) 
+SRC_ALL = $(call RECURSIVE_WILDCARD,,*.c,IGNORE_TEST)
+OBJ_ALL = $(foreach f,$(SRC_ALL),$(call OBJ_FUN,$f))
+COMPILE_ALL = $(foreach f,$(SRC_ALL),$(call OBJ_FUN,$f) $f)
 
-COMPILE = $(OBJ) $1
-COMPILE_ALL = $(call ITERATE_SRC,COMPILE)
+test:
+	echo $(SRC_ALL)
 
 $(OBJ_PATH)/%.o: %.c
 	mkdir -p $(@D)

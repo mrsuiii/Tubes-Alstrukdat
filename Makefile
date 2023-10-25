@@ -28,13 +28,11 @@ TEST = $(call RECURSIVE_WILDCARD,lib/ADT,*_test.c,ID)
 OBJ_TEST = $(foreach f,$(TEST),$(call OBJ_FUN,$f))
 
 .PRECIOUS: bin/o/lib/ADT/test/test.o $(OBJ_TEST)
+.PHONY: %.test build run clean all recompile
 
 $(TEST_BIN)/%: $(OBJ_TEST_BASE) $(OBJ_ADT) $(OBJ_PATH)/$(TEST_PATH)/%_test.o 
 	mkdir -p $(TEST_BIN)
 	$(CC) $(CFLAGS) -o $(TEST_BIN)/$* $(OBJ_TEST_BASE) $(OBJ_ADT) $(OBJ_PATH)/$(TEST_PATH)/$*_test.o
-
-%.test: $(TEST_BIN)/%
-	$(TEST_BIN)/$*
 
 $(OBJ_PATH)/%.o: %.c
 	mkdir -p $(@D)
@@ -42,6 +40,9 @@ $(OBJ_PATH)/%.o: %.c
 
 $(MAIN_OUT): $(OBJ_LIB)
 	$(CC) $(CFLAGS) -o $@ $(OBJ_LIB)
+
+%.test: $(TEST_BIN)/%
+	$(TEST_BIN)/$*
 
 build: $(MAIN_OUT)
 
@@ -52,5 +53,5 @@ clean:
 	rm -rf $(BIN_PATH)
 
 all: build run
-force-all: cleanup all
+recompile: clean all
 

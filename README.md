@@ -13,9 +13,10 @@ Menggunakan Struktur-Struktur Data berbasis ADT (Abstact Data Types) yang sudah 
 | 13522086 |          Muhammad Atpur Rafif          |
 | 13522091 | Raden Francisco Trianto Bratadiningrat |
 | 13522093 |       Matthew Vladimir Hutabarat       |
-| 13522118 |       Berto Richardo Togatorop         |
+| 13522118 |        Berto Richardo Togatorop        |
 
 ## Quick Links
+
 - [Getting Started](#getting-started)
 - [Features](#features)
 - [Contributing](#contributing)
@@ -23,37 +24,43 @@ Menggunakan Struktur-Struktur Data berbasis ADT (Abstact Data Types) yang sudah 
 - [Licensing](#licensing)
 
 ## External Links
+
 - [Link Drive Pusat](https://drive.google.com/drive/folders/1D6GTJ9Fq_8P79lhSrxI7DJDdBFtoojR0)
 - [Link Spesifikasi](https://docs.google.com/document/d/1yy0SLsXEE0e-ZBxMSrd0Gz9AOSWqJw1trtTqDjeyfsk/edit)
 - [Link Pedoman](https://docs.google.com/document/d/1vnoqQK18ECL8PEAkYbjM-9g1MRGTI7hOLv6GKHlGnuc/edit)
 - [Link Data Kelompok](https://docs.google.com/spreadsheets/d/1Q_TMzWjDSr5ZXc-hv2KoGYySJbb_LyA7Z5_KCdIE6ko/edit#gid=1406958191)
 
 ## Getting Started
+
 ## Instruction
-`make build`: To build from source to binary into bin/main   
+
+`make build`: To build from source to binary into bin/main  
 `make all`: Run binary directly after building  
-`make clean`: Remove all build generated files  
+`make clean`: Remove all build generated files
+
 <h4 align="center"><a href="#readme-top">back to top</a></h4>
 
-
 ## Features
+
 ### 1. XXXXX
+
 &ensp;&ensp;
 description
+
 ### 2. XXXXX
+
 &ensp;&ensp;
 description
+
 ### 3. XXXXX
+
 &ensp;&ensp;
 description
+
 <h4 align="center"><a href="#readme-top">back to top</a></h4>
 
 ## Pembagian Tugas
-<style>
-    td {
-        text-align: center;
-    }
-</style>
+
 <table align="center">
 <tr>
     <td>No</td>
@@ -134,22 +141,20 @@ description
     <td></td>
 </tr>
 
-
 </table>
 <h4 align="center"><a href="#readme-top">back to top</a></h4>
-
 
 ## Contributing
 
 Jika Anda ingin berkontribusi atau melanjutkan perkembangan program, silahkan fork repository ini dan gunakan branch fitur.  
-Permintaan Pull sangat diperbolehkan dan diterima dengan hangat.  
-<h4 align="center"><a href="#readme-top">back to top</a></h4>
+Permintaan Pull sangat diperbolehkan dan diterima dengan hangat.
 
+<h4 align="center"><a href="#readme-top">back to top</a></h4>
 
 ## Licensing
 
 The code in this project is licensed under MIT license.  
-Code dalam projek ini berada di bawah lisensi MIT.  
+Code dalam projek ini berada di bawah lisensi MIT.
 
 <h4 align="center"><a href="#readme-top">back to top</a></h4>
 <br><br>

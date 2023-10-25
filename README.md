@@ -44,6 +44,7 @@ Menggunakan Struktur-Struktur Data berbasis ADT (Abstact Data Types) yang sudah 
 `make build`: To build from source to binary into bin/main  
 `make all`: Run binary directly after building  
 `make clean`: Remove all build generated files
+`make ADT.test`: Running test for ADT test file, for example (`make time.test`)
 
 <h4 align="center"><a href="#readme-top">back to top</a></h4>
 

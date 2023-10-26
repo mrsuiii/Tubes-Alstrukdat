@@ -1,5 +1,7 @@
 #include "greet.h"
+#include "ADT/time.h"
 
-void greet(char* name){
-    printf("Hello, %s!", name);
+void greet(char *name){
+    TIME x;
+    printf("Hello, %s!\n", name);
 }

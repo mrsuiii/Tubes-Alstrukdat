@@ -5,6 +5,7 @@
 
 int main(){
     TIME T;
+    test();
     CreateTime(&T, 11, 2, 10);
     TulisTIME(T);
 }

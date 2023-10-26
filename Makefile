@@ -26,6 +26,7 @@ OBJ_TEST_BASE = $(call SRC_TO_OBJ,$(TEST_BASE))
 
 TEST = $(call RECUR_WILDCARD,lib/ADT,*_test.c,ID)
 OBJ_TEST = $(foreach f,$(TEST),$(call OBJ_FUN,$f))
+GET_TEST_PATH = $(TEST_PATH)/$1_test.c
 
 IS_EXIST = $(wildcard $1)
 H_TO_C = $(patsubst %.h,%.c,$1)
@@ -36,11 +37,12 @@ RECUR_DEP = $(call GET_C_DEP,$1) $(foreach f,$(call GET_C_DEP,$1),$(call RECUR_D
 RECUR_DEP_OBJ = $(call SRC_TO_OBJ,$(call RECUR_DEP,$1) $1)
 
 .SECONDARY:
+.SECONDEXPANSION:
 .PHONY: build run clean all recompile
 
-$(TEST_BIN)/% : $(OBJ_PATH)/$(TEST_PATH)/%_test.o $(OBJ_TEST_BASE) $(OBJ_ADT) 
+$(TEST_BIN)/% : $$(call RECUR_DEP_OBJ,$$(call GET_TEST_PATH,$$*))
 	mkdir -p $(TEST_BIN)
-	$(CC) $(CFLAGS) -o $(TEST_BIN)/$* $(OBJ_TEST_BASE) $(OBJ_ADT) $(OBJ_PATH)/$(TEST_PATH)/$*_test.o
+	$(CC) $(CFLAGS) -o $@ $^
 
 $(OBJ_PATH)/%.o : %.c
 	mkdir -p $(@D)

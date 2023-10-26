@@ -36,6 +36,16 @@ GET_C_DEP = $(patsubst $1,,$(foreach f,$(shell $(CC) -MM $1),$(call FILTER_C_DEP
 RECUR_DEP = $(call GET_C_DEP,$1) $(foreach f,$(call GET_C_DEP,$1),$(call RECUR_DEP,$f))
 RECUR_DEP_OBJ = $(call SRC_TO_OBJ,$(call RECUR_DEP,$1) $1)
 
+FILTER_RECUR_DEP = $(if $(findstring $1,$2),,$1)
+RECUR_DEP_N = $(call RECUR_DEP_N1,$1,$(call GET_C_DEP,$1))
+RECUR_DEP_N1 = $(call RECUR_DEP_N2,$1,$(foreach f,$2,$(call FILTER_RECUR_DEP,$f,$1)))
+RECUR_DEP_N2 = $1 $(foreach f,$2,$(call RECUR_DEP_N,$1 $2,$f))
+
+RECUR_DEP_F = $(call SRC_TO_OBJ,$(call RECUR_DEP_M,,$1))
+RECUR_DEP_M = $2 $(call RECUR_DEP_M1,$2 $1,$(call GET_C_DEP,$2))
+RECUR_DEP_M1 = $(call RECUR_DEP_M2,$1,$(foreach f,$2,$(if $(findstring $f,$1),,$f)))
+RECUR_DEP_M2 = $(foreach f,$2,$(call RECUR_DEP_M,$1 $2,$f))
+
 .SECONDARY:
 .SECONDEXPANSION:
 .PHONY: build run clean all recompile
@@ -48,7 +58,7 @@ $(OBJ_PATH)/%.o : %.c
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(MAIN_OUT) : $(call RECUR_DEP_OBJ,$(MAIN))
+$(MAIN_OUT) : $(call RECUR_DEP_F,$(MAIN))
 	$(CC) $(CFLAGS) -o $@ $^
 
 %.test : $(TEST_BIN)/%

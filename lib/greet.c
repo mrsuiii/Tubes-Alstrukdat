@@ -3,5 +3,5 @@
 
 void greet(char *name){
     TIME x;
-    printf("Hello, %s!", name);
+    printf("Hello, %s!\n", name);
 }

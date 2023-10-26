@@ -11,9 +11,9 @@ RECUR_WILDCARD=$(foreach f,$(wildcard $1$2),$(call $3,$f)) $(foreach d,$(wildcar
 OBJ_FUN = $(OBJ_PATH)/$(patsubst %.c,%.o,$1) 
 SRC_TO_OBJ = $(foreach f,$1,$(call OBJ_FUN,$f))
 
-TEST_PATH = lib/ADT/test
-TEST_BASE = $(TEST_PATH)/test.c
+TEST_PATH = test
 TEST_BIN = bin/test
+TEST_BASE = $(TEST_PATH)/test.c
 GET_TEST_PATH = $(TEST_PATH)/$1_test.c
 
 IS_EXIST = $(wildcard $1)

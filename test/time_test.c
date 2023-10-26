@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include "test.h"
-#include "../time.h"
-#include "../../greet.h"
+#include "../lib/ADT/time.h"
+#include "../lib/greet.h"
 
 int main(){
     TIME T;

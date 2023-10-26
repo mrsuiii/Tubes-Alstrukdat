@@ -1,6 +1,6 @@
-#include "a.h"
-#include "b.h"
+#include <stdio.h>
+#include "lib/greet.h"
 
 int main(){
-    a1();
+    greet("Bondowoso");
 }

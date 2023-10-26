@@ -33,12 +33,10 @@ H_TO_OBJ = $(OBJ_PATH)/$(patsubst %.h,%.o,$1)
 FILTER_C_DEP = $(if $(findstring .h,$1),$(call IS_EXIST,$(call H_TO_C,$1)),)
 GET_C_DEP = $(patsubst $1,,$(foreach f,$(shell $(CC) -MM $1),$(call FILTER_C_DEP,$f)))
 RECUR_DEP = $(call GET_C_DEP,$1) $(foreach f,$(call GET_C_DEP,$1),$(call RECUR_DEP,$f))
-RECUR_DEP_OBJ = $(call SRC_TO_OBJ,$(call RECUR_DEP,$1))
+RECUR_DEP_OBJ = $(call SRC_TO_OBJ,$(call RECUR_DEP,$1) $1)
 
 .SECONDARY:
 .PHONY: build run clean all recompile
-
-test: $(call RECUR_DEP_OBJ,main.c)
 
 $(TEST_BIN)/% : $(OBJ_PATH)/$(TEST_PATH)/%_test.o $(OBJ_TEST_BASE) $(OBJ_ADT) 
 	mkdir -p $(TEST_BIN)
@@ -48,8 +46,8 @@ $(OBJ_PATH)/%.o : %.c
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(MAIN_OUT) :: $(OBJ_LIB)
-	$(CC) $(CFLAGS) -o $@ $(OBJ_LIB)
+$(MAIN_OUT) : $(call RECUR_DEP_OBJ,$(MAIN))
+	$(CC) $(CFLAGS) -o $@ $^
 
 %.test : $(TEST_BIN)/%
 	$(TEST_BIN)/$*
@@ -64,4 +62,3 @@ clean:
 
 all: build run
 recompile: clean all
-

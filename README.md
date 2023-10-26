@@ -1,27 +1,80 @@
-<div align="center" id="readme-top">
-<h1>Tugas Besar IF2110 Algoritma & Struktur Data ITB</h1>
-<h3>TOPIK : Program simulasi berbasis CLI (command-line interface) dalam bahasa C </h3>
+<!-- Back to Top Link-->
+<a name="readme-top"></a>
+
+
+<br />
+<div align="center">
+  <h1 align="center">Tugas Besar IF2110 Algoritma & Struktur Data ITB</h1>
+
+  <p align="center">
+    <h3> Program simulasi Social Media berbasis CLI (command-line interface) dalam bahasa C </h3>
+    <br />
+    <a href="https://github.com/mrsuiii/Tubes-Alstrukdat/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/mrsuiii/Tubes-Alstrukdat/issues">Request Feature</a>
+<br>
+<br>
+
+[![MIT License][license-shield]][license-url]
+
+  </p>
 </div>
 
-Menggunakan Struktur-Struktur Data berbasis ADT (Abstact Data Types) yang sudah dipelajari dalam mata kuliah IF2110 Algoritma & Struktur Data ITB. Menggunakan Makefile untuk melakukan kompilasi dan dapat digunakan pada sistem operasi berbasis UNIX.
+<!-- CONTRIBUTOR -->
+<div align="center" id="contributor">
+  <strong>
+    <h3>Dibuat oleh Kelompok K02 - C</h3>
+    <table align="center">
+      <tr>
+        <td style="text-align: center;">NIM</td>
+        <td style="text-align: center;">Nama</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">13522079</td>
+        <td style="text-align: center;">Emery Fathan Zwageri</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">13522086</td>
+        <td style="text-align: center;">Muhammad Atpur Rafif</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">13522091</td>
+        <td style="text-align: center;">Raden Francisco Trianto Bratadiningrat</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">13522093</td>
+        <td style="text-align: center;">Matthew Vladimir Hutabarat</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">13522118</td>
+        <td style="text-align: center;">Berto Richardo Togatorop</td>
+      </tr>
+    </table>
+  </strong>
+</div>
 
-## Kelompok K02 - C :
 
-|   NIM    |                  Nama                  |
-| :------: | :------------------------------------: |
-| 13522079 |          Emery Fathan Zwageri          |
-| 13522086 |          Muhammad Atpur Rafif          |
-| 13522091 | Raden Francisco Trianto Bratadiningrat |
-| 13522093 |       Matthew Vladimir Hutabarat       |
-| 13522118 |        Berto Richardo Togatorop        |
 
-## Quick Links
-
-- [Getting Started](#getting-started)
-- [Features](#features)
-- [Contributing](#contributing)
-- [Links](#links)
-- [Licensing](#licensing)
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#instruction">Instruction</a></li>
+        <li><a href="#features">Features</a></li>
+      </ul>
+    </li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+  </ol>
+</details>
 
 ## External Links
 
@@ -30,17 +83,90 @@ Menggunakan Struktur-Struktur Data berbasis ADT (Abstact Data Types) yang sudah 
 - [Link Pedoman](https://docs.google.com/document/d/1vnoqQK18ECL8PEAkYbjM-9g1MRGTI7hOLv6GKHlGnuc/edit)
 - [Link Data Kelompok](https://docs.google.com/spreadsheets/d/1Q_TMzWjDSr5ZXc-hv2KoGYySJbb_LyA7Z5_KCdIE6ko/edit#gid=1406958191)
 
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+Untuk Melatih Penggunaan Struktur-Struktur Data berbasis ADT (Abstact Data Types) yang sudah dipelajari dalam mata kuliah IF2110 Algoritma & Struktur Data ITB, maka dibuatlah tugas besar ini.  
+
+<p align="center">
+Untuk Lebih dalam mengenal Tugas sekaligus Projek ini, Anda dapat melihat spesifikasi tugas pada link berikut :
+<br>
+<a href="https://docs.google.com/document/d/1yy0SLsXEE0e-ZBxMSrd0Gz9AOSWqJw1trtTqDjeyfsk/edit"> <Strong>Spesifikasi Tugas Besar IF2110 Algoritma & Struktur Data 2023/2024</Strong>
+</a>
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- GETTING STARTED -->
 ## Getting Started
 
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
+
+### Prerequisites
+
+Untuk melakukan kompilasi dan penggunaan Makefile diperlukan 
+
+* Makefile 
+  ```sh
+  # untuk Windows dengan NPM
+  npm install make
+
+  # untuk Linux Ubuntu
+  sudo apt install make
+  ```
+* GCC
+  ```sh
+  # untuk Windows dengan NPM
+  npm install gcc
+
+  # untuk Linux Ubuntu
+  sudo apt install gcc
+  ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Installation
+
+_Di bawah ini adalah contoh installasi dengan asumsi pengguna menggunakan Windows dengan NPM_
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/mrsuiii/Tubes-Alstrukdat
+   ```
+2. Install GCC
+   ```sh
+   npm install gcc
+   ```
+3. Install Make
+   ```sh
+   npm install make
+   ```
+4. Use Makefile
+   ```sh
+   make all
+   ```
+5. Run File
+   ```sh
+   ./main
+   ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- INSTURCTION -->
 ## Instruction
+Instruksi-instruksi yang dapat dilakukan :
 
 `make build` : To build from source to binary into bin/main  
 `make all` : Run binary directly after building   
 `make clean` : Remove all build generated files  
 `make ADT.test` : Running test for ADT test file, for example ( `make time.test` )  
 
-<h4 align="center"><a href="#readme-top">back to top</a></h4>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- FEATURES -->
 ## Features
 
 ### 1. XXXXX
@@ -57,105 +183,36 @@ description
 
 &ensp;&ensp;
 description
-<h4 align="center"><a href="#readme-top">back to top</a></h4>
 
-## Pembagian Tugas
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<table align="center">
-<tr>
-    <td>No</td>
-    <td>Fitur</td>
-    <td>Progress</td>
-    <td>Pembagian Tugas</td>
-</tr>
-<tr>
-    <td>1</td>
-    <td>Inisialisasi</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>2</td>
-    <td>Perintah</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>3</td>
-    <td>Pengguna</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>4</td>
-    <td>Profil</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>5</td>
-    <td>Teman</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>6</td>
-    <td>Permintaan Pertemanan</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>7</td>
-    <td>Kicauan</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>8</td>
-    <td>Balasan</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>9</td>
-    <td>Draf Kicauan</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>10</td>
-    <td>Utas</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>11</td>
-    <td>Simpan dan Muat</td>
-    <td>0%</td>
-    <td></td>
-</tr>
-<tr>
-    <td>12</td>
-    <td>Laporan</td>
-    <td>0%</td>
-    <td></td>
-</tr>
 
-</table>
-<h4 align="center"><a href="#readme-top">back to top</a></h4>
-
+<!-- CONTRIBUTING -->
 ## Contributing
 
-Jika Anda ingin berkontribusi atau melanjutkan perkembangan program, silahkan fork repository ini dan gunakan branch fitur.
-Permintaan Pull sangat diperbolehkan dan diterima dengan hangat.
+Jika Anda ingin berkontribusi atau melanjutkan perkembangan program, silahkan fork repository ini dan gunakan branch fitur.  
 
-<h4 align="center"><a href="#readme-top">back to top</a></h4>
+Permintaan Pull __sangat diperbolehkan dan diterima dengan hangat__.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- LICENSE -->
 ## Licensing
 
 The code in this project is licensed under MIT license.  
 Code dalam projek ini berada di bawah lisensi MIT.
 
-<h4 align="center"><a href="#readme-top">back to top</a></h4>
-<br><br>
-<h2 align="center"> THANK YOU! </h2>
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<br>
+<h3 align="center"> THANK YOU! </h3>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt

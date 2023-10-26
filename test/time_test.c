@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <assert.h>
 #include "test.h"
-#include "../time.h"
+#include "../lib/ADT/time.h"
+#include "../lib/greet.h"
 
 int main(){
-    TIME T;
     test();
+
+    TIME T;
     CreateTime(&T, 11, 2, 10);
     TulisTIME(T);
 }

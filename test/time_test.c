@@ -5,10 +5,9 @@
 #include "../lib/greet.h"
 
 int main(){
-    TIME T;
     test();
+
+    TIME T;
     CreateTime(&T, 11, 2, 10);
     TulisTIME(T);
-    printf("\n");
-    greet("test");
 }

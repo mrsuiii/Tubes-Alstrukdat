@@ -180,3 +180,18 @@ void cancelRequestFriendIO(){
     declineFriend(loggedUser->id, user->id);
     printf("Permintaan pertemanan kepada %s telah dibatalkan\n", user->name);
 }
+
+void displayRequestedFriendIO(){
+    Users u = getRequest(loggedUser->id);
+    if(u.size == 0){
+        printf("Tidak ada permintaan pertemanan untuk Anda\n");
+        return;
+    }
+
+    printf("Terdapat %d permintaan pertemanan untuk Anda\n\n", u.size);
+
+    for(int i = u.size - 1; i >= 0; --i){
+        printf("| %s\n", getUser(u.ids[i])->name);
+        printf("| Jumlah teman: %d\n\n", relationCount[u.ids[i]]);
+    }
+}

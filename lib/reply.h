@@ -25,8 +25,8 @@ typedef struct subreply{
     struct reply reply;
 } Subreply;
 
-ReplyId createReply(char* content, UserId author, TweetId tweetId, ReplyId replyId);
-Reply* getReply(TweetId tweetId, ReplyId replyId);
+ReplyId createReply(char* content, UserId author, TweetId tweetId, SubreplyPointer* target);
+SubreplyPointer* getSubreply(TweetId tweetId, ReplyId replyId);
 void deleteReply(TweetId tweetId, ReplyId replyId);
 
 void displayReplyIO(TweetId tweetId);

@@ -3,7 +3,7 @@
 #include "reply.h"
 #include "string.h"
 
-void insertReply(SubreplyPointer* target, SubreplyPointer value){
+void insertLastSubreply(SubreplyPointer* target, SubreplyPointer value){
     if(*target == NULL){
         *target = value;
     } else {
@@ -12,7 +12,7 @@ void insertReply(SubreplyPointer* target, SubreplyPointer value){
     }
 }
 
-ReplyId createReply(char* content, UserId author, TweetId tweetId, ReplyId replyId){
+ReplyId createReply(char* content, UserId author, TweetId tweetId, SubreplyPointer* target){
     SubreplyPointer newSubreply = malloc(sizeof(Subreply));
     Tweet *tweet = getTweet(tweetId);
     Reply *reply = &(newSubreply->reply);
@@ -23,21 +23,16 @@ ReplyId createReply(char* content, UserId author, TweetId tweetId, ReplyId reply
     reply->author = author;
     // TODO: Datetime
 
-    SubreplyPointer* target;
-    if(replyId == -1) target = &(tweet->subreply);
-    else target = &(getReply(tweetId, replyId)->subreply);
-
-    insertReply(target, newSubreply);
-
+    insertLastSubreply(target, newSubreply);
     return reply->id;
 }
 
-Reply* getReplyRecur(SubreplyPointer start, ReplyId target){
+Reply* getSubreplyRecur(SubreplyPointer start, ReplyId target){
     SubreplyPointer curr = start;
     while (curr != NULL){
         if(curr->reply.id == target) return &(curr->reply);
 
-        Reply *r = getReplyRecur((curr->reply).subreply, target);
+        Reply *r = getSubreplyRecur((curr->reply).subreply, target);
         if (r) return r;
 
         curr = curr->next;
@@ -45,9 +40,10 @@ Reply* getReplyRecur(SubreplyPointer start, ReplyId target){
     return NULL;
 }
 
-Reply* getReply(TweetId tweetId, ReplyId replyId){
+SubreplyPointer* getSubreply(TweetId tweetId, ReplyId replyId){
     Tweet *tweet = getTweet(tweetId);
-    return getReplyRecur(tweet->subreply, replyId);
+    if(replyId == -1) return &(tweet->subreply);
+    return &(getSubreplyRecur(tweet->subreply, replyId)->subreply);
 }
 
 void displayReplyRecurIO(SubreplyPointer start, int tab){

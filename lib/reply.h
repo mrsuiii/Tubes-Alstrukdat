@@ -11,20 +11,20 @@
 typedef int ReplyId;
 extern ReplyId lastReplyID;
 
-typedef struct{
-    Reply reply;
-    Subreply* next;
-} Subreply;
-
-typedef struct{
+typedef struct reply{
     ReplyId id;
-    char reply[MAX_REPLY];
+    char content[MAX_REPLY];
     UserId author;
     DATETIME datetime;
-    Subreply* subreply;
+    struct subreply* subreply;
 } Reply;
 
-ReplyId createReply(char* reply, TweetId tweetId, ReplyId ReplyId);
+typedef struct subreply{
+    Subreply* next;
+    struct reply reply;
+} Subreply;
+
+ReplyId createReply(char* content, UserId author, TweetId tweetId, ReplyId replyId);
 Reply* getReply(TweetId tweetId, ReplyId replyId);
 void deleteReply(TweetId tweetId, ReplyId replyId);
 

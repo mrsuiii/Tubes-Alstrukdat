@@ -18,6 +18,7 @@ typedef struct{
     UserId author;
     DATETIME datetime;
     Subreply* subreply;
+    int replyCount;
 } Tweet;
 
 extern ListDin tweets;

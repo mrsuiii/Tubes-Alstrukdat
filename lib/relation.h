@@ -3,9 +3,6 @@
 
 #include "user.h"
 
-char relation[MAX_USER][MAX_USER];
-int relationCount[MAX_USER];
-
 /* relation[a][b], mean requester and requestee refer too a */
 
 #define IsNothing 0

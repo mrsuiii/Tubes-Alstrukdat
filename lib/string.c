@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "string.h"
+# include "..\ADT\boolean.h"
 
 void string_copy(char* from, char* to, int max){
     if(max == 0) return;
@@ -35,4 +36,13 @@ int string_length(char* a){
         i++;
     }
     return i;
+}
+
+boolean isAllBlank(char* a){
+    int i = 0 ; 
+    while (a[i] != '\0'){
+        if (a[i] != " ") return false;
+        i++;
+    }
+    return true ; 
 }

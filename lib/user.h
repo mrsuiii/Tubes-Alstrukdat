@@ -6,8 +6,8 @@
 #define MAX_USER 20
 
 /* Maximum string length */
-#define MAX_USERNAME 30
-#define MAX_PASSWORD 15
+#define MAX_NAME 30
+#define MAX_PASS 15
 #define MAX_BIO 135
 #define MAX_PHONE 10
 #define MAX_WETON 10
@@ -21,8 +21,8 @@ typedef boolean UserType;
 
 typedef struct{
     UserId id; /* id is equal it's index in `extern users` variable */
-    char username[MAX_USERNAME];
-    char password[MAX_PASSWORD];
+    char name[MAX_NAME];
+    char pass[MAX_PASS];
     char bio[MAX_BIO];
     char phone[MAX_PHONE];
     char weton[MAX_WETON];
@@ -55,5 +55,7 @@ boolean isUserFull();
 void displayUser(UserId id);
 
 UserId signUp();
+UserId signIn();
+void signOut();
 
 #endif

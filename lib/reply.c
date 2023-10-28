@@ -1,9 +1,10 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "reply.h"
 #include "string.h"
 
 ReplyId createReply(char *content, UserId author, TweetId tweetId, ReplyId replyId){
-    Subreply* newReply = malloc(sizeof(Subreply));
+    struct subreply* newReply = malloc(sizeof(Subreply));
     Tweet *tweet = getTweet(tweetId);
     Reply *reply = &(newReply->reply);
     tweet->replyCount++;
@@ -13,11 +14,15 @@ ReplyId createReply(char *content, UserId author, TweetId tweetId, ReplyId reply
     reply->author = author;
     // TODO: Datetime
 
-    Subreply* target;
-    if(replyId == -1) target = tweet->subreply;
-    else target = getReply(tweetId, replyId);
+    struct subreply** target;
+    if(replyId == -1) target = &(tweet->subreply);
+    else target = &(getReply(tweetId, replyId)->subreply);
 
-    (*target).next = newReply;
+    (*target) = newReply;
+    // while((*target) && (*target)->next != NULL) (*target) = (*target)->next;
+
+    return 0;
+    printf("%p %p\n", target, &(tweet->subreply));
 }
 
 Reply* getReplyRecur(Subreply *start, ReplyId target){

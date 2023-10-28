@@ -49,9 +49,6 @@ void deleteUser(UserId id);
 /* Get user by id */
 User* getUser(UserId id);
 
-/* Return true if user already full */
-boolean isUserFull();
-
 void displayUser(UserId id);
 
 UserId signUp();

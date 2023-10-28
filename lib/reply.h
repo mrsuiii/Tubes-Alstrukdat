@@ -19,7 +19,7 @@ typedef struct{
 typedef struct{
     ReplyId id;
     char reply[MAX_REPLY];
-    UserID author;
+    UserId author;
     DATETIME datetime;
     Subreply* subreply;
 } Reply;

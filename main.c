@@ -1,13 +1,14 @@
 #include <stdio.h>
-#include "lib/greet.h"
+#include "lib/routine.h"
+#include "lib/user.h"
 #include "lib/get_string.h"
 
 int main(){
-    printf("Masukkan nama lengkap Anda: ");
+    setup();
 
-    int maxName = 100;
-    char name[maxName];
-    get_string(name, maxName);
+    UserId id = signUp();
 
-    greet(name);
+    displayUser(0);
+
+    cleanup();
 }

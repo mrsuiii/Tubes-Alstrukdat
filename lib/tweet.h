@@ -15,7 +15,7 @@ typedef struct{
     TweetId id;
     char tweet[MAX_TWEET];
     int like;
-    UserID author;
+    UserId author;
     DATETIME datetime;
     Subreply* subreply;
 } Tweet;

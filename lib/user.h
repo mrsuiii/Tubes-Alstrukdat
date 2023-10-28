@@ -16,17 +16,17 @@
 #define PUBLIC_USER 0
 #define PRIVATE_USER 1
 
-typedef int UserID;
-typedef boolean AccountType;
+typedef int UserId;
+typedef boolean UserType;
 
 typedef struct{
-    UserID id; /* id is equal it's index in `extern users` variable */
+    UserId id; /* id is equal it's index in `extern users` variable */
     char username[MAX_USERNAME];
     char password[MAX_PASSWORD];
     char bio[MAX_BIO];
     char phone[MAX_PHONE];
     char weton[MAX_WETON];
-    AccountType type; /* Account type */
+    UserType type; /* Account type */
 } User;
 
 #define USERNAME(x) (x).username
@@ -35,20 +35,25 @@ typedef struct{
 #define PHONE(x) (x).phone
 #define TYPE(x) (x).type
 
-/* All user pointer saved here */
+/* All user pointer saved here, initialized in setup function */
 extern User* users[MAX_USER];
 extern User* loggedUser;
+extern int userCount;
 
 /* Create new user, and return it's id */
-UserID CreateUser();
+UserId createUser();
 
 /* Delete user by id */
-void DeleteUser(UserID id);
+void deleteUser(UserId id);
 
 /* Get user by id */
-User* getUser(UserID id);
+User* getUser(UserId id);
 
-/* Count the user (using loop and check for NULL pointer) */
-int getUserCount();
+/* Return true if user already full */
+boolean isUserFull();
+
+void displayUser(UserId id);
+
+UserId signUp();
 
 #endif

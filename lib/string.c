@@ -41,7 +41,7 @@ int string_length(char* a){
 boolean isAllBlank(char* a){
     int i = 0 ; 
     while (a[i] != '\0'){
-        if (a[i] != " ") return false;
+        if (a[i] != ' ') return false;
         i++;
     }
     return true ; 

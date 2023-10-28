@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "routine.h"
 #include "user.h"
-#include "relation.h"
 
 void setup(){
 
@@ -12,7 +11,7 @@ void setup(){
     userCount = 0;
 
     /* Relation */
-    createMatrix(MAX_USER, MAX_USER, &relation);
+    //createMatrix(MAX_USER, MAX_USER, &relation);
 }
 
 void cleanup(){

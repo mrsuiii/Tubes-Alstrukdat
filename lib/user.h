@@ -29,6 +29,11 @@ typedef struct{
     UserType type; /* Account type */
 } User;
 
+typedef struct{
+    UserId ids[MAX_USER];
+    int size;
+} Users;
+
 #define USERNAME(x) (x).username
 #define PASSWORD(x) (x).password
 #define BIO(x) (x).bio

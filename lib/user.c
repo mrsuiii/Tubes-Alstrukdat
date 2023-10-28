@@ -3,6 +3,7 @@
 #include "user.h"
 #include "string.h"
 #include "get_string.h"
+#include "pcolor.h"
 
 User* users[MAX_USER];
 User* loggedUser;
@@ -32,8 +33,10 @@ UserId createUser(char* name, char* pass){
     string_copy("", user->bio, MAX_BIO);
     string_copy("", user->phone, MAX_PHONE);
     string_copy("", user->weton, MAX_WETON);
-
     users[newId] = user;
+
+    string_copy("RRRRRRRRRRRRRRRRRRRRRRRRR", user->picturecolor,MAX_COLOR);
+    string_copy("*************************", user->picture,MAX_PICTURE);
     return newId;
 }
 
@@ -50,7 +53,7 @@ User* getUserByName(char* name){
     return NULL;
 }
 
-void displayUser(UserId id){
+void displayUserIO(UserId id){
     User* user = getUser(id);
     printf("| Nama: %s\n", user->name);
     printf("| Bio Akun: %s\n", user->bio);
@@ -171,10 +174,29 @@ void deleteUser(UserId id){
     users[id] = NULL;
 }
 
+void displayProfilIO(UserId id){
+    int i;
+    User* user = getUser(id);
+    for (i = 0; i < MAX_COLOR; i++){
+        if ((i + 1) % 5 == 1 && i != 0){
+            printf("\n");
+        }
+        // printf("%d",i);
+        if (user->picturecolor[i] == 'R'){
+            print_red(user->picture[i]);
+        } else if (user->picturecolor[i] == 'G'){
+            print_green(user->picture[i]);
+        } else if (user->picturecolor[i] == 'B'){
+            print_blue(user->picture[i]);
+        }
+    }
+    printf("\n");
+}
 void gantiProfilIO(){
     char tmpBio[MAX_BIO], tmpPhone[MAX_PHONE],tmpWeton[MAX_WETON];
     User* user = getUser(loggedUser->id);
 
+    displayUserIO(user->id);
     printf("Masukkan Bio Akun:\n");
     get_string(tmpBio,MAX_BIO);
     if (string_length(tmpBio) != 0){
@@ -215,7 +237,10 @@ void gantiProfilIO(){
 void lihatProfilIO(char* name){
     User* user = getUserByName(name);
     if (user->type == PUBLIC_USER){
-        displayUser(user->id);
+        displayUserIO(user->id);
+        printf("\n");
+        printf("Foto profil akun %s\n",user->name);
+        displayProfilIO(user->id);
     } else {
         printf("Wah, akun Tuan Prim diprivat nih. ");
         printf("Ikuti dulu yuk untuk bisa melihat profil Tuan Prim!\n");

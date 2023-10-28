@@ -9,8 +9,8 @@
 #define MAX_NAME 30
 #define MAX_PASS 15
 #define MAX_BIO 135
-#define MAX_PHONE 10
-#define MAX_WETON 10
+#define MAX_PHONE 100
+#define MAX_WETON 100
 
 /* Account type */
 #define PUBLIC_USER 0
@@ -61,4 +61,5 @@ UserId signUp();
 UserId signIn();
 void signOut();
 
+void gantiProfilIO();
 #endif

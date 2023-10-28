@@ -12,7 +12,6 @@ OBJ_FUN = $(OBJ_PATH)/$(patsubst %.c,%.o,$1)
 SRC_TO_OBJ = $(foreach f,$1,$(call OBJ_FUN,$f))
 
 TEST_PATH = test
-TEST_BIN = bin/test
 TEST_BASE = $(TEST_PATH)/test.c
 GET_TEST_PATH = $(TEST_PATH)/$1_test.c
 
@@ -30,11 +29,7 @@ RECUR_DEP_3 = $(foreach f,$2,$(call RECUR_DEP_1,$1 $2,$(call RESOLVE_PATH,$f)))
 
 .SECONDARY:
 .SECONDEXPANSION:
-.PHONY: build run clean all recompile
-
-$(TEST_BIN)/% : $$(call RECUR_DEP,$$(call GET_TEST_PATH,$$*))
-	mkdir -p $(TEST_BIN)
-	$(CC) $(CFLAGS) -o $@ $^
+.PHONY: build run clean all recompile %.test %.tmp
 
 $(OBJ_PATH)/%.o : %.c
 	mkdir -p $(@D)
@@ -42,9 +37,6 @@ $(OBJ_PATH)/%.o : %.c
 
 $(MAIN_OUT) : $(call RECUR_DEP,$(MAIN))
 	$(CC) $(CFLAGS) -o $@ $^
-
-%.test : $(TEST_BIN)/%
-	$(TEST_BIN)/$*
 
 build: $(MAIN_OUT)
 
@@ -56,3 +48,17 @@ clean:
 
 all: build run
 recompile: clean all
+
+bin/tmp/% : $$(call RECUR_DEP,tmp/$$*.c)
+	mkdir -p bin/tmp
+	$(CC) $(CFLAGS) -o $@ $^
+
+%.tmp : bin/tmp/%
+	bin/tmp/$*
+
+bin/test/% : $$(call RECUR_DEP,$$(call GET_TEST_PATH,$$*))
+	mkdir -p bin/test
+	$(CC) $(CFLAGS) -o $@ $^
+
+%.test : bin/test/%
+	bin/test/$*

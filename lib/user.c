@@ -27,11 +27,11 @@ UserId createUser(char* name, char* pass){
     if(!user) return -1;
 
     user->id = newId;
-    string_copy(name, user->name, 1);
-    string_copy(pass, user->pass, 1);
-    string_copy("", user->bio, 1);
-    string_copy("", user->phone, 1);
-    string_copy("", user->weton, 1);
+    string_copy(name, user->name, MAX_NAME);
+    string_copy(pass, user->pass, MAX_PASS);
+    string_copy("", user->bio, MAX_BIO);
+    string_copy("", user->phone, MAX_PHONE);
+    string_copy("", user->weton, MAX_WETON);
 
     users[newId] = user;
     return newId;

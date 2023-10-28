@@ -2,16 +2,16 @@
 #define USER_H
 
 #include "ADT/boolean.h"
-
 #define MAX_USER 20
 
 /* Maximum string length */
 #define MAX_NAME 30
 #define MAX_PASS 15
-#define MAX_BIO 135
+#define MAX_BIO 136
 #define MAX_PHONE 100
 #define MAX_WETON 100
-
+#define MAX_COLOR 26
+#define MAX_PICTURE 26
 /* Account type */
 #define PUBLIC_USER 0
 #define PRIVATE_USER 1
@@ -26,6 +26,8 @@ typedef struct{
     char bio[MAX_BIO];
     char phone[MAX_PHONE];
     char weton[MAX_WETON];
+    char picturecolor[MAX_COLOR];
+    char picture[MAX_PICTURE];
     UserType type; /* Account type */
 } User;
 
@@ -39,6 +41,8 @@ typedef struct{
 #define BIO(x) (x).bio
 #define PHONE(x) (x).phone
 #define TYPE(x) (x).type
+#define PICTURECOLOR(x) (x).picturecolor
+#define PICTURE(x) (x).picture
 
 /* All user pointer saved here, initialized in setup function */
 extern User* users[MAX_USER];
@@ -55,13 +59,15 @@ void deleteUser(UserId id);
 User* getUser(UserId id);
 User* getUserByName(char* name);
 
-void displayUser(UserId id);
+void displayUserIO(UserId id);
 
 UserId signUp();
 UserId signIn();
 void signOut();
 
+void displayProfilIO(UserId id);
 void gantiProfilIO();
-void lihatProfilIO();
+void lihatProfilIO(char* name);
 void aturJenisAkunIO();
+void ubahFotoProfilIO();
 #endif

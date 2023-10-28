@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "string.h"
 
 void string_copy(char* from, char* to, int max){

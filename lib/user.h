@@ -29,6 +29,11 @@ typedef struct{
     UserType type; /* Account type */
 } User;
 
+typedef struct{
+    UserId ids[MAX_USER];
+    int size;
+} Users;
+
 #define USERNAME(x) (x).username
 #define PASSWORD(x) (x).password
 #define BIO(x) (x).bio
@@ -41,16 +46,14 @@ extern User* loggedUser;
 extern int userCount;
 
 /* Create new user, and return it's id */
-UserId createUser();
+UserId createUser(char* name, char* pass);
 
 /* Delete user by id */
 void deleteUser(UserId id);
 
 /* Get user by id */
 User* getUser(UserId id);
-
-/* Return true if user already full */
-boolean isUserFull();
+User* getUserByName(char* name);
 
 void displayUser(UserId id);
 

@@ -15,7 +15,11 @@ int getEmptyId(){
     return -1;
 }
 
-UserId createUser(){
+int isFull(){
+    return getEmptyId() == -1;
+}
+
+UserId createUser(char* name, char* pass){
     int newId = getEmptyId();
     if(newId == -1) return -1;
 
@@ -23,11 +27,11 @@ UserId createUser(){
     if(!user) return -1;
 
     user->id = newId;
-    string_copy("", user->name, 1);
-    string_copy("", user->bio, 1);
-    string_copy("", user->pass, 1);
-    string_copy("", user->phone, 1);
-    string_copy("", user->weton, 1);
+    string_copy(name, user->name, MAX_NAME);
+    string_copy(pass, user->pass, MAX_PASS);
+    string_copy("", user->bio, MAX_BIO);
+    string_copy("", user->phone, MAX_PHONE);
+    string_copy("", user->weton, MAX_WETON);
 
     users[newId] = user;
     return newId;
@@ -56,17 +60,14 @@ void displayUser(UserId id){
 
 UserId signUp(){
     if(loggedUser){
-        printf("Anda telah login");
+        printf("Anda telah login\n");
         return -1;
     }
 
-    UserId userId = createUser();
-    if(userId == -1){
-        printf("User telah penuh");
+    if(!isFull()){
+        printf("User telah penuh\n");
         return -1;
     }
-
-    User* user = getUser(userId);
 
     char tmpName[MAX_NAME];
     do{
@@ -76,12 +77,12 @@ UserId signUp(){
         (getUserByName(tmpName) != NULL) && 
         (printf("Nama telah dipakai\n") || true)
     );
-    string_copy(tmpName, user->name, MAX_USER);
 
+    char tmpPass[MAX_PASS];
     printf("Masukkan kata sandi: \n");
-    get_string(user->pass, MAX_PASS);
+    get_string(tmpPass, MAX_PASS);
 
-    return userId;
+    return createUser(tmpName, tmpPass);
 }
 
 UserId signIn(){

@@ -24,6 +24,7 @@ Users getRequest(int id);
 /* Get user id(s) who is/are friend of a user */
 Users getFriend(int id);
 
+boolean isRequestee(UserId id);
 boolean isFriend(UserId a, UserId b);
 
 void displayFriendIO();

@@ -74,6 +74,13 @@ Users getFriend(int id){
     return u;
 }
 
+boolean isRequestee(UserId id){
+    for(int i = 0; i < MAX_USER; ++i){
+        if(relation[id][i] == IsRequestee) return true;
+    }
+    return false;
+}
+
 boolean isFriend(UserId a, UserId b){
     return relation[a][b];
 }
@@ -109,7 +116,7 @@ void removeFriendIO(){
         return;
     }
 
-    // TODO: Generalize make prompt
+    // TODO: Generalize prompt
     int promptValue = -1;
     char tmpPrompt[10];
     do{
@@ -129,4 +136,47 @@ void removeFriendIO(){
     } else {
         printf("Penghapusan teman dibatalkan\n");
     }
+}
+
+void requestFriendIO(){
+    if(isRequestee(loggedUser->id)){
+        printf("Terdapat permintaan pertemanan yang belum Anda setujui. Silakan kosongkan daftar permintaan pertemanan untuk Anda terlebih dahulu.\n");
+        return;
+    }
+
+    char tmpName[MAX_NAME];
+    printf("Masukkan nama pengguna:\n");
+    get_string(tmpName, MAX_NAME);
+    User* user = getUserByName(tmpName);
+    if(!user){
+        printf("Pengguna bernama %s tidak ditemukan\n", tmpName);
+        return;
+    }
+
+    if(isFriend(loggedUser->id, user->id)){
+        printf("Anda sudah berteman\n");
+        return;
+    }
+
+    requestFriend(loggedUser->id, user->id);
+    printf("Permintaan pertemanan kepada %s telah dikirim. Tunggu beberapa saat hingga permintaan Anda disetujui.\n", tmpName);
+};
+
+void cancelRequestFriendIO(){
+    char tmpName[MAX_NAME];
+    printf("Masukkan nama pengguna:\n");
+    get_string(tmpName, MAX_NAME);
+    User* user = getUserByName(tmpName);
+    if(!user){
+        printf("Pengguna bernama %s tidak ditemukan\n", tmpName);
+        return;
+    }
+
+    if(relation[loggedUser->id][user->id] != IsRequester){
+        printf("Anda belum mengirimkan permintaan pertemanan kepada %s\n", user->name);
+        return;
+    }
+
+    declineFriend(loggedUser->id, user->id);
+    printf("Permintaan pertemanan kepada %s telah dibatalkan\n", user->name);
 }

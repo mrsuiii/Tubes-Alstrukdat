@@ -67,6 +67,18 @@ Users getRequest(int id){
     return u;
 }
 
+UserId getTopRequest(int id){
+    UserId top = -1;
+    for(int i = 0; i < MAX_USER; ++i){
+        if(relation[id][i] == IsRequestee){
+            if(top == -1 || relationCount[i] > relationCount[top]){
+                top = i;
+            }
+        }
+    }
+    return top;
+}
+
 Users getFriend(int id){
     Users u;
     getUsers(&u, id, IsFriend);
@@ -193,5 +205,39 @@ void displayRequestedFriendIO(){
     for(int i = u.size - 1; i >= 0; --i){
         printf("| %s\n", getUser(u.ids[i])->name);
         printf("| Jumlah teman: %d\n\n", relationCount[u.ids[i]]);
+    }
+}
+
+void acceptFriendIO(){
+    UserId id = getTopRequest(loggedUser->id);
+    if(id == -1){
+        printf("Tidak ada permintaan pertemanan untuk Anda\n");
+        return;
+    }
+
+    User* user = getUser(id);
+    printf("Permintaan pertemanan teratas dari %s\n", user->name);
+    printf("| %s\n", user->name);
+    printf("| Jumlah teman: %d\n\n", relationCount[id]);
+
+    int promptValue = -1;
+    char tmpPrompt[10];
+    do{
+        printf("Apakah Anda ingin menyetujui permintaan pertemanan ini? (YA/TIDAK) ");
+        get_string(tmpPrompt, 10);
+
+        if(string_compare("YA", tmpPrompt) == 0) promptValue = 1;
+        else if(string_compare("TIDAK", tmpPrompt) == 0) promptValue = 0;
+    } while(
+        (promptValue == -1) &&
+        (printf("Input tidak valid\n") || true)
+    );
+
+    if(promptValue){
+        acceptFriend(loggedUser->id, user->id);
+        printf("Permintaan pertemanan dari Bob telah disetujui. Selamat! Anda telah berteman dengan Bob.\n");
+    } else {
+        declineFriend(loggedUser->id, user->id);
+        printf("Permintaan pertemanan dari Bob telah ditolak.\n");
     }
 }

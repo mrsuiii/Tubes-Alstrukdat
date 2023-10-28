@@ -20,6 +20,7 @@ void removeFriend(UserId a, UserId b);
 
 /* Get user id(s) who requested to be a friend sorted by popularity (the amount of friend) */
 Users getRequest(int id);
+UserId getTopRequest(int id);
 
 /* Get user id(s) who is/are friend of a user */
 Users getFriend(int id);

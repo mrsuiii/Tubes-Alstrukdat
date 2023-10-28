@@ -209,4 +209,48 @@ void gantiProfilIO(){
             }
         }
     } while (!checkWetonValid(tmpWeton));
+
+}
+
+void lihatProfilIO(char* name){
+    User* user = getUserByName(name);
+    if (user->type == PUBLIC_USER){
+        displayUser(user->id);
+    } else {
+        printf("Wah, akun Tuan Prim diprivat nih. ");
+        printf("Ikuti dulu yuk untuk bisa melihat profil Tuan Prim!\n");
+    }
+
+}
+
+void aturJenisAkunIO(){
+    char input[MAX_BIO];
+    User* user = getUser(loggedUser->id);
+    if (user->type == PUBLIC_USER){
+        printf("Saat ini, akun Anda adalah akun Publik.\n"); 
+        printf("Ingin mengubah ke akun Privat?\n");
+        do {
+            printf("(YA/TIDAK) ");
+            get_string(input,MAX_BIO);
+            if (string_compare(input,"YA") == 0){
+                user->type = PRIVATE_USER;
+                printf("Akun anda sudah diubah menjadi akun Privat.\n");
+            } else if (string_compare(input,"TIDAK") != 0 && string_compare(input,"YA") != 0){
+                printf("Input Salah!\n");
+            }
+        } while (string_compare(input,"YA") != 0 && string_compare(input,"TIDAK") != 0);
+    } else if (user->type == PRIVATE_USER){
+        printf("Saat ini, akun Anda adalah akun Private.\n"); 
+        printf("Ingin mengubah ke akun Public?\n");
+        do {
+            printf("(YA/TIDAK) ");
+            get_string(input,MAX_BIO);
+            if (string_compare(input,"YA") == 0){
+                user->type = PUBLIC_USER;
+                printf("Akun anda sudah diubah menjadi akun Public.\n");
+            } else if (string_compare(input,"TIDAK") != 0 && string_compare(input,"YA") != 0){
+                printf("Input Salah!\n");
+            }
+        } while (string_compare(input,"YA") != 0 && string_compare(input,"TIDAK") != 0);
+    }
 }

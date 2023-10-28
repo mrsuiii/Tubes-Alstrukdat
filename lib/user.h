@@ -53,6 +53,7 @@ void deleteUser(UserId id);
 
 /* Get user by id */
 User* getUser(UserId id);
+User* getUserByName(char* name);
 
 void displayUser(UserId id);
 

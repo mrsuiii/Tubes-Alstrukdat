@@ -6,17 +6,17 @@
 char relation[MAX_USER][MAX_USER];
 int relationCount[MAX_USER];
 
-/* idFrom -> idTo, requester and requestee refer too idFrom */
+/* relation[a][b], mean requester and requestee refer too a */
 
 #define IsNothing 0
 #define IsRequester 1
 #define IsRequestee 2
 #define IsFriend 3
 
-void requestFriend(UserId idFrom, UserId idTo);
-void declineFriend(UserId idFrom, UserId idTo);
-void acceptFriend(UserId idFrom, UserId idTo);
-void removeFriend(UserId idFrom, UserId idTo);
+void requestFriend(UserId requester, UserId requestee);
+void declineFriend(UserId a, UserId b);
+void acceptFriend(UserId a, UserId b);
+void removeFriend(UserId a, UserId b);
 
 /* Get user id(s) who requested to be a friend sorted by popularity (the amount of friend) */
 Users getRequest(int id);
@@ -25,5 +25,12 @@ Users getRequest(int id);
 Users getFriend(int id);
 
 boolean isFriend(UserId a, UserId b);
+
+void displayFriendIO();
+void removeFriendIO();
+void requestFriendIO();
+void cancelRequestFriendIO();
+void displayRequestedFriendIO();
+void acceptFriendIO();
 
 #endif

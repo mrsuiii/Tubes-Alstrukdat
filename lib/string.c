@@ -28,3 +28,11 @@ int string_compare(char* a, char* b){
     else if(a[ia] == '\0') return 1;
     else return -1;
 }
+
+int string_length(char* a){
+    int i = 0;
+    while (a[i] != '\0'){
+        i++;
+    }
+    return i;
+}

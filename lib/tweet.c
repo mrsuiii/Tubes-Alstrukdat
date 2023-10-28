@@ -1,14 +1,14 @@
 # include <stdlib.h>
 #include <stdio.h>
 
-# include "tweet.h"
+#include "tweet.h"
 #include "user.h"
 #include "relation.h"
 #include "get_string.h"
-// #include "reply.h"
+#include "reply.h"
 #include "string.h"
-// #include "thread.h"
-// #include "ADT/datetime.h"
+#include "thread.h"
+#include "ADT/datetime.h"
 
 Tweets tweets; 
 
@@ -49,9 +49,9 @@ void createTweetIO(){
     char content [MAX_TWEET] ; 
     get_string(content, MAX_TWEET) ; 
 
-    TweetId newTweetId = createTweet(content, loggedUser);
+    TweetId newTweetId = createTweet(content, loggedUser->id);
     
-    if (isAllBlank (content)){
+    if (isAllBlank(content)){
         printf("Kicauan tidak boleh hanya berisi spasi!");
     } else {         
         printf("Selamat! kicauan telah diterbitkan!\n"); 
@@ -69,9 +69,6 @@ void changeTweetIO(TweetId id) {
         if (loggedUser != tweeter){
             printf("Kicauan dengan ID = %d bukan milikmu!\n",id);
         } else {
-            printf("Selamat! kicauan telah diterbitkan!\n");
-            printf("Detil kicauan:\n");
-
             char newContent [MAX_TWEET] ; 
             get_string(newContent, MAX_TWEET);
 
@@ -79,6 +76,8 @@ void changeTweetIO(TweetId id) {
                 printf("Kicauan tidak boleh hanya berisi spasi!");
             }
             else {
+                printf("Selamat! kicauan telah diterbitkan!\n");
+                printf("Detil kicauan:\n");
                 string_copy(newContent, tweet->tweet, MAX_TWEET) ;         
             }
         }
@@ -91,7 +90,7 @@ void likeTweetIO(TweetId id){
     } else {
         Tweet* tweet = getTweet(id) ; 
         User* tweeter = getUser(tweet->author) ;  // tweeeter = pengicau
-        if (tweeter->type == 1  && !isFriend(loggedUser, tweeter)){
+        if (tweeter->type == 1  && !isFriend(loggedUser->id, tweeter->id)){
             printf("Wah, kicauan tersebut dibuat oleh akun privat! Ikuti akun itu dulu ya\n");
         } else {
             tweet->like ++ ; 
@@ -105,9 +104,9 @@ void displayTweetIO(TweetId id){
     
     printf("| ID: %d\n", tweet-> id);
     printf("| %s\n", user-> name);
-    // printf("| No HP: %s\n", tweet->datetime);
+    // printf("| %s\n", tweet->datetime);
     printf("| %s\n", tweet -> tweet);
-    printf("| Disukai: %d\n", tweet->like);
+    printf("| Disukai: %d\n\n", tweet->like);
 }
 
 void displayAllTweetIO() {
@@ -116,10 +115,12 @@ void displayAllTweetIO() {
         return ; 
     }
     for(int i = 1 ; i <= tweets.nEff; i ++){
-        printf("%d\n", i);
         Tweet *tweet = getTweet(i) ; 
         
-        if(!isFriend(loggedUser->id, tweet->author)) continue;
-        displayTweetIO(i) ; 
+        if(
+            !isFriend(loggedUser->id, tweet->author) &&
+            tweet->author != loggedUser->id
+        ) continue;
+        displayTweetIO(i); 
     }
 }

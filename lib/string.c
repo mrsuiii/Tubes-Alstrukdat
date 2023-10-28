@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "string.h"
-# include "..\ADT\boolean.h"
+# include "ADT/boolean.h"
 
 void string_copy(char* from, char* to, int max){
     if(max == 0) return;

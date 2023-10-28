@@ -1,23 +1,21 @@
 #ifndef TWEET_H
 #define TWEET_H
 
-#include "user.h"
-// #include "relation.h"
-// #include "reply.h"
-// #include "thread.h"
-// #include "ADT/datetime.h"
-
 #define MAX_TWEET 280
 
 typedef int TweetId;
+
+#include "user.h"
+#include "reply.h"
 
 typedef struct{
     TweetId id;
     char tweet[MAX_TWEET];
     int like;
     UserId author;
-    // DATETIME datetime;
-    // Subreply* subreply;
+    //DATETIME datetime;
+    struct subreply* subreply;
+    int replyCount;
 } Tweet;
 
 typedef struct{
@@ -26,11 +24,18 @@ typedef struct{
     int capacity ; 
 }Tweets;
 
+// #include "relation.h"
+// #include "thread.h"
+// #include "ADT/datetime.h"
+
+
+
 extern Tweets tweets;
 
 TweetId createTweet(char* content, UserId author);
 Tweet* getTweet(TweetId id);
 
+void createTweetIO();
 void changeTweetIO(TweetId id) ; 
 void likeTweetIO(TweetId id) ; 
 void displayTweetIO(TweetId id) ; 

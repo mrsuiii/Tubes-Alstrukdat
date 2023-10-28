@@ -1,30 +1,29 @@
 #ifndef REPLY_H
 #define REPLY_H
 
-#include "user.h"
-#include "tweet.h"
-#include "ADT/datetime.h"
-#include "ADT/listdin.h"
-
 #define MAX_REPLY 280
 
 typedef int ReplyId;
-extern ReplyId lastReplyID;
 
-typedef struct{
-    Reply reply;
-    Subreply* next;
-} Subreply;
+#include "user.h"
+#include "tweet.h"
+// #include "ADT/datetime.h"
+// #include "ADT/listdin.h"
 
-typedef struct{
+typedef struct reply{
     ReplyId id;
-    char reply[MAX_REPLY];
+    char content[MAX_REPLY];
     UserId author;
-    DATETIME datetime;
-    Subreply* subreply;
+    // DATETIME datetime;
+    struct subreply* subreply;
 } Reply;
 
-ReplyId createReply(char* reply, TweetId tweetId, ReplyId ReplyId);
+typedef struct subreply{
+    struct subreply* next;
+    struct reply reply;
+} Subreply;
+
+ReplyId createReply(char* content, UserId author, TweetId tweetId, ReplyId replyId);
 Reply* getReply(TweetId tweetId, ReplyId replyId);
 void deleteReply(TweetId tweetId, ReplyId replyId);
 

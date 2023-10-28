@@ -62,4 +62,6 @@ UserId signIn();
 void signOut();
 
 void gantiProfilIO();
+void lihatProfilIO();
+void aturJenisAkunIO();
 #endif

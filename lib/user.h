@@ -46,7 +46,7 @@ extern User* loggedUser;
 extern int userCount;
 
 /* Create new user, and return it's id */
-UserId createUser();
+UserId createUser(char* name, char* pass);
 
 /* Delete user by id */
 void deleteUser(UserId id);

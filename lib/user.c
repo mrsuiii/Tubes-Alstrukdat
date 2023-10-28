@@ -15,7 +15,11 @@ int getEmptyId(){
     return -1;
 }
 
-UserId createUser(){
+int isFull(){
+    return getEmptyId() == -1;
+}
+
+UserId createUser(char* name, char* pass){
     int newId = getEmptyId();
     if(newId == -1) return -1;
 
@@ -23,11 +27,11 @@ UserId createUser(){
     if(!user) return -1;
 
     user->id = newId;
-    string_copy("", user->name, 1);
-    string_copy("", user->bio, 1);
-    string_copy("", user->pass, 1);
-    string_copy("", user->phone, 1);
-    string_copy("", user->weton, 1);
+    string_copy(name, user->name, MAX_NAME);
+    string_copy(pass, user->pass, MAX_PASS);
+    string_copy("", user->bio, MAX_BIO);
+    string_copy("", user->phone, MAX_PHONE);
+    string_copy("", user->weton, MAX_WETON);
 
     users[newId] = user;
     return newId;
@@ -54,19 +58,58 @@ void displayUser(UserId id){
     printf("| Weton: %s\n", user->weton);
 }
 
+boolean checkPhoneValid(char* phone){
+    int i = 0;
+    while (phone[i] != '\0'){
+        if (phone[i] < '0' || phone[i] > '9'){
+            return false;
+        }
+        i++;
+    }
+
+    return true;
+}
+
+boolean checkWetonValid(char* weton){
+    int i = 0;
+    char pahingValid[MAX_WETON] = "pahing", kliwonValid[MAX_WETON] = "kliwon";
+    char wageValid[MAX_WETON] = "wage", ponValid[MAX_WETON] = "pon";
+    char legiValid[MAX_WETON] = "legi";
+
+    if (weton[0] == '\0'){
+        return true;
+    }
+
+    while (weton[i] != '\0'){
+        if (weton[i] < 'a'){
+            weton[i] += 32;
+        }
+        i++;
+    }
+
+    if (
+        string_compare(pahingValid,weton) == 0 ||
+        string_compare(kliwonValid,weton) == 0 ||
+        string_compare(wageValid,weton) == 0 ||
+        string_compare(ponValid,weton) == 0 ||
+        string_compare(legiValid,weton) == 0
+    ){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 UserId signUp(){
     if(loggedUser){
-        printf("Anda telah login");
+        printf("Anda telah login\n");
         return -1;
     }
 
-    UserId userId = createUser();
-    if(userId == -1){
-        printf("User telah penuh");
+    if(isFull()){
+        printf("User telah penuh\n");
         return -1;
     }
-
-    User* user = getUser(userId);
 
     char tmpName[MAX_NAME];
     do{
@@ -76,12 +119,12 @@ UserId signUp(){
         (getUserByName(tmpName) != NULL) && 
         (printf("Nama telah dipakai\n") || true)
     );
-    string_copy(tmpName, user->name, MAX_USER);
 
+    char tmpPass[MAX_PASS];
     printf("Masukkan kata sandi: \n");
-    get_string(user->pass, MAX_PASS);
+    get_string(tmpPass, MAX_PASS);
 
-    return userId;
+    return createUser(tmpName, tmpPass);
 }
 
 UserId signIn(){
@@ -126,4 +169,44 @@ void signOut(){
 void deleteUser(UserId id){
     free(users[id]);
     users[id] = NULL;
+}
+
+void gantiProfilIO(){
+    char tmpBio[MAX_BIO], tmpPhone[MAX_PHONE],tmpWeton[MAX_WETON];
+    User* user = getUser(loggedUser->id);
+
+    printf("Masukkan Bio Akun:\n");
+    get_string(tmpBio,MAX_BIO);
+    if (string_length(tmpBio) != 0){
+        string_copy(tmpBio,user->bio,MAX_BIO);
+    }
+
+    do {    
+        printf("Masukkan No HP:\n");
+        get_string(tmpPhone,MAX_PHONE);
+
+        if (string_length(tmpPhone) != 0){
+            if (!checkPhoneValid(tmpPhone)){
+                printf("No HP tidak valid. Masukkan lagi yuk!\n");
+            } else {
+                string_copy(tmpPhone,user->phone,MAX_PHONE);
+            }
+        }
+    } while(!checkPhoneValid(tmpPhone));
+    
+    do {
+        printf("Masukkan Weton:\n");
+        get_string(tmpWeton,MAX_WETON);
+        
+        if (string_length(tmpWeton) != 0){
+            if (!checkWetonValid(tmpWeton)){
+                // printf("%s",tmpWeton);
+                printf("Weton anda tidak valid.\n");
+            } else {
+                tmpWeton[0] -= 32;
+                string_copy(tmpWeton,user->weton,MAX_WETON);
+                tmpWeton[0] += 32;
+            }
+        }
+    } while (!checkWetonValid(tmpWeton));
 }

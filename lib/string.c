@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "string.h"
 
 void string_copy(char* from, char* to, int max){
@@ -26,4 +27,12 @@ int string_compare(char* a, char* b){
     if(a[ia] == '\0' && b[ib] == '\0') return 0;
     else if(a[ia] == '\0') return 1;
     else return -1;
+}
+
+int string_length(char* a){
+    int i = 0;
+    while (a[i] != '\0'){
+        i++;
+    }
+    return i;
 }

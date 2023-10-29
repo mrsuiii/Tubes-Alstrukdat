@@ -4,6 +4,7 @@
 #define MAX_REPLY 280
 
 typedef int ReplyId;
+typedef struct reply* ReplyPointer;
 typedef struct replynode* ReplyNodePointer;
 typedef ReplyNodePointer Replies;
 
@@ -27,10 +28,11 @@ typedef struct replynode{
     ReplyNodePointer next;
 } ReplyNode;
 
-ReplyNodePointer getReply(TweetId tweetId, ReplyId replyId);
+ReplyPointer getReply(TweetId tweetId, ReplyId replyId);
+ReplyNodePointer getReplyNode(TweetId tweetId, ReplyId replyId);
 Replies* getReplies(TweetId tweetId, ReplyId replyId);
 
-ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base);
+ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base, ReplyPointer* result);
 ReplyNodePointer* getReplies(TweetId tweetId, ReplyId replyId);
 void deleteReply(ReplyNodePointer target);
 

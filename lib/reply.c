@@ -3,6 +3,7 @@
 #include "reply.h"
 #include "string.h"
 #include "relation.h"
+#include "get_string.h"
 
 void insertLastReplies(Replies* base, ReplyNodePointer value){
     if(*base == NULL){
@@ -14,7 +15,7 @@ void insertLastReplies(Replies* base, ReplyNodePointer value){
     }
 }
 
-ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base){
+ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base, ReplyPointer* result){
     ReplyNodePointer newSubreply = malloc(sizeof(ReplyNode));
     newSubreply->base = base;
 
@@ -29,6 +30,8 @@ ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base
 
     if(base == NULL) return -1;
     insertLastReplies(base, newSubreply);
+
+    if(result != NULL) *result = reply;
 
     return reply->id;
 }
@@ -46,15 +49,23 @@ ReplyNodePointer getReplyRecur(Replies start, ReplyId target){
     return NULL;
 }
 
-ReplyNodePointer getReply(TweetId tweetId, ReplyId replyId){
-    return getReplyRecur(getTweet(tweetId)->replies, replyId);
+ReplyNodePointer getReplyNode(TweetId tweetId, ReplyId replyId){
+    Tweet* tweet = getTweet(tweetId);
+    if(!tweet) return NULL;
+    return getReplyRecur(tweet->replies, replyId);
+}
+
+ReplyPointer getReply(TweetId tweetId, ReplyId replyId){
+    ReplyNodePointer p = getReplyNode(tweetId, replyId);
+    if(!p) return NULL;
+    return &(p->reply);
 }
 
 Replies* getReplies(TweetId tweetId, ReplyId replyId){
     Tweet *tweet = getTweet(tweetId);
     if(replyId == -1) return &(tweet->replies);
 
-    ReplyNodePointer parent = getReply(tweetId, replyId);
+    ReplyNodePointer parent = getReplyNode(tweetId, replyId);
     if(parent == NULL) return NULL;
 
     return &(parent->reply.replies);
@@ -64,29 +75,38 @@ void pt(int tab){
     for(int i = 0; i < tab; ++i) printf("\t");
 }
 
-void displayReplyRecurIO(ReplyNodePointer start, int t){
+void displaySingleReply(ReplyPointer reply, User* author, int t){
+    pt(t); printf("| ID = %d\n", reply->id);
+    pt(t); printf("| %s\n", author->name);
+    // TODO: Date
+    pt(t); printf("| date\n");
+    pt(t); printf("| %s\n", reply->content);
+}
+
+void displaySinglePrivateReply(ReplyPointer reply, int t){
+    pt(t); printf("| ID = %d\n", reply->id);
+    pt(t); printf("| PRIVAT\n");
+    pt(t); printf("| PRIVAT\n");
+    pt(t); printf("| PRIVAT\n");
+}
+
+void displayReplyRecurIO(ReplyNodePointer start, int tab){
     ReplyNodePointer curr = start;
     while (curr != NULL){
-        Reply reply = curr->reply;
+        ReplyPointer reply = &(curr->reply);
         User* author = getUser(curr->reply.author);
+
         if(
             isFriend(author->id, loggedUser->id) ||
             loggedUser->id == author->id
         ){
-            pt(t); printf("| ID = %d\n", reply.id);
-            pt(t); printf("| %s\n", author->name);
-            // TODO: Date
-            pt(t); printf("| date\n");
-            pt(t); printf("| %s\n", reply.content);
+            displaySingleReply(reply, author, tab);
         } else {
-            pt(t); printf("| ID = %d\n", reply.id);
-            pt(t); printf("| PRIVAT\n");
-            pt(t); printf("| PRIVAT\n");
-            pt(t); printf("| PRIVAT\n");
+            displaySinglePrivateReply(reply, tab);
         }
         printf("\n");
 
-        displayReplyRecurIO(reply.replies, t + 1);
+        displayReplyRecurIO(reply->replies, tab + 1);
         curr = curr->next;
     }
 }
@@ -121,4 +141,58 @@ void deleteReply(ReplyNodePointer target){
     }
 
     free(target);
+}
+
+void createReplyIO(TweetId tweetId, ReplyId replyId){
+    Tweet* tweet = getTweet(tweetId);
+    if(!tweet){
+        printf("Wah, tidak terdapat kicauan yang ingin Anda balas!\n");
+        return;
+    }
+
+    Replies* replies = getReplies(tweetId, replyId);
+    if(!replies){
+        printf("Wah, tidak terdapat balasan yang ingin Anda balas!\n");
+        return;
+    }
+
+    if(
+        !isFriend(tweet->author, loggedUser->id) &&
+        loggedUser->id != tweet->author
+    ){
+        printf("Wah, akun tersebut merupakan akun privat dan anda belum berteman akun tersebu!\n");
+        return;
+    }
+
+    char tmpReply[MAX_REPLY];
+    printf("Masukkan balasan:\n");
+    get_string(tmpReply, MAX_REPLY);
+
+    ReplyPointer rp;
+    ReplyId id = createReply(tmpReply, loggedUser->id, tweetId, replies, &rp);
+
+    printf("Selamat! balasan telah diterbitkan!\nDetil balasan:\n");
+    displaySingleReply(rp, loggedUser, 0);
+}
+
+void deleteReplyIO(TweetId tweetId, ReplyId replyId){
+    Tweet* tweet = getTweet(tweetId);
+    if(!tweet){
+        printf("Kicauan tidak ditemukan\n");
+        return;
+    }
+
+    ReplyNodePointer rp = getReplyNode(tweetId, replyId);
+    if(!rp){
+        printf("Balasan tidak ditemukan\n");
+        return;
+    }
+
+    if(rp->reply.author != loggedUser->id){
+        printf("Balasan bukan milik anda\n");
+        return;
+    }
+
+    deleteReply(rp);
+    printf("Balasan berhasil dihapus\n");
 }

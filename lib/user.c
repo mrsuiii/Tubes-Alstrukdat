@@ -279,3 +279,17 @@ void aturJenisAkunIO(){
         } while (string_compare(input,"YA") != 0 && string_compare(input,"TIDAK") != 0);
     }
 }
+
+void ubahFotoProfilIO(){
+    char inputcolor[MAX_COLOR], inputpicture[MAX_PICTURE];
+    User* user = getUser(loggedUser->id);
+    printf("Foto profil Anda saat ini adalah\n");
+    displayProfilIO(user->id);
+    printf("\nMasukkan foto profil yang baru\n");
+    get_string_foto_profil(inputcolor,inputpicture,MAX_PICTURE);
+
+    string_copy(inputcolor,user->picturecolor,MAX_COLOR);
+    string_copy(inputpicture,user->picture,MAX_PICTURE);
+
+    printf("\nFoto profil anda sudah berhasil diganti!\n");
+}

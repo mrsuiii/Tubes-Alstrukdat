@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "reply.h"
 #include "string.h"
+#include "relation.h"
 
 void insertLastReplies(Replies* base, ReplyNodePointer value){
     if(*base == NULL){
@@ -59,12 +60,33 @@ Replies* getReplies(TweetId tweetId, ReplyId replyId){
     return &(parent->reply.replies);
 }
 
-void displayReplyRecurIO(Replies start, int tab){
+void pt(int tab){
+    for(int i = 0; i < tab; ++i) printf("\t");
+}
+
+void displayReplyRecurIO(ReplyNodePointer start, int t){
     ReplyNodePointer curr = start;
     while (curr != NULL){
         Reply reply = curr->reply;
-        printf("%d %s\n", tab, reply.content);
-        displayReplyRecurIO(reply.replies, tab + 1);
+        User* author = getUser(curr->reply.author);
+        if(
+            isFriend(author->id, loggedUser->id) ||
+            loggedUser->id == author->id
+        ){
+            pt(t); printf("| ID = %d\n", reply.id);
+            pt(t); printf("| %s\n", author->name);
+            // TODO: Date
+            pt(t); printf("| date\n");
+            pt(t); printf("| %s\n", reply.content);
+        } else {
+            pt(t); printf("| ID = %d\n", reply.id);
+            pt(t); printf("| PRIVAT\n");
+            pt(t); printf("| PRIVAT\n");
+            pt(t); printf("| PRIVAT\n");
+        }
+        printf("\n");
+
+        displayReplyRecurIO(reply.replies, t + 1);
         curr = curr->next;
     }
 }

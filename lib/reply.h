@@ -34,6 +34,8 @@ ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base
 ReplyNodePointer* getReplies(TweetId tweetId, ReplyId replyId);
 void deleteReply(ReplyNodePointer target);
 
+void createReplyIO(TweetId tweetId, ReplyId replyId);
 void displayReplyIO(TweetId tweetId);
+void deleteReplyIO(TweetId tweetId, ReplyId replyId);
 
 #endif

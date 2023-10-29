@@ -3,19 +3,20 @@
 #include "reply.h"
 #include "string.h"
 
-void insertLastSubreply(ReplyNodePointer* target, ReplyNodePointer value){
-    if(*target == NULL){
-        *target = value;
-        value->prev = NULL;
+void insertLastReplies(Replies* base, ReplyNodePointer value){
+    if(*base == NULL){
+        *base = value;
     } else {
-        while((*target)->next != NULL) *target = (*target)->next;
-        (*target)->next = value;
-        value->prev = *target;
+        ReplyNodePointer curr = *base;
+        while(curr->next != NULL) curr = curr->next;
+        curr->next = value;
     }
 }
 
-ReplyId createReply(char* content, UserId author, TweetId tweetId, ReplyNodePointer* startTarget){
+ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base){
     ReplyNodePointer newSubreply = malloc(sizeof(ReplyNode));
+    newSubreply->base = base;
+
     Tweet *tweet = getTweet(tweetId);
     Reply *reply = &(newSubreply->reply);
     tweet->replyCount++;
@@ -25,50 +26,77 @@ ReplyId createReply(char* content, UserId author, TweetId tweetId, ReplyNodePoin
     reply->author = author;
     // TODO: Datetime
 
-    if(startTarget == NULL) return -1;
-    insertLastSubreply(startTarget, newSubreply);
+    if(base == NULL) return -1;
+    insertLastReplies(base, newSubreply);
 
     return reply->id;
 }
 
-ReplyNodePointer* getReplyNodeRecur(ReplyNodePointer* start, ReplyId target){
-    if(*start == NULL) return NULL;
-    if((*start)->reply.id == target) return start;
+ReplyNodePointer getReplyRecur(Replies start, ReplyId target){
+    if(start == NULL) return NULL;
 
-    ReplyNodePointer* curr = start;
-    while(*curr != NULL){
-        ReplyNodePointer* r = getReplyNodeRecur(&((*curr)->reply.subreply), target);
+    ReplyNodePointer curr = start;
+    while(curr != NULL){
+        if(curr->reply.id == target) return curr;
+        ReplyNodePointer r = getReplyRecur(curr->reply.replies, target);
         if(r) return r;
-        curr = &((*curr)->next);
+        curr = curr->next;
     }
     return NULL;
 }
 
-ReplyNodePointer* getReplyNode_DP(TweetId tweetId, ReplyId replyId){
-    Tweet *tweet = getTweet(tweetId);
-    return getReplyNodeRecur(&(tweet->subreply), replyId);
+ReplyNodePointer getReply(TweetId tweetId, ReplyId replyId){
+    return getReplyRecur(getTweet(tweetId)->replies, replyId);
 }
 
-ReplyNodePointer* getStartTarget(TweetId tweetId, ReplyId replyId){
+Replies* getReplies(TweetId tweetId, ReplyId replyId){
     Tweet *tweet = getTweet(tweetId);
-    if(replyId == -1) return &(tweet->subreply);
+    if(replyId == -1) return &(tweet->replies);
 
-    ReplyNodePointer* parent = getReplyNode_DP(tweetId, replyId);
+    ReplyNodePointer parent = getReply(tweetId, replyId);
     if(parent == NULL) return NULL;
 
-    return &((*parent)->reply.subreply);
+    return &(parent->reply.replies);
 }
 
-void displayReplyRecurIO(ReplyNodePointer start, int tab){
+void displayReplyRecurIO(Replies start, int tab){
     ReplyNodePointer curr = start;
     while (curr != NULL){
         Reply reply = curr->reply;
         printf("%d %s\n", tab, reply.content);
-        displayReplyRecurIO(reply.subreply, tab + 1);
+        displayReplyRecurIO(reply.replies, tab + 1);
         curr = curr->next;
     }
 }
 
 void displayReplyIO(TweetId tweetId){
-    displayReplyRecurIO(getTweet(tweetId)->subreply, 0);
+    displayReplyRecurIO(getTweet(tweetId)->replies, 0);
+}
+
+void deleteReplyRecur(Replies start){
+    ReplyNodePointer curr = start;
+    while(curr != NULL){
+        deleteReplyRecur(curr->reply.replies);
+
+        ReplyNodePointer next = curr->next;
+        free(curr);
+        curr = next;
+    }
+}
+
+void deleteReply(ReplyNodePointer target){
+    deleteReplyRecur(target->reply.replies);
+
+    ReplyNodePointer curr = *(target->base);
+    if(curr == target){
+        *(target->base) = target->next;
+    } else {
+        while(curr != NULL){
+            if(curr->next == target) break;
+            curr = curr->next;
+        }
+        curr->next = target->next;
+    }
+
+    free(target);
 }

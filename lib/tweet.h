@@ -14,7 +14,7 @@ typedef struct{
     int like;
     UserId author;
     //DATETIME datetime;
-    struct subreply* subreply;
+    struct replynode* subreply;
     int replyCount;
 } Tweet;
 

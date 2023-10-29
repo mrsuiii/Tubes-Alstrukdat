@@ -10,24 +10,25 @@ typedef int ReplyId;
 // #include "ADT/datetime.h"
 // #include "ADT/listdin.h"
 
-typedef struct subreply* SubreplyPointer;
+typedef struct replynode* ReplyNodePointer;
 
 typedef struct reply{
     ReplyId id;
     char content[MAX_REPLY];
     UserId author;
     // DATETIME datetime;
-    SubreplyPointer subreply;
+    ReplyNodePointer subreply;
 } Reply;
 
-typedef struct subreply{
-    SubreplyPointer next;
+typedef struct replynode{
     struct reply reply;
-} Subreply;
+    ReplyNodePointer prev;
+    ReplyNodePointer next;
+} ReplyNode;
 
-ReplyId createReply(char* content, UserId author, TweetId tweetId, SubreplyPointer* target);
-SubreplyPointer* getSubreply(TweetId tweetId, ReplyId replyId);
-void deleteReply(TweetId tweetId, ReplyId replyId);
+ReplyId createReply(char* content, UserId author, TweetId tweetId, ReplyNodePointer* target);
+ReplyNodePointer* getStartTarget(TweetId tweetId, ReplyId replyId);
+ReplyNodePointer* getReplyNode_DP(TweetId tweetId, ReplyId replyId);
 
 void displayReplyIO(TweetId tweetId);
 

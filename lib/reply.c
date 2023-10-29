@@ -3,17 +3,19 @@
 #include "reply.h"
 #include "string.h"
 
-void insertLastSubreply(SubreplyPointer* target, SubreplyPointer value){
+void insertLastSubreply(ReplyNodePointer* target, ReplyNodePointer value){
     if(*target == NULL){
         *target = value;
+        value->prev = NULL;
     } else {
         while((*target)->next != NULL) *target = (*target)->next;
         (*target)->next = value;
+        value->prev = *target;
     }
 }
 
-ReplyId createReply(char* content, UserId author, TweetId tweetId, SubreplyPointer* target){
-    SubreplyPointer newSubreply = malloc(sizeof(Subreply));
+ReplyId createReply(char* content, UserId author, TweetId tweetId, ReplyNodePointer* startTarget){
+    ReplyNodePointer newSubreply = malloc(sizeof(ReplyNode));
     Tweet *tweet = getTweet(tweetId);
     Reply *reply = &(newSubreply->reply);
     tweet->replyCount++;
@@ -23,31 +25,42 @@ ReplyId createReply(char* content, UserId author, TweetId tweetId, SubreplyPoint
     reply->author = author;
     // TODO: Datetime
 
-    insertLastSubreply(target, newSubreply);
+    if(startTarget == NULL) return -1;
+    insertLastSubreply(startTarget, newSubreply);
+
     return reply->id;
 }
 
-Reply* getSubreplyRecur(SubreplyPointer start, ReplyId target){
-    SubreplyPointer curr = start;
-    while (curr != NULL){
-        if(curr->reply.id == target) return &(curr->reply);
+ReplyNodePointer* getReplyNodeRecur(ReplyNodePointer* start, ReplyId target){
+    if(*start == NULL) return NULL;
+    if((*start)->reply.id == target) return start;
 
-        Reply *r = getSubreplyRecur((curr->reply).subreply, target);
-        if (r) return r;
-
-        curr = curr->next;
+    ReplyNodePointer* curr = start;
+    while(*curr != NULL){
+        ReplyNodePointer* r = getReplyNodeRecur(&((*curr)->reply.subreply), target);
+        if(r) return r;
+        curr = &((*curr)->next);
     }
     return NULL;
 }
 
-SubreplyPointer* getSubreply(TweetId tweetId, ReplyId replyId){
+ReplyNodePointer* getReplyNode_DP(TweetId tweetId, ReplyId replyId){
     Tweet *tweet = getTweet(tweetId);
-    if(replyId == -1) return &(tweet->subreply);
-    return &(getSubreplyRecur(tweet->subreply, replyId)->subreply);
+    return getReplyNodeRecur(&(tweet->subreply), replyId);
 }
 
-void displayReplyRecurIO(SubreplyPointer start, int tab){
-    SubreplyPointer curr = start;
+ReplyNodePointer* getStartTarget(TweetId tweetId, ReplyId replyId){
+    Tweet *tweet = getTweet(tweetId);
+    if(replyId == -1) return &(tweet->subreply);
+
+    ReplyNodePointer* parent = getReplyNode_DP(tweetId, replyId);
+    if(parent == NULL) return NULL;
+
+    return &((*parent)->reply.subreply);
+}
+
+void displayReplyRecurIO(ReplyNodePointer start, int tab){
+    ReplyNodePointer curr = start;
     while (curr != NULL){
         Reply reply = curr->reply;
         printf("%d %s\n", tab, reply.content);

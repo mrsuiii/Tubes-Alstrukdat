@@ -163,6 +163,8 @@ Instruksi-instruksi yang dapat dilakukan :
 `make all` : Run binary directly after building   
 `make clean` : Remove all build generated files  
 `make ADT.test` : Running test for ADT test file, for example ( `make time.test` )  
+`make test.all` : Running all test  
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

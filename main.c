@@ -1,13 +1,5 @@
-#include<stdlib.h>
-#include "lib/adt.h"
-
-
-
-
-
-
-
-
+#include <stdio.h>
 
 int main(){
+    printf("Hello, world!");
 }

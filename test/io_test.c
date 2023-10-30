@@ -11,5 +11,5 @@ int main(){
 
     clearStdIO();
 
-    printf("Result: %s", out);
+    printf("Result: %s\n", out);
 }

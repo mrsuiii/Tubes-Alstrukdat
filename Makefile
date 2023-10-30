@@ -1,15 +1,19 @@
+# TODO: Make header file as dependency
+
 CC=gcc
 
 MAIN = main.c
-MAIN_OUT = $(BIN_PATH)/$(MAIN:.c=)
+MAIN_OUT = $(call SRC_TO_BIN,$(MAIN))
 
 BIN_PATH = bin
 OBJ_PATH = $(BIN_PATH)/o
 
-RECUR_WILDCARD=$(foreach f,$(wildcard $1$2),$(call $3,$f)) $(foreach d,$(wildcard $1*),$(call RECUR_WILDCARD,$d/,$2,$3))
+RECUR_WILDCARD=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call RECUR_WILDCARD,$d/,$2))
 
 OBJ_FUN = $(OBJ_PATH)/$(patsubst %.c,%.o,$1) 
 SRC_TO_OBJ = $(foreach f,$1,$(call OBJ_FUN,$f))
+BIN_FUN = $(BIN_PATH)/$(patsubst %.c,%,$1)
+SRC_TO_BIN = $(foreach f,$1,$(call BIN_FUN,$f))
 
 TEST_PATH = test
 TEST_BASE = $(TEST_PATH)/test.c
@@ -62,3 +66,6 @@ bin/test/% : $$(call RECUR_DEP,$$(call GET_TEST_PATH,$$*))
 
 %.test : bin/test/%
 	bin/test/$*
+
+test.all: $(patsubst %_test,%,$(call SRC_TO_BIN,$(call RECUR_WILDCARD,test,*_test.c)))
+	echo ; for P in $^ ; do echo --- $${P} --- ; $${P} ; echo ; done ; echo

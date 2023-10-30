@@ -26,8 +26,8 @@ int string_compare(char* a, char* b){
     }
 
     if(a[ia] == '\0' && b[ib] == '\0') return 0;
-    else if(a[ia] == '\0') return 1;
-    else return -1;
+    else if(a[ia] == '\0') return -1;
+    else return 1;
 }
 
 int string_length(char* a){
@@ -45,4 +45,20 @@ boolean isAllBlank(char* a){
         i++;
     }
     return true ; 
+}
+
+boolean string_include(char* str, char* substr){
+    int strLen = string_length(str);
+    int substrLen = string_length(substr);
+
+    for(int i = 0; i <= strLen - substrLen; ++i){
+        int m = 0;
+        for(int j = 0; j < substrLen; ++j){
+            if(str[i + j] == substr[j]) ++m;
+            else break;
+        }
+
+        if(m == substrLen) return true;
+    }
+    return false;
 }

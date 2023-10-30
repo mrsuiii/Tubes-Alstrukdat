@@ -36,9 +36,9 @@ int main(){
         char expected[] = "Hello, Bondowoso!";
         boolean res = string_compare(expected, out) == 0;
 
-        char err[1000];
+        char err[MAX_ERROR];
         if(!res){
-            snprintf(err, 1000, "Expected: \"%s\", Actual: \"%s\"", expected, out);
+            snprintf(err, MAX_ERROR, "Expected: \"%s\", Actual: \"%s\"", expected, out);
         }
     , res, err)
 }

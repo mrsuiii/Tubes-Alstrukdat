@@ -1,15 +1,19 @@
 #include <stdio.h>
+#include "../lib/string.h"
 #include "_test_.h"
 
 int main(){
-    char in[] = "-1"; char* out;
-    interceptStdIO(in, &out);
+    DEFINE_TEST("IO intercept",
+        char in[] = "1 2"; char* out;
 
-    int t;
-    scanf("%d", &t);
-    printf("Hello, world! (%d)", t);
+        interceptStdIO(in, &out);
 
-    clearStdIO();
+        int a;
+        int b;
+        scanf("%d %d", &a, &b);
+        printf("%d", a + b);
 
-    printf("Result: %s\n", out);
+        clearStdIO();
+
+    , string_compare(out, "3") == 0, "")
 }

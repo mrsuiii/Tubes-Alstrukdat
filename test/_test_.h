@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+#define MAX_ERROR 1000
 #define NORMAL "\x1B[0m"
 #define RED "\x1B[31m"
 #define GREEN "\x1B[32m"
@@ -13,7 +14,9 @@
     if(_result){\
         printf("\x1B[32m✓ \x1B[0m%s\n", _name);\
     }else{\
-        printf("\x1B[31m✗ \x1B[0m%s (%s)\n", _name, _error);\
+        printf("\x1B[31m✗ \x1B[0m%s ", _name);\
+        if(*_error) printf("(%s)", _error);\
+        printf("\n");\
     }\
 }
 

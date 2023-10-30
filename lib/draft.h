@@ -2,6 +2,10 @@
 #define DRAFT_H
 
 #include "tweet.h"
+#include "string.h"
+#include "get_string.h"
+#include "ADT/boolean.h"
+#include "ADT/datetime.h"
 
 #define DELETE_DRAFT 0
 #define UPLOAD_DRAFT 1
@@ -10,32 +14,42 @@
 
 typedef struct Draft* DraftAddress;
 typedef struct Draft{
-    char text[MAX_TWEET];
+    char content[MAX_TWEET];
     DraftAddress next;    
+    //DATETIME datetime;
 } Draft;
 
-/* Create new draft */
+/* Create new empty Draft */
 DraftAddress newDraft();
 
-/* Create a draft, if not empty then Insertfirst */
-void createDraft(UserId id, char* newText);
+/* Create a Draft */
+void createDraft(UserId id, char* newcontent);
 
-/* Get First Draft */
+/* Get Last Draft */
 DraftAddress getDraft(UserId id);
 
 /* Check if Draft is Empty */
 boolean isDraftEmpty(UserId id);
 
-/* Delete last draft */
+/* Get amount of Draft of a user */
+int draftLength(UserId id);
+
+/* Delete last Draft */
 void deleteDraft(UserId id);
 
-/* Publish last draft */
-void publishDraft(UserId id);
+/* Publish last Draft, IO for displayTweetIO */
+void publishDraftIO();
 
-/* Display last draft */
-void displayDraftIO(UserId id);
+/* Display last Draft */
+void displayLastDraftIO();
 
-/* Get amount of draft of a user */
-int draftLength(UserId id);
+/* Display Draft and ask for command */
+void displayDraftIO();
+
+/* Read Draft and ask for command */
+void readDraftIO();
+
+/* Read commands for Draft (HAPUS, SIMPAN, UBAH, TERBIT, KEMBALI) */
+void readDraftCommandIO();
 
 #endif

@@ -98,6 +98,11 @@ boolean isFriend(UserId a, UserId b){
 }
 
 void displayFriendIO(){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
+
     int count = relationCount[loggedUser->id];
 
     if(count == 0){
@@ -114,6 +119,11 @@ void displayFriendIO(){
 }
 
 void removeFriendIO(){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
+
     char tmpName[MAX_NAME];
     printf("Masukkan nama pengguna:\n");
     get_string(tmpName, MAX_NAME);
@@ -151,6 +161,11 @@ void removeFriendIO(){
 }
 
 void requestFriendIO(){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
+
     if(isRequestee(loggedUser->id)){
         printf("Terdapat permintaan pertemanan yang belum Anda setujui. Silakan kosongkan daftar permintaan pertemanan untuk Anda terlebih dahulu.\n");
         return;
@@ -175,6 +190,11 @@ void requestFriendIO(){
 };
 
 void cancelRequestFriendIO(){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
+
     char tmpName[MAX_NAME];
     printf("Masukkan nama pengguna:\n");
     get_string(tmpName, MAX_NAME);
@@ -194,6 +214,11 @@ void cancelRequestFriendIO(){
 }
 
 void displayRequestedFriendIO(){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
+
     Users u = getRequest(loggedUser->id);
     if(u.size == 0){
         printf("Tidak ada permintaan pertemanan untuk Anda\n");
@@ -209,6 +234,11 @@ void displayRequestedFriendIO(){
 }
 
 void acceptFriendIO(){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
+
     UserId id = getTopRequest(loggedUser->id);
     if(id == -1){
         printf("Tidak ada permintaan pertemanan untuk Anda\n");

@@ -81,6 +81,7 @@
 - [Link Drive Pusat](https://drive.google.com/drive/folders/1D6GTJ9Fq_8P79lhSrxI7DJDdBFtoojR0)
 - [Link Spesifikasi](https://docs.google.com/document/d/1yy0SLsXEE0e-ZBxMSrd0Gz9AOSWqJw1trtTqDjeyfsk/edit)
 - [Link Pedoman](https://docs.google.com/document/d/1vnoqQK18ECL8PEAkYbjM-9g1MRGTI7hOLv6GKHlGnuc/edit)
+- [Link Q&A](https://docs.google.com/spreadsheets/d/1S8pEorkaomHjgonWgp44o_AvLxFdENWVEXE3NrO2P_o/edit#gid=1259903967)
 - [Link Data Kelompok](https://docs.google.com/spreadsheets/d/1Q_TMzWjDSr5ZXc-hv2KoGYySJbb_LyA7Z5_KCdIE6ko/edit#gid=1406958191)
 
 
@@ -163,6 +164,8 @@ Instruksi-instruksi yang dapat dilakukan :
 `make all` : Run binary directly after building   
 `make clean` : Remove all build generated files  
 `make ADT.test` : Running test for ADT test file, for example ( `make time.test` )  
+`make test.all` : Running all test  
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

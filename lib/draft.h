@@ -37,7 +37,7 @@ int draftLength(UserId id);
 /* Delete last Draft */
 void deleteDraft(UserId id);
 
-/* Publish last Draft, IO for displayTweetIO */
+/* Publish last Draft, use IO for displayTweetIO() */
 void publishDraftIO();
 
 /* Display last Draft */
@@ -47,7 +47,7 @@ void displayLastDraftIO();
 void displayDraftIO();
 
 /* Read Draft and ask for command */
-void readDraftIO();
+void createDraftIO();
 
 /* Read commands for Draft (HAPUS, SIMPAN, UBAH, TERBIT, KEMBALI) */
 void readDraftCommandIO();

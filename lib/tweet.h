@@ -7,13 +7,16 @@ typedef int TweetId;
 
 #include "user.h"
 #include "reply.h"
+#include "thread.h"
 
-typedef struct{
+typedef struct tweet{
     TweetId id;
     char tweet[MAX_TWEET];
     int like;
     UserId author;
     //DATETIME datetime;
+    ThreadPointer firstThread; // firstThread = kicauan sambungan pertama
+    int threadCount;
     Replies replies;
     int replyCount;
 } Tweet;

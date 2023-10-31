@@ -52,7 +52,7 @@ void createTweetIO(){
     TweetId newTweetId = createTweet(content, loggedUser->id);
     
     if (isAllBlank(content)){
-        printf("Kicauan tidak boleh hanya berisi spasi!");
+        printf("Kicauan tidak boleh hanya berisi spasi!\n");
     } else {         
         printf("Selamat! kicauan telah diterbitkan!\n"); 
         displayTweetIO(newTweetId);
@@ -69,11 +69,13 @@ void changeTweetIO(TweetId id) {
         if (loggedUser != tweeter){
             printf("Kicauan dengan ID = %d bukan milikmu!\n",id);
         } else {
+            printf("Masukkan kicauan baru: \n");
+
             char newContent [MAX_TWEET] ; 
             get_string(newContent, MAX_TWEET);
 
             if (isAllBlank (newContent)){
-                printf("Kicauan tidak boleh hanya berisi spasi!");
+                printf("Kicauan tidak boleh hanya berisi spasi!\n");
             }
             else {
                 printf("Selamat! kicauan telah diterbitkan!\n");

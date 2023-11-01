@@ -68,7 +68,24 @@
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
         <li><a href="#instruction">Instruction</a></li>
-        <li><a href="#features">Features</a></li>
+        <li>
+        <details>
+          <summary><a href="#features">Features</a></summary>
+          <ol>
+            <li><a href="#1-initialization-inisialisasi">Inisialisasi</a></li>
+            <li><a href="#2-commands-perintah">Commands</a></li>
+            <li><a href="#3-user-pengguna">User</a></li>
+            <li><a href="#4-profile-profil">Profile</a></li>
+            <li><a href="#5-friend-teman">Friend</a></li>
+            <li><a href="#6-friend-request-permintaan-pertemanan">Friend Request</a></li>
+            <li><a href="#7-tweet-kicauan">Tweet</a></li>
+            <li><a href="#8-reply-balasan">Reply</a></li>
+            <li><a href="#9-tweet-draft-draf-kicauan">Tweet Draft</a></li>
+            <li><a href="#10-thread-utas">Thread</a></li>
+            <li><a href="#11-save-and-load-simpan-dan-muat">Save & Load</a></li>
+          <ol>
+        </details>
+        </li>
       </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
@@ -172,20 +189,63 @@ Instruksi-instruksi yang dapat dilakukan :
 <!-- FEATURES -->
 ## Features
 
-### 1. XXXXX
+### 1. Initialization (Inisialisasi)
 
 &ensp;&ensp;
-description
+Ketika Program dijalankan dilakukan Inisialisasi Program seperti memuat konfigurasi dan output pembuka program.
 
-### 2. XXXXX
-
-&ensp;&ensp;
-description
-
-### 3. XXXXX
+### 2. Commands (Perintah)
 
 &ensp;&ensp;
-description
+Membaca dan Mengeksekusi Perintah-Perintah Program.
+
+### 3. User (Pengguna)
+
+&ensp;&ensp;
+Program dapat membuat seorang pengguna yang terdiri dari Nama dan Password Akun.
+
+### 4. Profile (Profil)
+
+&ensp;&ensp;
+Seorang Pengguna memiliki profil yang terdiri dari bio, nomor hp, weton, jenis akun, dan foto profil.
+
+### 5. Friend (Teman)
+
+&ensp;&ensp;
+Dapat dijalinkan Pertemanan antara Pengguna.
+
+### 6. Friend Request (Permintaan Pertemanan)
+
+&ensp;&ensp;
+Seorang Pengguna dapat melakukan permintaan pertemanan kepada Pengguna lain.
+
+### 7. Tweet (Kicauan)
+
+&ensp;&ensp;
+Membuat Kicauan atau tweet yang memiliki isi, pembuat, waktu, dan jumlah like.
+
+### 8. Reply (Balasan)
+
+&ensp;&ensp;
+Membuat balasan terhadap suatu kicauan atau balasan lain.
+
+### 9. Tweet Draft (Draf Kicauan)
+
+&ensp;&ensp;
+Membuat Draf Kicauan yang dapat disimpan, diubah, dihapus, dan diterbitkan menjadi Kicauan.
+
+### 10. Thread (Utas)
+
+&ensp;&ensp;
+Suatu Kicauan mungkin tidak cukup untuk menulis suatu pesan. Maka suatu kicauan dapat dibuat menjadi 
+
+### 11. Save & Load (Simpan dan Muat)
+
+&ensp;&ensp;
+State Akhir program dapat disimpan pada file konfigurasi.  
+&ensp;&ensp;
+Konfigurasi dapat dimuat saat program dimulai.   
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

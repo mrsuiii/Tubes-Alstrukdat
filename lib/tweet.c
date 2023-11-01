@@ -116,7 +116,7 @@ void displayAllTweetIO() {
         printf("Anda belum login\n");
         return ; 
     }
-    for(int i = 1 ; i <= tweets.nEff; i ++){
+    for(int i = tweets.nEff ; i >= 1; i ++){
         Tweet *tweet = getTweet(i) ; 
         
         if(

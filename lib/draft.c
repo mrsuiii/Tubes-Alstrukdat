@@ -55,7 +55,11 @@ int draftLength(UserId id){
 /* Delete last Draft */
 void deleteDraft(UserId id){
     DraftAddress p = getDraft(id);
-    drafts[id] = drafts[id]->next;
+    if(draftLength(id) == 1){
+        drafts[id] = NULL;
+    } else{
+        drafts[id] = drafts[id]->next;
+    }
     free(p);
 }
 
@@ -93,7 +97,7 @@ void displayDraftIO(){
 }
 
 /* Read Draft and ask for command */
-void readDraftIO(){
+void createDraftIO(){
     UserId id = loggedUser->id;
     char content[MAX_TWEET];
     do{

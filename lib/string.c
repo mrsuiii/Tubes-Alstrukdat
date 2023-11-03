@@ -2,6 +2,12 @@
 #include "string.h"
 # include "ADT/boolean.h"
 
+void string_append(char* start, char* end, char* to, int max){
+    int startLength = string_length(start);
+    string_copy(start, to, max);
+    string_copy(end, &to[startLength], max - startLength);
+}
+
 void string_copy(char* from, char* to, int max){
     if(max == 0) return;
 

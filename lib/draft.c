@@ -146,3 +146,27 @@ void readDraftCommandIO(){
         printf("\n\n");
     }
 }
+
+int MAX_CONFIG = 100000;
+
+/* Convert Draft data to Config */
+void draftToConfig(char* buffer){
+    buffer[0] = '\n';
+    char line[1000];
+
+    int count = 0;
+    for(int i = 0; i < MAX_USER; i++){
+        count += draftLength(i);
+    }
+
+    snprintf(line, 1000, "%d\n", count);
+    string_append(buffer, line, buffer, MAX_CONFIG);
+    int id = 1;
+    for(int i = 0; i < MAX_USER; i++){
+        for(int j = 0; j < draftLength(i); j++){
+            snprintf(line, 1000, "%d\n%s\n%s\n%s\n", id, getDraft(i),getUser(i)->name, getDraft(i)->datetime);
+            string_append(buffer, line, buffer, MAX_CONFIG);
+            id ++;
+        }
+    }
+}

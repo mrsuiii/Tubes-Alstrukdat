@@ -9,13 +9,28 @@ int main(){
     DEFINE_TEST("Belum Login", 
         setup();
 
+        char err[MAX_ERROR];
         char in[] = ""; char* out;
-        interceptStdIO(in, &out);
-        displayFriendIO();
-        clearStdIO();
 
-        cleanup();
+        SUB_TEST(
+            interceptStdIO(in, &out);
+            displayFriendIO();
+            clearStdIO();
+            cleanup();
 
-        boolean res = string_include(out, "belum login");
-    , res, "Tidak terdapat pesan yang sesuai")
+
+            assert_string_include(err, out, "belum login");
+            prependError(err, "Function displayFriendIO. ");
+        , err)
+
+        SUB_TEST(
+            interceptStdIO(in, &out);
+            requestFriendIO();
+            clearStdIO();
+            cleanup();
+
+            assert_string_include(err, out, "belum login");
+            prependError(err, "Function requestFriendIO. ");
+        , err)
+    , err)
 }

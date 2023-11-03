@@ -4,6 +4,7 @@
 
 int main(){
     DEFINE_TEST("IO intercept",
+        char err[MAX_ERROR];
         char in[] = "1 2"; char* out;
 
         interceptStdIO(in, &out);
@@ -15,5 +16,6 @@ int main(){
 
         clearStdIO();
 
-    , string_compare(out, "3") == 0, "")
+        assert_string_equal(err, out, "3");
+    , err)
 }

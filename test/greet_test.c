@@ -5,6 +5,7 @@
 
 int main(){
     DEFINE_TEST("Greet IO Lib",
+        char err[MAX_ERROR];
         char in[] = ""; char* out;
 
         interceptStdIO(in, &out);
@@ -12,6 +13,6 @@ int main(){
         clearStdIO();
 
         char expected[] = "Hello, Bondowoso!";
-        boolean res = string_include(out, "Bondowoso");
-    , res, "")
+        assert_string_include(err, out, "Bondowoso")
+    , err)
 }

@@ -196,3 +196,42 @@ void deleteReplyIO(TweetId tweetId, ReplyId replyId){
     deleteReply(rp);
     printf("Balasan berhasil dihapus\n");
 }
+
+int maxLine = 1000;
+int maxConfig = 1000000;
+
+void repliesToConfig(Replies replies, int parent, char* buffer){
+    ReplyNodePointer current = replies;
+    while(current){
+        Reply reply = current->reply;
+        char line[maxLine];
+        snprintf(line, maxLine, "%d %d\n%s\n%s\n", parent, reply.id, reply.content, getUser(reply.author)->name);
+        string_append(buffer, line, buffer, maxConfig);
+
+        repliesToConfig(reply.replies, reply.id, buffer);
+        current = current->next;
+    }
+}
+
+void replyToConfig(char* buffer){
+    char line[maxLine];
+
+    TweetPointer tweet[tweets.nEff];
+    int tweetCount = 0;
+    for(int id = 1; id <= tweets.nEff; ++id){
+        TweetPointer tp = getTweet(id);
+        if(tp->replies != NULL){
+            tweet[tweetCount] = tp;
+            ++tweetCount;
+        }
+    }
+
+    snprintf(line, maxLine, "%d\n", tweetCount);
+    string_append(buffer, line, buffer, maxConfig);
+
+    for(int i = 0; i < tweetCount; ++i){
+        snprintf(line, maxLine, "%d\n", tweet[i]->id);
+        string_append(buffer, line, buffer, maxConfig);
+        repliesToConfig(tweet[i]->replies, -1, buffer);
+    }
+}

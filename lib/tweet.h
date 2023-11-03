@@ -35,11 +35,14 @@ typedef struct{
 
 extern Tweets tweets;
 
-TweetId createTweet(char* content, UserId author);
+boolean isIdValid(TweetId id) ; 
 Tweet* getTweet(TweetId id);
+TweetId createTweet(char* content, UserId author);
+TweetId editTweet(TweetId id, UserId author, char* newContent) ; 
+TweetId likeTweet(TweetId id);
 
 void createTweetIO();
-void changeTweetIO(TweetId id) ; 
+void editTweetIO(TweetId id) ; 
 void likeTweetIO(TweetId id) ; 
 void displayTweetIO(TweetId id) ; 
 void displayAllTweetIO() ; 

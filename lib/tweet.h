@@ -46,4 +46,6 @@ void editTweetIO(TweetId id) ;
 void likeTweetIO(TweetId id) ; 
 void displayTweetIO(TweetId id) ; 
 void displayAllTweetIO() ; 
+
+void tweetToConfig();
 #endif

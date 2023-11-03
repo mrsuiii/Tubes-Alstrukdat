@@ -27,8 +27,9 @@
     }\
 }
 
+/* DANGEROUS, since we allow for 10.000 char to be writen to 1.000 buffer, can cause Buffer-Overflow */
 #define assert_true(err, res, ...) {\
-    if(!(res)) snprintf(err, MAX_ERROR, __VA_ARGS__);\
+    if(!(res)) snprintf(err, MAX_ERROR * 10, __VA_ARGS__);\
     else (err)[0] = '\0';\
 }
 

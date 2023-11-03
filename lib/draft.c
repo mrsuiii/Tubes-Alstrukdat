@@ -15,7 +15,7 @@ DraftAddress newDraft(){
 
 /* Create a Draft */
 void createDraft(UserId id, char* newcontent){
-    DraftAddress n = newDraft(id);
+    DraftAddress n = newDraft();
     if(isDraftEmpty(id)){
         drafts[id] = newDraft();
         string_copy(newcontent, drafts[id]->content, MAX_TWEET);
@@ -90,7 +90,7 @@ void displayDraftIO(){
     if(draft == NULL){
         printf("Yah, anda belum memiliki draf apapun! Buat dulu ya :D\n");
     } else{
-        displayLastDraftIO(id);
+        displayLastDraftIO();
         printf("\nApakah anda ingin mengubah, menghapus, atau menerbitkan draf ini? (KEMBALI jika ingin kembali)\n");
         readDraftCommandIO();   
     }
@@ -117,9 +117,9 @@ void createDraftIO(){
 /* Read commands for Draft (Hapus, Simpan, Ubah, Terbit) */
 void readDraftCommandIO(){
     UserId id = loggedUser->id;
-    char command[7]; 
+    char command[10]; 
     /* command yang mungkin: HAPUS; SIMPAN; UBAH; TERBIT; KEMBALI;*/ 
-    get_string(command, 7);
+    get_string(command, 10);
     printf("ini isi command : %s\n",command);
     if(string_compare(command,"SIMPAN") == 0){
         printf("\nDraf telah berhasil disimpan!\n");
@@ -160,17 +160,22 @@ void draftToConfig(char* buffer){
 
     int count = 0;
     for(int i = 0; i < MAX_USER; i++){
-        count += draftLength(i);
+        if(!isDraftEmpty(i)){
+            count ++;
+        }
     }
 
     snprintf(line, 1000, "%d\n", count);
     string_append(buffer, line, buffer, MAX_CONFIG);
-    int id = 1;
     for(int i = 0; i < MAX_USER; i++){
-        for(int j = 0; j < draftLength(i); j++){
-            snprintf(line, 1000, "%d\n%s\n%s\n%s\n", id, getDraft(i)->content,getUser(i)->name, getDraft(i)->datetime);
+        if(!isDraftEmpty(i)){
+            snprintf(line,1000,"%s %d\n",getUser(i)->name, draftLength(i));
             string_append(buffer, line, buffer, MAX_CONFIG);
-            id ++;
+
+            for(int j = 0; j < draftLength(i); j++){
+                snprintf(line, 1000, "%s\n%s\n", getDraft(i)->content, getDraft(i)->datetime);
+                string_append(buffer, line, buffer, MAX_CONFIG);
+            }
         }
     }
 }

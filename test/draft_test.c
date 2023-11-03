@@ -5,75 +5,126 @@
 #include "../lib/routine.h"
 
 int main(){
-    DEFINE_TEST("Create Draft - SIMPAN",
+    DEFINE_TEST("Buat Draf", 
         setup();
-        char in[] = "ini Draft;SIMPAN;"; char* out;
+        char err[MAX_ERROR] = "\0";
         UserId id = createUser("ciko", "");
         loggedUser = getUser(id);
 
-        interceptStdIO(in, &out);
-        createDraftIO();
-        clearStdIO();
+        SUB_TEST(
+            char in[] = "isi Draf;"; char* out;
+            
+            interceptStdIO(in, &out);
+            createDraftIO();
+            clearStdIO();
+
+            assert_string_include(err, out, "Apakah anda ingin menghapus");
+            prependError(err, "Perintah DAFTAR_TEMAN. Gagal mengisi Konten. ");
+        ,err);        
+        
+        SUB_TEST(
+            char in[] = "isi Draf;SIMPAN;"; char* out;
+            
+            interceptStdIO(in, &out);
+            createDraftIO();
+            clearStdIO();
+
+            assert_string_include(err, out, "berhasil disimpan");
+            prependError(err, "Perintah DAFTAR_TEMAN. Gagal menyimpan. ");
+        ,err);      
+
+        SUB_TEST(
+            char in[] = "isi Draft;HAPUS;"; char* out;
+            
+            interceptStdIO(in, &out);
+            createDraftIO();
+            clearStdIO();
+
+            assert_string_include(err, out, "berhasil dihapus");
+            prependError(err, "Perintah DAFTAR_TEMAN. Gagal menghapus. ");
+        ,err);
+
+        SUB_TEST(
+            char in[] = "isi Draft;TERBIT;"; char* out;
+            
+            interceptStdIO(in, &out);
+            createDraftIO();
+            clearStdIO();
+
+            assert_string_include(err, out, "kicauan telah diterbitkan");
+            prependError(err, "Perintah DAFTAR_TEMAN. Gagal menerbitkan. ");
+        ,err);
+
+        cleanup();
+    , err);
     
-        char err[MAX_ERROR];
-        boolean res = string_include(out, "berhasil disimpan");
-        if(!res){
-            string_copy("Draft tidak berhasil dibuat", err, MAX_ERROR);
-        } else{
-            res = string_include(in, getDraft(id)->content);
-            if(!res){
-                string_copy("Draft tidak ditemukan", err, MAX_ERROR);
-            }
-        }
-        cleanup();
-   , res, "");
-   
-    DEFINE_TEST("Create Draft - HAPUS",
+    DEFINE_TEST("Lihat Draft", 
         setup();
-        char in[] = "ini Draft;HAPUS;"; char* out;
+        char err[MAX_ERROR] = "\0";
         UserId id = createUser("ciko", "");
         loggedUser = getUser(id);
 
-        interceptStdIO(in, &out);
-        createDraftIO();
-        clearStdIO();
+        SUB_TEST( 
+            char in[] = ""; char* out;
 
-        char err[MAX_ERROR];
-        boolean res = string_include(out, "berhasil dihapus");
-        printf("%s",out);
-        if(!res){
-            string_copy("Draft tidak berhasil dihapus", err, MAX_ERROR);
-        } else{
-            res = getDraft(id) == NULL;
-            if(!res){
-                string_copy("Draft ditemukan", err, MAX_ERROR);
-            }
-        }
+            interceptStdIO(in, &out);
+            displayDraftIO();
+            clearStdIO();
+
+            assert_string_include(err, out, "belum memiliki draf");
+            prependError(err, "Perintah LIHAT_TEMAN. Gagal tidak ada draf. ");
+        ,err);
+
+        createDraft(id,"isi Draft");
+
+        SUB_TEST(
+            char in[] = ""; char* out;
+
+            interceptStdIO(in, &out);
+            displayDraftIO();
+            clearStdIO();
+
+            assert_string_include(err, out, "draf terakhir");
+            prependError(err, "Perintah LIHAT_TEMAN. ");
+        ,err);        
+        
+        SUB_TEST(
+            char in[] = "HAPUS;"; char* out;
+
+            interceptStdIO(in, &out);
+            displayDraftIO();
+            clearStdIO();
+
+            assert_string_include(err, out, "berhasil dihapus");
+            prependError(err, "Perintah LIHAT_TEMAN. Gagal menghapus. ");
+        ,err);      
+
+        createDraft(id,"isi Draft");
+
+        SUB_TEST(
+            char in[] = "TERBIT;"; char* out;
+            
+            interceptStdIO(in, &out);
+            displayDraftIO();
+            clearStdIO();
+
+            assert_string_include(err, out, "kicauan telah diterbitkan");
+            prependError(err, "Perintah LIHAT_TEMAN. Gagal menerbitkan. ");
+        ,err);
+
+        createDraft(id,"isi Draft");
+
+        SUB_TEST(
+            char in[] = "UBAH; isi baru Draft;SIMPAN;"; char* out;
+            
+            interceptStdIO(in, &out);
+            displayDraftIO();
+            clearStdIO();
+
+            assert_string_include(err, out, "Masukkan draf baru:");
+            prependError(err, "Perintah LIHAT_TEMAN. Gagal mengubah draf. ");
+        ,err);      
+
         cleanup();
-   , res, "");
-   
-    DEFINE_TEST("Create Draft - TERBIT",
-        setup();
-        char in[] = "ini Draft;TERBIT;"; char* out;
-        UserId id = createUser("ciko", "");
-        loggedUser = getUser(id);
-
-        interceptStdIO(in, &out);
-        createDraftIO();
-        clearStdIO();
-
-        char err[MAX_ERROR];
-        boolean res = string_include(out, "kicauan telah diterbitkan");
-        printf("%s",out);
-        if(!res){
-            string_copy("Draft tidak berhasil diterbitkan", err, MAX_ERROR);
-        } else{
-            res = getDraft(id) == NULL;
-            if(!res){
-                string_copy("Draft ditemukan", err, MAX_ERROR);
-            }
-        }
-        cleanup();
-   , res, "");
-   
+    , err);
 }

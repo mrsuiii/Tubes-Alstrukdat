@@ -16,6 +16,10 @@ boolean isIdValid(TweetId id){
     return (id >= 1 && id <= tweets.nEff);
 }
 
+Tweet* getTweet(TweetId id){
+    return &(tweets.buffer[id - 1]) ; 
+}
+
 TweetId createTweet(char* content, UserId author){
     if (tweets.capacity == 0 ){
         tweets.buffer = (Tweet*) malloc (sizeof(Tweet));
@@ -38,10 +42,17 @@ TweetId createTweet(char* content, UserId author){
     return tweet->id ; 
 }
 
-Tweet* getTweet(TweetId id){
-    return &(tweets.buffer[id - 1]) ; 
+TweetId editTweet(TweetId id, UserId author, char* newContent){
+    Tweet* tweet = getTweet(id) ; 
+    string_copy(newContent, tweet->tweet, MAX_TWEET) ; 
+
+    return  id; 
 }
 
+TweetId likeTweet(TweetId id){
+    Tweet* tweet = getTweet(id); 
+    tweet->like ++ ; 
+}
 
 // Pemrosesan IO //
 void createTweetIO(){
@@ -57,10 +68,9 @@ void createTweetIO(){
         printf("Selamat! kicauan telah diterbitkan!\n"); 
         displayTweetIO(newTweetId);
     }
-
 }
 
-void changeTweetIO(TweetId id) {
+void editTweetIO(TweetId id) {
     if (!isIdValid(id)){
         printf("Tidak ditemukan kicauan dengan ID ==%d!\n",id);
     } else {
@@ -80,7 +90,8 @@ void changeTweetIO(TweetId id) {
             else {
                 printf("Selamat! kicauan telah diterbitkan!\n");
                 printf("Detil kicauan:\n");
-                string_copy(newContent, tweet->tweet, MAX_TWEET) ;         
+                TweetId tweetId = editTweet(id, loggedUser->id, newContent);
+                displayTweetIO(id);
             }
         }
     }
@@ -95,7 +106,7 @@ void likeTweetIO(TweetId id){
         if (tweeter->type == 1  && !isFriend(loggedUser->id, tweeter->id)){
             printf("Wah, kicauan tersebut dibuat oleh akun privat! Ikuti akun itu dulu ya\n");
         } else {
-            tweet->like ++ ; 
+            likeTweet(id);
         }
     }
 }
@@ -116,7 +127,7 @@ void displayAllTweetIO() {
         printf("Anda belum login\n");
         return ; 
     }
-    for(int i = tweets.nEff ; i >= 1; i ++){
+    for(int i = tweets.nEff  ; i >= 1; i --){
         Tweet *tweet = getTweet(i) ; 
         
         if(

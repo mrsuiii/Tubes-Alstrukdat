@@ -19,12 +19,14 @@ void greet(){
 
 int main(){
     DEFINE_TEST("isGreater Function",
-        boolean res = isGreater(1, 2);
-    , res == false, "Fungsi salah");
+        char err[MAX_ERROR];
+        assert_true(err, isGreater(2, 1), "1 > 2");
+    , err);
 
     DEFINE_TEST("isLess Function", 
-        boolean res = isLess(1, 2);
-    , res == true, "Fungsi salah");
+        char err[MAX_ERROR];
+        assert_true(err, isLess(1, 2), "1 < 2");
+    , err);
 
     DEFINE_TEST("Greet IO",
         char in[] = "Bondowoso;"; char* out;
@@ -37,8 +39,6 @@ int main(){
         boolean res = string_compare(expected, out) == 0;
 
         char err[MAX_ERROR];
-        if(!res){
-            snprintf(err, MAX_ERROR, "Expected: \"%s\", Actual: \"%s\"", expected, out);
-        }
-    , res, err)
+        assert_string_equal(err, out, expected)
+    , err)
 }

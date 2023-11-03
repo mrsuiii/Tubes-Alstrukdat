@@ -55,4 +55,7 @@ void readDraftCommandIO();
 /* Convert Draft data to Config */
 void draftToConfig(char* buffer);
 
+/* Memberishkan draft */
+void draftCleanUpRoutine();
+
 #endif

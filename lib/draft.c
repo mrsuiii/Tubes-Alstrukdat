@@ -142,8 +142,12 @@ void readDraftCommandIO(){
         createDraft(id,content);
         printf("\nApakah anda ingin menghapus, menyimpan, atau menerbitkan draf ini?\n");
         readDraftCommandIO();
-    } else /* command = kembali */ {
-        printf("\n\n");
+    } else/* command = kembali */ {
+        printf("\n");
+        if(string_compare(command,"KEMBALI") != 0){
+            printf("Input \"%s\" tidak valid", command);
+        }
+        printf("\n");
     }
 }
 
@@ -151,7 +155,7 @@ int MAX_CONFIG = 100000;
 
 /* Convert Draft data to Config */
 void draftToConfig(char* buffer){
-    buffer[0] = '\n';
+    buffer[0] = '\0';
     char line[1000];
 
     int count = 0;
@@ -164,9 +168,18 @@ void draftToConfig(char* buffer){
     int id = 1;
     for(int i = 0; i < MAX_USER; i++){
         for(int j = 0; j < draftLength(i); j++){
-            snprintf(line, 1000, "%d\n%s\n%s\n%s\n", id, getDraft(i),getUser(i)->name, getDraft(i)->datetime);
+            snprintf(line, 1000, "%d\n%s\n%s\n%s\n", id, getDraft(i)->content,getUser(i)->name, getDraft(i)->datetime);
             string_append(buffer, line, buffer, MAX_CONFIG);
             id ++;
+        }
+    }
+}
+
+/* Memberishkan draft */
+void draftCleanUpRoutine(){
+    for(int i = 0; i < MAX_USER; ++i){
+        while(!isDraftEmpty(i)){
+            deleteDraft(i);
         }
     }
 }

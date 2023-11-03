@@ -40,4 +40,6 @@ void createReplyIO(TweetId tweetId, ReplyId replyId);
 void displayReplyIO(TweetId tweetId);
 void deleteReplyIO(TweetId tweetId, ReplyId replyId);
 
+void replyToConfig(char* buffer);
+
 #endif

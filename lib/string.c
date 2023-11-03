@@ -2,6 +2,12 @@
 #include "string.h"
 # include "ADT/boolean.h"
 
+void string_append(char* start, char* end, char* to, int max){
+    int startLength = string_length(start);
+    string_copy(start, to, max);
+    string_copy(end, &to[startLength], max - startLength);
+}
+
 void string_copy(char* from, char* to, int max){
     if(max == 0) return;
 
@@ -61,4 +67,36 @@ boolean string_include(char* str, char* substr){
         if(m == substrLen) return true;
     }
     return false;
+}
+
+void string_replace(char* target, char* result, char* from, char* to, int max){
+    int targetLen = string_length(target);
+    int fromLen = string_length(from);
+    int toLen = string_length(to);
+
+    char tmp[targetLen + 1];
+    string_copy(target, tmp, max);
+
+    int p = 0, i = 0;
+    while(i <= targetLen - fromLen && p < max - 1){
+        boolean found = true;
+        int j = 0;
+        while(found && j < fromLen){
+            if(tmp[i + j] != from[j]) found = false;
+            j++;
+        }
+
+        if(found){
+            j = 0;
+            while(j < toLen && p < max - 1){
+                result[p] = to[j];
+                j++; p++;
+            }
+            i += fromLen;
+        } else {
+            result[p] = tmp[i];
+            i++; p++;
+        }
+    }
+    result[p] = '\0';
 }

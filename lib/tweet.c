@@ -137,3 +137,16 @@ void displayAllTweetIO() {
         displayTweetIO(i); 
     }
 }
+
+void tweetToConfig(){
+    printf("%d\n", tweets.nEff); 
+    int i ; 
+    for (i = 1 ; i <= tweets.nEff; i ++){
+        TweetPointer tweet = getTweet(i); 
+        printf("%d\n", i );
+        printf("%s\n", tweet->tweet);
+        printf("%d\n", tweet->like);
+        printf("%s\n", getUser(tweet->author)->name);
+        // printf DATETIME
+    }
+}

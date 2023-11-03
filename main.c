@@ -2,12 +2,5 @@
 #include "lib/adt.h"
 
 
-
-
-
-
-
-
-
 int main(){
 }

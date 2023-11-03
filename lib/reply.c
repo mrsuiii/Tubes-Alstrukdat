@@ -200,22 +200,19 @@ void deleteReplyIO(TweetId tweetId, ReplyId replyId){
 int maxLine = 1000;
 int maxConfig = 1000000;
 
-void repliesToConfig(Replies replies, int parent, char* buffer){
+void repliesToConfig(Replies replies, int parent){
     ReplyNodePointer current = replies;
     while(current){
         Reply reply = current->reply;
-        char line[maxLine];
-        snprintf(line, maxLine, "%d %d\n%s\n%s\n", parent, reply.id, reply.content, getUser(reply.author)->name);
-        string_append(buffer, line, buffer, maxConfig);
 
-        repliesToConfig(reply.replies, reply.id, buffer);
+        printf("%d %d\n%s\n%s\n", parent, reply.id, reply.content, getUser(reply.author)->name);
+
+        repliesToConfig(reply.replies, reply.id);
         current = current->next;
     }
 }
 
-void replyToConfig(char* buffer){
-    char line[maxLine];
-
+void replyToConfig(){
     TweetPointer tweet[tweets.nEff];
     int tweetCount = 0;
     for(int id = 1; id <= tweets.nEff; ++id){
@@ -226,12 +223,10 @@ void replyToConfig(char* buffer){
         }
     }
 
-    snprintf(line, maxLine, "%d\n", tweetCount);
-    string_append(buffer, line, buffer, maxConfig);
+    printf("%d\n", tweetCount);
 
     for(int i = 0; i < tweetCount; ++i){
-        snprintf(line, maxLine, "%d\n", tweet[i]->id);
-        string_append(buffer, line, buffer, maxConfig);
-        repliesToConfig(tweet[i]->replies, -1, buffer);
+        printf("%d\n", tweet[i]->id);
+        repliesToConfig(tweet[i]->replies, -1);
     }
 }

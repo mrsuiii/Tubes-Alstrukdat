@@ -32,4 +32,6 @@ void cancelRequestFriendIO();
 void displayRequestedFriendIO();
 void acceptFriendIO();
 
+void relationCleanUpRoutine();
+
 #endif

@@ -2,7 +2,7 @@
 #include "ADT/boolean.h"
 #include <stdio.h>
 
-#define MARK ';'
+#define GET_STRING_MARK ';'
 
 char currentChar;
 
@@ -25,7 +25,7 @@ void get_string(char* res, int size){
     if(currentChar == '\n') ADV(); 
 
     int i = 0;
-    while(currentChar != MARK && i + 1 < size){
+    while(currentChar != GET_STRING_MARK && i + 1 < size){
         res[i] = currentChar;
         ++i;
         ADV();
@@ -41,7 +41,7 @@ void get_string_foto_profil(char* color, char* picture, int size){
     if (currentChar == '\n') ADV();
 
     int colori = 0, picturei = 0;
-    while(currentChar != MARK && colori + 1 <= size && picturei + 1 <= size){
+    while(currentChar != GET_STRING_MARK && colori + 1 <= size && picturei + 1 <= size){
         if (currentChar != ' ' && currentChar != '\n'){
             if (currentChar == 'R' || currentChar == 'G' || currentChar == 'B'){
                 color[colori] = currentChar;

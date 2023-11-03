@@ -1,31 +1,45 @@
 #ifndef REPLY_H
 #define REPLY_H
 
-#include "user.h"
-#include "tweet.h"
-#include "ADT/datetime.h"
-#include "ADT/listdin.h"
-
 #define MAX_REPLY 280
 
 typedef int ReplyId;
-extern ReplyId lastReplyID;
+typedef struct reply* ReplyPointer;
+typedef struct replynode* ReplyNodePointer;
+typedef ReplyNodePointer Replies;
 
-typedef struct{
-    Reply reply;
-    Subreply* next;
-} Subreply;
+#include "user.h"
+#include "tweet.h"
+// #include "ADT/datetime.h"
+// #include "ADT/listdin.h"
 
-typedef struct{
+
+typedef struct reply{
     ReplyId id;
-    char reply[MAX_REPLY];
+    char content[MAX_REPLY];
     UserId author;
-    DATETIME datetime;
-    Subreply* subreply;
+    // DATETIME datetime;
+    ReplyNodePointer replies;
 } Reply;
 
-ReplyId createReply(char* reply, TweetId tweetId, ReplyId ReplyId);
-Reply* getReply(TweetId tweetId, ReplyId replyId);
-void deleteReply(TweetId tweetId, ReplyId replyId);
+typedef struct replynode{
+    struct reply reply;
+    Replies* base;
+    ReplyNodePointer next;
+} ReplyNode;
+
+ReplyPointer getReply(TweetId tweetId, ReplyId replyId);
+ReplyNodePointer getReplyNode(TweetId tweetId, ReplyId replyId);
+Replies* getReplies(TweetId tweetId, ReplyId replyId);
+
+ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base, ReplyPointer* result);
+ReplyNodePointer* getReplies(TweetId tweetId, ReplyId replyId);
+void deleteReply(ReplyNodePointer target);
+
+void createReplyIO(TweetId tweetId, ReplyId replyId);
+void displayReplyIO(TweetId tweetId);
+void deleteReplyIO(TweetId tweetId, ReplyId replyId);
+
+void replyToConfig();
 
 #endif

@@ -3,6 +3,7 @@
 #include "user.h"
 #include "string.h"
 #include "get_string.h"
+#include "pcolor.h"
 
 User* users[MAX_USER];
 User* loggedUser;
@@ -32,8 +33,10 @@ UserId createUser(char* name, char* pass){
     string_copy("", user->bio, MAX_BIO);
     string_copy("", user->phone, MAX_PHONE);
     string_copy("", user->weton, MAX_WETON);
-
     users[newId] = user;
+
+    string_copy("RRRRRRRRRRRRRRRRRRRRRRRRR", user->picturecolor,MAX_COLOR);
+    string_copy("*************************", user->picture,MAX_PICTURE);
     return newId;
 }
 
@@ -50,7 +53,7 @@ User* getUserByName(char* name){
     return NULL;
 }
 
-void displayUser(UserId id){
+void displayUserIO(UserId id){
     User* user = getUser(id);
     printf("| Nama: %s\n", user->name);
     printf("| Bio Akun: %s\n", user->bio);
@@ -171,10 +174,29 @@ void deleteUser(UserId id){
     users[id] = NULL;
 }
 
+void displayProfilIO(UserId id){
+    int i;
+    User* user = getUser(id);
+    for (i = 0; i < MAX_COLOR; i++){
+        if ((i + 1) % 5 == 1 && i != 0){
+            printf("\n");
+        }
+        // printf("%d",i);
+        if (user->picturecolor[i] == 'R'){
+            print_red(user->picture[i]);
+        } else if (user->picturecolor[i] == 'G'){
+            print_green(user->picture[i]);
+        } else if (user->picturecolor[i] == 'B'){
+            print_blue(user->picture[i]);
+        }
+    }
+    printf("\n");
+}
 void gantiProfilIO(){
     char tmpBio[MAX_BIO], tmpPhone[MAX_PHONE],tmpWeton[MAX_WETON];
     User* user = getUser(loggedUser->id);
 
+    displayUserIO(user->id);
     printf("Masukkan Bio Akun:\n");
     get_string(tmpBio,MAX_BIO);
     if (string_length(tmpBio) != 0){
@@ -209,4 +231,65 @@ void gantiProfilIO(){
             }
         }
     } while (!checkWetonValid(tmpWeton));
+
+}
+
+void lihatProfilIO(char* name){
+    User* user = getUserByName(name);
+    if (user->type == PUBLIC_USER){
+        displayUserIO(user->id);
+        printf("\n");
+        printf("Foto profil akun %s\n",user->name);
+        displayProfilIO(user->id);
+    } else {
+        printf("Wah, akun Tuan Prim diprivat nih. ");
+        printf("Ikuti dulu yuk untuk bisa melihat profil Tuan Prim!\n");
+    }
+
+}
+
+void aturJenisAkunIO(){
+    char input[MAX_BIO];
+    User* user = getUser(loggedUser->id);
+    if (user->type == PUBLIC_USER){
+        printf("Saat ini, akun Anda adalah akun Publik.\n"); 
+        printf("Ingin mengubah ke akun Privat?\n");
+        do {
+            printf("(YA/TIDAK) ");
+            get_string(input,MAX_BIO);
+            if (string_compare(input,"YA") == 0){
+                user->type = PRIVATE_USER;
+                printf("Akun anda sudah diubah menjadi akun Privat.\n");
+            } else if (string_compare(input,"TIDAK") != 0 && string_compare(input,"YA") != 0){
+                printf("Input Salah!\n");
+            }
+        } while (string_compare(input,"YA") != 0 && string_compare(input,"TIDAK") != 0);
+    } else if (user->type == PRIVATE_USER){
+        printf("Saat ini, akun Anda adalah akun Private.\n"); 
+        printf("Ingin mengubah ke akun Public?\n");
+        do {
+            printf("(YA/TIDAK) ");
+            get_string(input,MAX_BIO);
+            if (string_compare(input,"YA") == 0){
+                user->type = PUBLIC_USER;
+                printf("Akun anda sudah diubah menjadi akun Public.\n");
+            } else if (string_compare(input,"TIDAK") != 0 && string_compare(input,"YA") != 0){
+                printf("Input Salah!\n");
+            }
+        } while (string_compare(input,"YA") != 0 && string_compare(input,"TIDAK") != 0);
+    }
+}
+
+void ubahFotoProfilIO(){
+    char inputcolor[MAX_COLOR], inputpicture[MAX_PICTURE];
+    User* user = getUser(loggedUser->id);
+    printf("Foto profil Anda saat ini adalah\n");
+    displayProfilIO(user->id);
+    printf("\nMasukkan foto profil yang baru\n");
+    get_string_foto_profil(inputcolor,inputpicture,MAX_PICTURE);
+
+    string_copy(inputcolor,user->picturecolor,MAX_COLOR);
+    string_copy(inputpicture,user->picture,MAX_PICTURE);
+
+    printf("\nFoto profil anda sudah berhasil diganti!\n");
 }

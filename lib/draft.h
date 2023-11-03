@@ -16,7 +16,7 @@ typedef struct Draft* DraftAddress;
 typedef struct Draft{
     char content[MAX_TWEET];
     DraftAddress next;    
-    //DATETIME datetime;
+    char* datetime;
 } Draft;
 
 /* Create new empty Draft */
@@ -51,5 +51,8 @@ void createDraftIO();
 
 /* Read commands for Draft (HAPUS, SIMPAN, UBAH, TERBIT, KEMBALI) */
 void readDraftCommandIO();
+
+/* Convert Draft data to Config */
+void draftToConfig(char* buffer);
 
 #endif

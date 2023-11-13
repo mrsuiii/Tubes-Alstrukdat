@@ -89,7 +89,7 @@ void continueThreadAt(Tweet * mainThread, int threadIdx, char* content) {
 }
 
 // I.S : mainThread is a valid Thread, threadIdx is a valid thread 
-// F.S : deletet the thread of mainThread at idx == threadIdx
+// F.S : delete the thread of mainThread at idx == threadIdx
 void deleteThreadAt(Tweet * mainThread, int threadIdx){
     if (threadIdx == 1 ){
         printf("hehe;");
@@ -119,7 +119,7 @@ void displayThreadSeqIO(ThreadId mainThreadId){
     } else {
         Tweet * mainThread = getMainThread(mainThreadId);
         User* user = getUser(mainThread->author);
-        if(!isFriend(loggedUser->id, mainThread->author) && mainThread->author != loggedUser->id){
+        if(user->type && !isFriend(loggedUser->id, user) && user != loggedUser->id){
             printf("Akun yang membuat utas ini adalah akun privat! Ikuti dahulu akun ini untuk melihat utasnya!\n");
         } else {
             ThreadPointer currThread = mainThread->firstThread;
@@ -183,11 +183,11 @@ void deleteThreadAtIO(ThreadId mainThreadId, int threadIdx){
 // F.S menjadikan tweet dengan Id == tweetId menjadi sebuah thread 
 void makeMainThreadIO(TweetId tweetId){
     printf("\n");
-    if (isMainThreadIdValid(tweetId)){
-        printf("Utas telah dibuat sebelumnya!\n");
-    } else if (tweetId < 1 || tweetId > tweets.nEff){
+    if (tweetId < 1 || tweetId > tweets.nEff){
         printf("Kicauan tidak ditemukan!\n");
-    } else if (loggedUser->id != (tweets.buffer->author)){
+    } else if (getTweet(tweetId)->firstThread != NULL){
+        printf("Utas telah dibuat sebelumnya!\n");
+    } else if (loggedUser->id != getTweet(tweetId)->author){
         printf("Utas ini bukan milik Anda\n");
     } else{
         printf("Utas berhasil dibuat!\n");
@@ -207,5 +207,23 @@ void makeMainThreadIO(TweetId tweetId){
     }
 }
 
-
-
+void threadToConfig(){
+    printf("%d\n", threads.nEff); 
+    int i ; 
+    for (i = 1 ; i <= threads.nEff; i ++){ 
+        TweetPointer mainThread = threads.buffer[i];
+        if (mainThread->firstThread != NULL){
+            printf("%d\n", mainThread->id) ; 
+            printf("%d\n", mainThread->threadCount) ; 
+            
+            ThreadPointer currThread  = mainThread->firstThread ; 
+            char* userName = getUser(mainThread->author)->name ; 
+            do{
+              printf("%s\n",currThread->content);
+              printf("%s\n", userName);
+              // PRINT DATETIME  
+              currThread = currThread->nextThread;
+            } while (currThread != NULL);
+        }
+    }
+}

@@ -3,11 +3,11 @@
 
 #define MAX_THREADS 280
 
-#include "tweet.h"
 
 typedef int ThreadId ; 
 typedef struct tweet* TweetPointer ;
 typedef struct thread* ThreadPointer ;
+#include "tweet.h"
 
 // Thread adalah linked list berisi isi dari Threads itu dan alamat Threads selanjutnya
 typedef struct thread{
@@ -37,4 +37,6 @@ void displayThreadSeqIO(ThreadId threadId);
 void continueThreadAtIO(ThreadId mainThreadId, int threadIdx) ;
 void deleteThreadAtIO(ThreadId mainThreadId, int threadIdx);
 void makeMainThreadIO(TweetId tweetId);
+
+void threadToConfig();
 #endif

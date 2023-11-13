@@ -16,14 +16,14 @@ void unionSets(int a , int b, DisjointSet *set){
         if(set->kelompokTeman[a].rank>=set->kelompokTeman[b].rank){
             set->kelompokTeman[b].parent = a;
             if(set->kelompokTeman[b].rank>0){
-            set->kelompokTeman[a].rank +=set->kelompokTeman[b].rank;
+            set->kelompokTeman[a].rank +=set->kelompokTeman[b].rank+1;
             }
             else{set->kelompokTeman[a].rank++;
             }
         }else if(set->kelompokTeman[a].rank<set->kelompokTeman[b].rank){
             set->kelompokTeman[a].parent = b;
             if(set->kelompokTeman[a].rank>0){
-            set->kelompokTeman[b].rank +=set->kelompokTeman[a].rank;
+            set->kelompokTeman[b].rank +=set->kelompokTeman[a].rank+1;
             }
             else{set->kelompokTeman[b].rank++;
             }

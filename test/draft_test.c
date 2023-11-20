@@ -127,4 +127,28 @@ int main(){
 
         cleanup();
     , err);
+
+    DEFINE_TEST("draftToConfig", 
+        setup();
+        char err[MAX_ERROR] = "\0";
+        
+        UserId id1 = createUser("ciko", "");
+        UserId id2 = createUser("afif", "");
+        loggedUser = getUser(id1);
+        createDraft(id1, "draft ciko 1");
+        createDraft(id1, "draft ciko 2");
+        createDraft(id1, "draft ciko 3");
+        createDraft(id2, "draft afif 1");
+        createDraft(id2, "draft afif 2");
+
+        char in[] = ""; char* out;
+
+        interceptStdIO(in, &out);
+        draftToConfig();
+        clearStdIO();
+        
+        assert_string_include(err, out, "draft afif 1");
+        prependError(err, "Perintah draftToConfig gagal");
+        cleanup();
+    , err);
 }

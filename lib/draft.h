@@ -7,11 +7,6 @@
 #include "ADT/boolean.h"
 #include "ADT/datetime.h"
 
-#define DELETE_DRAFT 0
-#define UPLOAD_DRAFT 1
-#define SAVE_DRAFT 2
-#define BACK_DRAFT 3
-
 typedef struct Draft* DraftAddress;
 typedef struct Draft{
     char content[MAX_TWEET];
@@ -53,7 +48,7 @@ void createDraftIO();
 void readDraftCommandIO();
 
 /* Convert Draft data to Config */
-void draftToConfig(char* buffer);
+void draftToConfig();
 
 /* Memberishkan draft */
 void draftCleanUpRoutine();

@@ -73,6 +73,7 @@ void nextLine(){
     readChar();
 }
 
+
 void readNext(char* str, char* mark, int max){
     int size = 0;
 

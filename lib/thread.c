@@ -7,6 +7,7 @@
 #include "get_string.h"
 #include "reply.h"
 #include "string.h"
+#include "config.h"
 #include "ADT/datetime.h"
 
 
@@ -221,9 +222,30 @@ void threadToConfig(){
             do{
               printf("%s\n",currThread->content);
               printf("%s\n", userName);
-              // PRINT DATETIME  
+              printf("%s\n", "DATETIME");
               currThread = currThread->nextThread;
             } while (currThread != NULL);
+        }
+    }
+}
+
+void configToThread(){
+    int tweetCount = readInt(); nextLine();
+
+    for(int i = 0; i < tweetCount; ++i){
+        TweetId tweet = readInt(); nextLine();
+
+        int threadCount = readInt();
+        for(int j = 0; j < threadCount; ++j){
+            char content[MAX_THREADS];
+            readTill(content, "\n", MAX_THREADS);
+
+            char name[MAX_NAME];
+            readTill(name, "\n", MAX_NAME);
+
+            char date[1000];
+            readTill(date, "\n", 1000);
+
         }
     }
 }

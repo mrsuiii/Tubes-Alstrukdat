@@ -39,4 +39,5 @@ void deleteThreadAtIO(ThreadId mainThreadId, int threadIdx);
 void makeMainThreadIO(TweetId tweetId);
 
 void threadToConfig();
+void configToThread();
 #endif

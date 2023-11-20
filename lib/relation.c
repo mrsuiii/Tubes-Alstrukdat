@@ -252,33 +252,18 @@ void relationToConfig(){
 void configToRelation(){
     for(int i = 0; i < userCount; ++i){
         for(int j = 0; j < userCount; ++j){
-            char relationChar[2];
-            readNext(relationChar, " \n", 2);
+            boolean value = readInt(); nextWord();
 
-            char relationValue = string_to_number(relationChar);
-            relation[i][j] = relationValue;
-            relation[j][i] = relationValue;
+            relation[i][j] = value;
+            relation[j][i] = value;
         }
     }
 
-    char countString[MAX_NUMBER];
-    readNext(countString, "\n", MAX_NUMBER);
-    int count = string_to_number(countString);
-
+    int count = readInt(); nextLine();
     for(int i = 0; i < count; ++i){
-        char requesterString[MAX_NUMBER];
-        readNext(requesterString, " ", MAX_NUMBER);
-
-        char requesteeString[MAX_NUMBER];
-        readNext(requesteeString, " ", MAX_NUMBER);
-        
-        char friendCountString[MAX_NUMBER];
-        readNext(friendCountString, " \n", MAX_NUMBER);
-        printf("(%s %s %s)", requesterString, requesteeString, friendCountString);
-
-        int requester = string_to_number(requesterString);
-        int requestee = string_to_number(requesteeString);
-        int friendCount = string_to_number(friendCountString);
+        int requester = readInt(); nextWord();
+        int requestee = readInt(); nextWord();
+        int friendCount = readInt(); nextLine();
 
         requestFriend(requester, requestee, friendCount);
     }

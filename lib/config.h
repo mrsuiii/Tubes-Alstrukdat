@@ -16,6 +16,8 @@ void readNext(char* str, char* mark, int max);
 void ignore(char* chars);
 void readTill(char* buff, char* mark, int max);
 int readInt();
+
 void nextLine();
+void nextWord();
 
 #endif

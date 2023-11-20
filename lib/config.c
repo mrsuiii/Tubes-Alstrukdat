@@ -59,6 +59,10 @@ int readInt(){
     return r;
 }
 
+void nextWord(){
+    while(currentChar == '\n' || currentChar == ' ') readChar();
+}
+
 void nextLine(){
     while(currentChar != '\n') readChar();
     readChar();

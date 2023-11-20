@@ -2,6 +2,7 @@
 #define DSU_h
 #include "adt.h"
 typedef struct 
+
 {
     int parent;
     int rank;

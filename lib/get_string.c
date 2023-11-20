@@ -18,6 +18,42 @@ void START(){
     ADV();
 }
 
+void ignore_blank(){
+    while(currentChar == ' ' || currentChar == '\n') ADV();
+}
+
+void get_word(char* res, int size){
+    START();
+    ignore_blank();
+
+    int i = 0;
+    while(currentChar != ' ' && currentChar != '\n' && currentChar != GET_STRING_MARK && i + 1 < size){
+        res[i] = currentChar; ++i;
+        ADV();
+    }
+
+    res[i] = '\0';
+}
+
+boolean get_int(int *res){
+    char buff[100];
+    get_word(buff, 100);
+
+    int r = 0;
+    int i = 0;
+
+    boolean match = false;
+    while(buff[i] != '\0' && ('0' <= buff[i] && buff[i] <= '9')){
+        match = true;
+        r = (r * 10) + (buff[i] - '0');
+        ++i;
+    }
+
+    *res = r;
+
+    return match;
+}
+
 void get_string(char* res, int size){
     START();
 
@@ -26,34 +62,9 @@ void get_string(char* res, int size){
 
     int i = 0;
     while(currentChar != GET_STRING_MARK && i + 1 < size){
-        res[i] = currentChar;
-        ++i;
+        res[i] = currentChar; ++i;
         ADV();
     }
 
     res[i] = '\0';
 };
-
-void get_string_foto_profil(char* color, char* picture, int size){
-    START();
-
-    /* Ignore carriage return */
-    if (currentChar == '\n') ADV();
-
-    int colori = 0, picturei = 0;
-    while(currentChar != GET_STRING_MARK && colori + 1 <= size && picturei + 1 <= size){
-        if (currentChar != ' ' && currentChar != '\n'){
-            if (currentChar == 'R' || currentChar == 'G' || currentChar == 'B'){
-                color[colori] = currentChar;
-                colori++;
-            } else{
-                picture[picturei] = currentChar;
-                picturei++;
-            }
-        }
-        ADV();
-    }
-
-    color[colori] = '\0';
-    picture[picturei] = '\0';
-}

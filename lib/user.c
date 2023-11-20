@@ -30,8 +30,8 @@ UserId createUser(char* name, char* pass){
     string_copy("", user->weton, MAX_WETON);
     users[newId] = user;
 
-    string_copy("RRRRRRRRRRRRRRRRRRRRRRRRR", user->picturecolor,MAX_COLOR);
-    string_copy("*************************", user->picture,MAX_PICTURE);
+    string_copy("RRRRRRRRRRRRRRRRRRRRRRRRR", user->pictureColor,MAX_COLOR);
+    string_copy("*************************", user->pictureChar,MAX_PICTURE);
     return newId;
 }
 
@@ -166,7 +166,7 @@ void displayPhotoProfileIO(UserId id){
     for (int i = 0; i < PICTURE_LENGTH; i++){
         void (*printer) (char) = NULL;
 
-        switch (user->picturecolor[i]){
+        switch (user->pictureColor[i]){
             case 'R':
                 printer = print_red;
                 break;
@@ -178,8 +178,8 @@ void displayPhotoProfileIO(UserId id){
                 break;
         }
 
-        if(printer != NULL) printer(user->picture[i]);
-        else printf("%c", user->picture[i]);
+        if(printer != NULL) printer(user->pictureChar[i]);
+        else printf("%c", user->pictureChar[i]);
 
         if(i % 5 == 4) printf("\n");
     }
@@ -278,15 +278,22 @@ void changeAccountTypeIO(){
 }
 
 void changePhotoProfileIO(){
-    char inputcolor[MAX_COLOR], inputpicture[MAX_PICTURE];
+    char inputColor[MAX_COLOR], inputChar[MAX_PICTURE];
     User *user = getUser(loggedUser->id);
     printf("Foto profil Anda saat ini adalah\n");
     displayPhotoProfileIO(user->id);
     printf("\nMasukkan foto profil yang baru\n");
-    get_string_foto_profil(inputcolor, inputpicture, MAX_PICTURE);
 
-    string_copy(inputcolor, user->picturecolor, MAX_COLOR);
-    string_copy(inputpicture, user->picture, MAX_PICTURE);
+    char buff[2];
+    for(int i = 0; i < PICTURE_LENGTH; ++i){
+        get_word(buff, 2);
+        inputColor[i] = buff[0];
+        get_word(buff, 2);
+        inputChar[i] = buff[0];
+    }
+
+    string_copy(inputColor, user->pictureColor, MAX_COLOR);
+    string_copy(inputChar, user->pictureChar, MAX_PICTURE);
 
     printf("\nFoto profil anda sudah berhasil diganti!\n");
 }
@@ -305,38 +312,38 @@ void userToConfig(){
         printf("%s\n", user->type == PUBLIC_USER ? "Publik" : "Privat");
 
         for(int i = 0; i < PICTURE_LENGTH; ++i){
-            printf("%c %c ", user->picturecolor[i], user->picture[i]);
+            printf("%c %c ", user->pictureColor[i], user->pictureChar[i]);
             if(i % 5 == 4) printf("\n");
         }
     }
 }
 
 void configToUser(){
-    char strCount[MAX_NUMBER];
-    readNext(strCount, '\n', MAX_NUMBER);
+    ignore(" \n");
+    int count = readInt();
+    nextLine();
 
-    int count = string_to_number(strCount);
     for(int i = 0; i < count; ++i){
         char name[MAX_NAME];
-        readNext(name, '\n', MAX_NAME);
+        readTill(name, "\n", MAX_NAME); nextLine();
 
         char pass[MAX_PASS];
-        readNext(pass, '\n', MAX_PASS);
+        readTill(pass, "\n", MAX_PASS); nextLine();
 
         UserId id = createUser(name, pass);
         User *user = getUser(id);
 
         char bio[MAX_BIO];
-        readNext(user->bio, '\n', MAX_BIO);
+        readTill(user->bio, "\n", MAX_PASS); nextLine();
 
         char phone[MAX_PHONE];
-        readNext(user->phone, '\n', MAX_PHONE);
+        readTill(user->phone, "\n", MAX_PHONE); nextLine();
 
         char weton[MAX_WETON];
-        readNext(user->weton, '\n', MAX_WETON);
+        readTill(user->weton, "\n", MAX_WETON); nextLine();
 
         char accountType[100];
-        readNext(accountType, '\n', 100);
+        readTill(accountType, "\n", 100); nextLine();
         if(string_compare(accountType, "Privat") == 0){
             user->type = PRIVATE_USER;
         } else {
@@ -346,22 +353,15 @@ void configToUser(){
         char picture[MAX_PICTURE];
         char color[MAX_COLOR];
 
-        int idx = 0;
-        char pictureChar[2], colorChar[2];
-        for(int i = 0; i < PICTURE_HEIGHT; ++i){
-            for(int j = 0; j < PICTURE_WIDTH; ++j){
-                char mark = ' ';
-                readNext(colorChar, mark, 2);
-                if(j + 1 == PICTURE_WIDTH) mark = '\n';
-                readNext(pictureChar, mark, 2);
-
-                picture[idx] = pictureChar[0];
-                color[idx] = colorChar[0];
-                ++idx;
-            }
+        for(int i = 0; i < PICTURE_LENGTH; ++i){
+            ignore(" \n");
+            readTill(&(color[i]), " \n", 2);
+            ignore(" \n");
+            readTill(&(picture[i]), " \n", 2);
         }
+        nextLine();
 
-        string_copy(picture, user->picture, MAX_PICTURE);
-        string_copy(color, user->picturecolor, MAX_COLOR);
+        string_copy(picture, user->pictureChar, MAX_PICTURE);
+        string_copy(color, user->pictureColor, MAX_COLOR);
     }
 }

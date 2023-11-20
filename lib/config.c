@@ -27,20 +27,61 @@ void finishReadFile(){
     fclose(fileReadIO);
 }
 
-void readNext(char* str, char mark, int max){
-    int size = 0;
+char currentChar;
+char charContainer[2] = " \0";
+void readChar(){
+    fscanf(fileReadIO, "%c", &currentChar);
+    charContainer[0] = currentChar;
+}
 
-    char current;
-    while(
-        fscanf(fileReadIO, "%c", &current) &&
-        current != mark
-    ){
+void ignore(char* chars){
+    while(string_include(chars, charContainer)) readChar();
+}
+
+void readTill(char* buff, char* mark, int max){
+    int size = 0;
+    while(!string_include(mark, charContainer)){
         if(size < max - 1){
-            str[size] = current;
+            buff[size] = currentChar;
             ++size;
         }
+        readChar();
+    }
+    buff[size] = '\0';
+}
 
+int readInt(){
+    int r = 0;
+    while('0' <= currentChar && currentChar <= '9'){
+        r = (r * 10) + (currentChar - '0');
+        readChar();
+    }
+    return r;
+}
+
+void nextLine(){
+    while(currentChar != '\n') readChar();
+    readChar();
+}
+
+void readNext(char* str, char* mark, int max){
+    int size = 0;
+
+    char stringContainer[2];
+    stringContainer[0] = currentChar;
+    stringContainer[1] = '\0';
+
+    while(
+        fscanf(fileReadIO, "%c", &currentChar) &&
+        !string_include(mark, stringContainer)
+    ){
         if(feof(fileReadIO)) break;
+
+        if(size < max - 1){
+            str[size] = currentChar;
+            stringContainer[0] = currentChar;
+            ++size;
+        }
     }
 
     str[size] = '\0';

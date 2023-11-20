@@ -4,15 +4,16 @@
 #include "get_string.h"
 #include "relation.h"
 #include "user.h"
+#include "config.h"
 
 static char relation[MAX_USER][MAX_USER];
 static int relationCount[MAX_USER];
 static RequestQueuePointer requestQueue[MAX_USER];
 
-void requestFriend(UserId requester, UserId requestee){
+void requestFriend(UserId requester, UserId requestee, int friendCount){
     RequestQueuePointer n = malloc(sizeof(RequestQueue));
     n->userId = requester;
-    n->friendCount = relationCount[requester];
+    n->friendCount = friendCount;
     n->next = NULL;
     if(requestQueue[requestee] == NULL){
         requestQueue[requestee] = n;
@@ -144,7 +145,7 @@ void requestFriendIO(){
         return;
     }
 
-    requestFriend(loggedUser->id, user->id);
+    requestFriend(loggedUser->id, user->id, relationCount[user->id]);
     printf("Permintaan pertemanan kepada %s telah dikirim. Tunggu beberapa saat hingga permintaan Anda disetujui.\n", tmpName);
 };
 
@@ -152,6 +153,7 @@ int countFriendRequest(UserId requestee){
     int size = 0;
     RequestQueuePointer curr = requestQueue[requestee];
     while(curr != NULL){
+        ++size;
         curr = curr->next;
     }
 
@@ -244,5 +246,40 @@ void relationToConfig(){
             printf("%d %d %d\n", curr->userId, i, curr->friendCount);
             curr = curr->next;
         }
+    }
+}
+
+void configToRelation(){
+    for(int i = 0; i < userCount; ++i){
+        for(int j = 0; j < userCount; ++j){
+            char relationChar[2];
+            readNext(relationChar, " \n", 2);
+
+            char relationValue = string_to_number(relationChar);
+            relation[i][j] = relationValue;
+            relation[j][i] = relationValue;
+        }
+    }
+
+    char countString[MAX_NUMBER];
+    readNext(countString, "\n", MAX_NUMBER);
+    int count = string_to_number(countString);
+
+    for(int i = 0; i < count; ++i){
+        char requesterString[MAX_NUMBER];
+        readNext(requesterString, " ", MAX_NUMBER);
+
+        char requesteeString[MAX_NUMBER];
+        readNext(requesteeString, " ", MAX_NUMBER);
+        
+        char friendCountString[MAX_NUMBER];
+        readNext(friendCountString, " \n", MAX_NUMBER);
+        printf("(%s %s %s)", requesterString, requesteeString, friendCountString);
+
+        int requester = string_to_number(requesterString);
+        int requestee = string_to_number(requesteeString);
+        int friendCount = string_to_number(friendCountString);
+
+        requestFriend(requester, requestee, friendCount);
     }
 }

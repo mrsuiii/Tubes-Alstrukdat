@@ -32,8 +32,8 @@ typedef struct{
     char bio[MAX_BIO];
     char phone[MAX_PHONE];
     char weton[MAX_WETON];
-    char picturecolor[MAX_COLOR];
-    char picture[MAX_PICTURE];
+    char pictureColor[MAX_COLOR];
+    char pictureChar[MAX_PICTURE];
     UserType type; /* Account type */
 } User;
 

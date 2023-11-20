@@ -119,7 +119,7 @@ void displayThreadSeqIO(ThreadId mainThreadId){
     } else {
         Tweet * mainThread = getMainThread(mainThreadId);
         User* user = getUser(mainThread->author);
-        if(user->type && !isFriend(loggedUser->id, user) && user != loggedUser->id){
+        if(user->type && !isFriend(loggedUser->id, user->id) && user->id != loggedUser->id){
             printf("Akun yang membuat utas ini adalah akun privat! Ikuti dahulu akun ini untuk melihat utasnya!\n");
         } else {
             ThreadPointer currThread = mainThread->firstThread;

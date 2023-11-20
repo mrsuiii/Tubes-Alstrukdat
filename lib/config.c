@@ -27,7 +27,7 @@ void finishReadFile(){
     fclose(fileReadIO);
 }
 
-char currentChar;
+static char currentChar;
 char charContainer[2] = " \0";
 void readChar(){
     fscanf(fileReadIO, "%c", &currentChar);

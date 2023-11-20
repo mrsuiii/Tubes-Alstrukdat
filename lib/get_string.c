@@ -4,7 +4,7 @@
 
 #define GET_STRING_MARK ';'
 
-char currentChar;
+static char currentChar;
 
 static FILE *pita;
 static int retval;

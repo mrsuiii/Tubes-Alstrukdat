@@ -34,6 +34,7 @@ Replies* getReplies(TweetId tweetId, ReplyId replyId);
 
 ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base, ReplyPointer* result);
 ReplyNodePointer* getReplies(TweetId tweetId, ReplyId replyId);
+int countReply(TweetId tweetId);
 void deleteReply(ReplyNodePointer target);
 
 void createReplyIO(TweetId tweetId, ReplyId replyId);

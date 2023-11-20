@@ -14,6 +14,7 @@ typedef struct requestqueue{
 } RequestQueue;
 
 void requestFriend(UserId requester, UserId requestee);
+void addFriend(UserId a, UserId b);
 void removeFriend(UserId a, UserId b);
 boolean isFriend(UserId a, UserId b);
 

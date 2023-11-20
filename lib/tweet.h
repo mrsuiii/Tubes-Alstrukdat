@@ -18,7 +18,7 @@ typedef struct tweet{
     ThreadPointer firstThread; // firstThread = kicauan sambungan pertama
     int threadCount;
     Replies replies;
-    int replyCount;
+    int lastReplyId;
 } Tweet;
 
 typedef struct{

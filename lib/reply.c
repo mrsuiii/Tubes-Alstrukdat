@@ -21,9 +21,9 @@ ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base
 
     Tweet *tweet = getTweet(tweetId);
     Reply *reply = &(newSubreply->reply);
-    tweet->replyCount++;
+    tweet->lastReplyId++;
 
-    reply->id = tweet->replyCount;
+    reply->id = tweet->lastReplyId;
     string_copy(content, (newSubreply->reply).content, MAX_REPLY);
     reply->author = author;
     // TODO: Datetime
@@ -62,13 +62,31 @@ ReplyPointer getReply(TweetId tweetId, ReplyId replyId){
 }
 
 Replies* getReplies(TweetId tweetId, ReplyId replyId){
-    Tweet *tweet = getTweet(tweetId);
+    TweetPointer tweet = getTweet(tweetId);
     if(replyId == -1) return &(tweet->replies);
 
     ReplyNodePointer parent = getReplyNode(tweetId, replyId);
     if(parent == NULL) return NULL;
 
     return &(parent->reply.replies);
+}
+
+int countReplyRecur(Replies replies){
+    if(replies == NULL) return 0;
+
+    int count = 0;
+    ReplyNodePointer curr = replies;
+    while(curr != NULL){
+        count += countReplyRecur(curr->reply.replies);
+        ++count;
+        curr = curr->next;
+    }
+    return count;
+}
+
+int countReply(TweetId tweetId){
+    TweetPointer tweet = getTweet(tweetId);
+    return countReplyRecur(tweet->replies);
 }
 
 void pt(int tab){
@@ -227,6 +245,7 @@ void replyToConfig(){
 
     for(int i = 0; i < tweetCount; ++i){
         printf("%d\n", tweet[i]->id);
+        printf("%d\n", countReply(tweet[i]->id));
         repliesToConfig(tweet[i]->replies, -1);
     }
 }

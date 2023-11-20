@@ -5,6 +5,7 @@
 #include "string.h"
 #include "get_string.h"
 #include "pcolor.h"
+#include "config.h"
 
 User* loggedUser;
 int userCount = 0;
@@ -301,11 +302,66 @@ void userToConfig(){
 
         printf("%s\n", user->phone);
         printf("%s\n", user->weton);
-        printf("%s\n", user->type == PUBLIC_USER ? "Publik" : "Private");
+        printf("%s\n", user->type == PUBLIC_USER ? "Publik" : "Privat");
 
         for(int i = 0; i < PICTURE_LENGTH; ++i){
             printf("%c %c ", user->picturecolor[i], user->picture[i]);
             if(i % 5 == 4) printf("\n");
         }
+    }
+}
+
+void configToUser(){
+    char strCount[MAX_NUMBER];
+    readNext(strCount, '\n', MAX_NUMBER);
+
+    int count = string_to_number(strCount);
+    for(int i = 0; i < count; ++i){
+        char name[MAX_NAME];
+        readNext(name, '\n', MAX_NAME);
+
+        char pass[MAX_PASS];
+        readNext(pass, '\n', MAX_PASS);
+
+        UserId id = createUser(name, pass);
+        User *user = getUser(id);
+
+        char bio[MAX_BIO];
+        readNext(user->bio, '\n', MAX_BIO);
+
+        char phone[MAX_PHONE];
+        readNext(user->phone, '\n', MAX_PHONE);
+
+        char weton[MAX_WETON];
+        readNext(user->weton, '\n', MAX_WETON);
+
+        char accountType[100];
+        readNext(accountType, '\n', 100);
+        if(string_compare(accountType, "Privat") == 0){
+            user->type = PRIVATE_USER;
+        } else {
+            user->type = PUBLIC_USER;
+        };
+
+        char picture[MAX_PICTURE];
+        char color[MAX_COLOR];
+
+        int idx = 0;
+        char pictureChar[2], colorChar[2];
+        for(int i = 0; i < PICTURE_HEIGHT; ++i){
+            for(int j = 0; j < PICTURE_WIDTH; ++j){
+                char mark = ' ';
+                readNext(colorChar, mark, 2);
+                if(j + 1 == PICTURE_WIDTH) mark = '\n';
+                readNext(pictureChar, mark, 2);
+
+                picture[idx] = pictureChar[0];
+                color[idx] = colorChar[0];
+                ++idx;
+            }
+        }
+
+        string_copy(picture, user->picture, MAX_PICTURE);
+        string_copy(color, user->picturecolor, MAX_COLOR);
     }
 }

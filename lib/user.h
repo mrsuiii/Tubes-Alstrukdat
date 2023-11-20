@@ -10,7 +10,6 @@
 #define MAX_BIO 136
 #define MAX_PHONE 100
 #define MAX_WETON 100
-#define MAX_COLOR 26
 
 #define PICTURE_WIDTH 5
 #define PICTURE_HEIGHT 5
@@ -72,4 +71,5 @@ void changeAccountTypeIO();
 void changePhotoProfileIO();
 
 void userToConfig();
+void configToUser();
 #endif

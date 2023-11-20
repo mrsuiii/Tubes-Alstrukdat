@@ -12,5 +12,6 @@ void startWriteFile(char* path);
 void startReadFile(char* path);
 void finishReadFile();
 void readNext(char* str, char mark, int max);
+int strToNumber();
 
 #endif

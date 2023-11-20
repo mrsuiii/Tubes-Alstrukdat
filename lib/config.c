@@ -32,12 +32,15 @@ void readNext(char* str, char mark, int max){
 
     char current;
     while(
-        size < max - 1 &&
         fscanf(fileReadIO, "%c", &current) &&
         current != mark
     ){
-        str[size] = current;
-        ++size;
+        if(size < max - 1){
+            str[size] = current;
+            ++size;
+        }
+
+        if(feof(fileReadIO)) break;
     }
 
     str[size] = '\0';

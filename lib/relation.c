@@ -87,7 +87,7 @@ void removeFriendIO(){
     char tmpName[MAX_NAME];
     printf("Masukkan nama pengguna:\n");
     get_string(tmpName, MAX_NAME);
-    User* friend = getUserByName(tmpName);
+    User* friend = getUser(getUserIdByName(tmpName));
     if(!friend){
         printf("User %s tidak ditemukan\n", tmpName);
         return;
@@ -129,7 +129,7 @@ void requestFriendIO(){
     char tmpName[MAX_NAME];
     printf("Masukkan nama pengguna:\n");
     get_string(tmpName, MAX_NAME);
-    User* user = getUserByName(tmpName);
+    User* user = getUser(getUserIdByName(tmpName));
     if(!user){
         printf("Pengguna bernama %s tidak ditemukan\n", tmpName);
         return;

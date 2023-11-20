@@ -19,28 +19,33 @@ void finishWriteFile(){
 
 static FILE* fileReadIO;
 
+static boolean finished = false;
+static char currentChar;
+char charContainer[2] = " \0";
+void readChar(){
+    fscanf(fileReadIO, "%c", &currentChar);
+    charContainer[0] = currentChar;
+    if(feof(fileReadIO)) finished = true;
+}
+
 void startReadFile(char* path){
+    finished = false;
     fileReadIO = fopen(path, "r");
+    readChar();
 }
 
 void finishReadFile(){
     fclose(fileReadIO);
 }
 
-static char currentChar;
-char charContainer[2] = " \0";
-void readChar(){
-    fscanf(fileReadIO, "%c", &currentChar);
-    charContainer[0] = currentChar;
+void ignore(char* chars){
+    while(!finished && string_include(chars, charContainer)) readChar();
 }
 
-void ignore(char* chars){
-    while(string_include(chars, charContainer)) readChar();
-}
 
 void readTill(char* buff, char* mark, int max){
     int size = 0;
-    while(!string_include(mark, charContainer)){
+    while(!finished && !string_include(mark, charContainer)){
         if(size < max - 1){
             buff[size] = currentChar;
             ++size;
@@ -52,7 +57,7 @@ void readTill(char* buff, char* mark, int max){
 
 int readInt(){
     int r = 0;
-    while('0' <= currentChar && currentChar <= '9'){
+    while(!finished && '0' <= currentChar && currentChar <= '9'){
         r = (r * 10) + (currentChar - '0');
         readChar();
     }
@@ -60,11 +65,11 @@ int readInt(){
 }
 
 void nextWord(){
-    while(currentChar == '\n' || currentChar == ' ') readChar();
+    while(!finished && (currentChar == '\n' || currentChar == ' ')) readChar();
 }
 
 void nextLine(){
-    while(currentChar != '\n') readChar();
+    while(!finished && currentChar != '\n') readChar();
     readChar();
 }
 

@@ -8,6 +8,7 @@
 #include "reply.h"
 #include "string.h"
 #include "thread.h"
+#include "config.h"
 #include "ADT/datetime.h"
 
 Tweets tweets; 
@@ -33,7 +34,7 @@ TweetId createTweet(char* content, UserId author){
     tweets.nEff ++ ; 
     Tweet* tweet = getTweet(tweets.nEff) ; 
     tweet -> id =  tweets.nEff ; 
-    string_copy(content, tweet->tweet, MAX_TWEET) ; 
+    string_copy(content, tweet->content, MAX_TWEET) ; 
     tweet -> like = 0 ; 
     tweet -> author =  author;   
     // tweet -> datetime =  DetikToTIME(0) ; 
@@ -44,7 +45,7 @@ TweetId createTweet(char* content, UserId author){
 
 TweetId editTweet(TweetId id, UserId author, char* newContent){
     Tweet* tweet = getTweet(id) ; 
-    string_copy(newContent, tweet->tweet, MAX_TWEET) ; 
+    string_copy(newContent, tweet->content, MAX_TWEET) ; 
 
     return  id; 
 }
@@ -118,7 +119,7 @@ void displayTweetIO(TweetId id){
     printf("| ID: %d\n", tweet-> id);
     printf("| %s\n", user-> name);
     // printf("| %s\n", tweet->datetime);
-    printf("| %s\n", tweet -> tweet);
+    printf("| %s\n", tweet -> content);
     printf("| Disukai: %d\n\n", tweet->like);
 }
 
@@ -143,10 +144,39 @@ void tweetToConfig(){
     int i ; 
     for (i = 1 ; i <= tweets.nEff; i ++){
         TweetPointer tweet = getTweet(i); 
+        User* author = getUser(tweet->author);
         printf("%d\n", i );
-        printf("%s\n", tweet->tweet);
+        printf("%s\n", tweet->content);
         printf("%d\n", tweet->like);
-        printf("%s\n", getUser(tweet->author)->name);
-        // printf DATETIME
+        printf("%s\n", author ? author->name : "UNKNOWN_USER");
+        printf("%s\n", "DATETIME");
+    }
+}
+
+void configToTweet(){
+    int count = readInt(); nextLine();
+
+    Tweet tweets[count];
+    for(int i = 0; i < count; ++i){
+        int id = readInt(); nextLine();
+        Tweet* tweet = &(tweets[id - 1]);
+
+        readTill(tweet->content, "\n", MAX_TWEET); nextLine();
+
+        int like = readInt(); nextLine();
+        tweet->like = like;
+
+        char author[MAX_NAME];
+        readTill(author, "\n", MAX_NAME); nextLine();
+        tweet->author = getUserIdByName(author);
+
+        char datetime[100];
+        readTill(datetime, "\n", 100); nextLine();
+    }
+
+    for(int i = 0; i < count; ++i){
+        Tweet *src = &(tweets[i]);
+        Tweet *dst = getTweet(createTweet(src->content, src->author));
+        dst->like = src->like;
     }
 }

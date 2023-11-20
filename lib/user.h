@@ -55,9 +55,9 @@ UserId createUser(char* name, char* pass);
 /* Delete user by id */
 void deleteUser(UserId id);
 
-/* Get user by id */
 User* getUser(UserId id);
-User* getUserByName(char* name);
+UserId getUserIdByName(char* name);
+
 
 UserId signUp();
 UserId signIn();

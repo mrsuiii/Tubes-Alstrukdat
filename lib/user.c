@@ -39,13 +39,13 @@ User* getUser(UserId id){
     return users[id];
 }
 
-User* getUserByName(char* name){
+UserId getUserIdByName(char* name){
     for(int i = 0; i < userCount; ++i){
         User* user = getUser(i);
         if(!user) continue;
-        if(string_compare(name, user->name) == 0) return user;
+        if(string_compare(name, user->name) == 0) return i;
     }
-    return NULL;
+    return -1;
 }
 
 boolean checkPhoneValid(char* phone){
@@ -106,7 +106,7 @@ UserId signUp(){
         printf("Masukkan nama: \n");
         get_string(tmpName, MAX_NAME);
     } while(
-        (getUserByName(tmpName) != NULL) && 
+        (getUserIdByName(tmpName) != -1) && 
         (printf("Nama telah dipakai\n") || true)
     );
 
@@ -126,7 +126,7 @@ UserId signIn(){
     char tmpName[MAX_NAME];
     printf("Masukkan nama: \n");
     get_string(tmpName, MAX_NAME);
-    User* user = getUserByName(tmpName);
+    User* user = getUser(getUserIdByName(tmpName));
 
     if(!user){
         printf("User tidak ditemukan\n");
@@ -228,7 +228,7 @@ void changeProfileIO(){
 }
 
 void displayProfileIO(char* name){
-    User* user = getUserByName(name);
+    User* user = getUser(getUserIdByName(name));
     
     if(user->type == PRIVATE_USER && isFriend(user->id, loggedUser->id)){
         printf("Wah, akun %s diprivat nih.\n", user->name);

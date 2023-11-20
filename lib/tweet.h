@@ -11,7 +11,7 @@ typedef int TweetId;
 
 typedef struct tweet{
     TweetId id;
-    char tweet[MAX_TWEET];
+    char content[MAX_TWEET];
     int like;
     UserId author;
     //DATETIME datetime;
@@ -42,4 +42,5 @@ void displayTweetIO(TweetId id) ;
 void displayAllTweetIO() ; 
 
 void tweetToConfig();
+void configToTweet();
 #endif

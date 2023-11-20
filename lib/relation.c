@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "string.h"
 #include "get_string.h"
 #include "relation.h"
@@ -6,91 +7,53 @@
 
 char relation[MAX_USER][MAX_USER];
 int relationCount[MAX_USER];
+RequestQueuePointer requestQueue[MAX_USER];
 
 void requestFriend(UserId requester, UserId requestee){
-    relation[requester][requestee] = IsRequester;
-    relation[requestee][requester] = IsRequestee;
+    RequestQueuePointer n = malloc(sizeof(RequestQueue));
+    n->userId = requester;
+    n->friendCount = relationCount[requester];
+    n->next = NULL;
+    if(requestQueue[requestee] == NULL){
+        requestQueue[requestee] = n;
+    } else {
+        RequestQueuePointer curr = requestQueue[requestee];
+        if(curr->friendCount <= n->friendCount){
+            n->next = requestQueue[requestee];
+            requestQueue[requestee] = n;
+        } else {
+            while (curr->next != NULL && curr->next->friendCount > n->friendCount){
+                curr = curr->next;
+            }
+            n->next = curr->next;
+            curr->next = n;
+        }
+    }
 }
 
-void declineFriend(UserId a, UserId b){
-    relation[a][b] = IsNothing;
-    relation[b][a] = IsNothing;
+boolean checkAlreadyRequested(UserId requester, UserId requestee){
+    RequestQueuePointer curr = requestQueue[requestee];
+    while(curr != NULL){
+        if(curr->userId == requester) return true;
+        curr = curr->next;
+    }
+    return false;
 }
 
-void acceptFriend(UserId a, UserId b){
-    relation[a][b] = IsFriend;
+void addFriend(UserId a, UserId b){
     relation[b][a] = IsFriend;
+    relation[a][b] = IsFriend;
 
-    relationCount[a] += 1;
     relationCount[b] += 1;
+    relationCount[a] += 1;
 }
 
 void removeFriend(UserId a, UserId b){
-    declineFriend(a, b);
+    relation[a][b] = IsNothing;
+    relation[b][a] = IsNothing;
 
     relationCount[a] -= 1;
     relationCount[b] -= 1;
-}
-
-/* Sort users by ascending order of friends count */
-void sortByFriend(Users* users){
-    int size = (*users).size;
-    for(int i = 0; i < size; ++i){
-        for(int j = i; j < size - 1; ++j){
-            int a = relationCount[(users->ids)[j]];
-            int b = relationCount[(users->ids)[j + 1]];
-            if(a > b){
-                int p = (users->ids)[j];
-                int q = (users->ids)[j + 1];
-                (users->ids)[j] = q;
-                (users->ids)[j + 1] = p;
-            }
-        }
-    }
-}
-
-void getUsers(Users* u, int id, int req){
-    u->size = 0;
-
-    for(int i = 0; i < MAX_USER; ++i){
-        if(relation[id][i] == req){
-            u->ids[u->size] = i;
-            u->size += 1;
-        }
-    }
-}
-
-Users getRequest(int id){
-    Users u;
-    getUsers(&u, id, IsRequestee);
-    sortByFriend(&u);
-    return u;
-}
-
-UserId getTopRequest(int id){
-    UserId top = -1;
-    for(int i = 0; i < MAX_USER; ++i){
-        if(relation[id][i] == IsRequestee){
-            if(top == -1 || relationCount[i] > relationCount[top]){
-                top = i;
-            }
-        }
-    }
-    return top;
-}
-
-Users getFriend(int id){
-    Users u;
-    getUsers(&u, id, IsFriend);
-    sortByFriend(&u);
-    return u;
-}
-
-boolean isRequestee(UserId id){
-    for(int i = 0; i < MAX_USER; ++i){
-        if(relation[id][i] == IsRequestee) return true;
-    }
-    return false;
 }
 
 boolean isFriend(UserId a, UserId b){
@@ -98,19 +61,24 @@ boolean isFriend(UserId a, UserId b){
 }
 
 void displayFriendIO(){
-    int count = relationCount[loggedUser->id];
+    int count = 0;
+    UserId friends[MAX_USER];
+    for(int i = 0; i < MAX_USER; ++i){
+        if(isFriend(loggedUser->id, i)){
+            friends[count] = i;
+            ++count;
+        }
+    }
 
     if(count == 0){
         printf("%s belum mempunyai teman\n", loggedUser->name);
         return;
     }
-    
 
-    Users u = getFriend(loggedUser->id);
     printf("%s memiliki %d teman\n", loggedUser->name, count);
     printf("Daftar teman %s\n", loggedUser->name);
     for(int i = 0; i < count; ++i){
-        printf("| %s\n", getUser(u.ids[i])->name);
+        printf("| %s\n", getUser(friends[i])->name);
     }
 }
 
@@ -152,7 +120,7 @@ void removeFriendIO(){
 }
 
 void requestFriendIO(){
-    if(isRequestee(loggedUser->id)){
+    if(requestQueue[loggedUser->id] != NULL){
         printf("Terdapat permintaan pertemanan yang belum Anda setujui. Silakan kosongkan daftar permintaan pertemanan untuk Anda terlebih dahulu.\n");
         return;
     }
@@ -166,6 +134,11 @@ void requestFriendIO(){
         return;
     }
 
+    if(checkAlreadyRequested(loggedUser->id, user->id)){
+        printf("Anda sudah mengirimkan permintaan pertemanan kepada David. Silakan tunggu hingga permintaan Anda disetujui.\n");
+        return;
+    }
+
     if(isFriend(loggedUser->id, user->id)){
         printf("Anda sudah berteman\n");
         return;
@@ -175,51 +148,43 @@ void requestFriendIO(){
     printf("Permintaan pertemanan kepada %s telah dikirim. Tunggu beberapa saat hingga permintaan Anda disetujui.\n", tmpName);
 };
 
-void cancelRequestFriendIO(){
-    char tmpName[MAX_NAME];
-    printf("Masukkan nama pengguna:\n");
-    get_string(tmpName, MAX_NAME);
-    User* user = getUserByName(tmpName);
-    if(!user){
-        printf("Pengguna bernama %s tidak ditemukan\n", tmpName);
-        return;
-    }
-
-    if(relation[loggedUser->id][user->id] != IsRequester){
-        printf("Anda belum mengirimkan permintaan pertemanan kepada %s\n", user->name);
-        return;
-    }
-
-    declineFriend(loggedUser->id, user->id);
-    printf("Permintaan pertemanan kepada %s telah dibatalkan\n", user->name);
-}
-
 void displayRequestedFriendIO(){
-    Users u = getRequest(loggedUser->id);
-    if(u.size == 0){
+    RequestQueuePointer top = requestQueue[loggedUser->id];
+
+    if(top == NULL){
         printf("Tidak ada permintaan pertemanan untuk Anda\n");
         return;
     }
 
-    printf("Terdapat %d permintaan pertemanan untuk Anda\n\n", u.size);
+    int size = 0;
+    RequestQueuePointer curr = top;
+    while(curr != NULL){
+        curr = curr->next;
+    }
 
-    for(int i = u.size - 1; i >= 0; --i){
-        printf("| %s\n", getUser(u.ids[i])->name);
-        printf("| Jumlah teman: %d\n\n", relationCount[u.ids[i]]);
+    printf("Terdapat %d permintaan pertemanan untuk Anda\n\n", size);
+
+    curr = top;
+    while (curr != NULL){
+        printf("| %s\n", getUser(curr->userId)->name);
+        printf("| Jumlah teman: %d\n\n", curr->friendCount);
+        curr = curr->next;
     }
 }
 
 void acceptFriendIO(){
-    UserId id = getTopRequest(loggedUser->id);
-    if(id == -1){
+    RequestQueuePointer top = requestQueue[loggedUser->id];
+    UserId requester = top != NULL ? top->userId : -1;
+
+    if(requester == -1){
         printf("Tidak ada permintaan pertemanan untuk Anda\n");
         return;
     }
 
-    User* user = getUser(id);
+    User* user = getUser(requester);
     printf("Permintaan pertemanan teratas dari %s\n", user->name);
     printf("| %s\n", user->name);
-    printf("| Jumlah teman: %d\n\n", relationCount[id]);
+    printf("| Jumlah teman: %d\n\n", top->friendCount);
 
     int promptValue = -1;
     char tmpPrompt[10];
@@ -235,12 +200,14 @@ void acceptFriendIO(){
     );
 
     if(promptValue){
-        acceptFriend(loggedUser->id, user->id);
+        addFriend(loggedUser->id, requester);
         printf("Permintaan pertemanan dari %s telah disetujui. Selamat! Anda telah berteman dengan %s.\n",user->name,user->name);
     } else {
-        declineFriend(loggedUser->id, user->id);
         printf("Permintaan pertemanan dari %s telah ditolak.\n", user->name);
     }
+
+    requestQueue[loggedUser->id] = top->next;
+    free(top);
 }
 
 void relationCleanUpRoutine(){

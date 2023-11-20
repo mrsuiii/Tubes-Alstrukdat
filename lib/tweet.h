@@ -27,12 +27,6 @@ typedef struct{
     int capacity ; 
 }Tweets;
 
-// #include "relation.h"
-// #include "thread.h"
-// #include "ADT/datetime.h"
-
-
-
 extern Tweets tweets;
 
 boolean isIdValid(TweetId id) ; 

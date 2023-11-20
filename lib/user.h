@@ -11,7 +11,14 @@
 #define MAX_PHONE 100
 #define MAX_WETON 100
 #define MAX_COLOR 26
-#define MAX_PICTURE 26
+
+#define PICTURE_WIDTH 5
+#define PICTURE_HEIGHT 5
+#define PICTURE_LENGTH PICTURE_WIDTH * PICTURE_HEIGHT
+
+#define MAX_PICTURE PICTURE_LENGTH + 1
+#define MAX_COLOR MAX_PICTURE
+
 /* Account type */
 #define PUBLIC_USER 0
 #define PRIVATE_USER 1
@@ -40,7 +47,6 @@ typedef struct{
 #define PICTURE(x) (x).picture
 
 /* All user pointer saved here, initialized in setup function */
-extern User* users[MAX_USER];
 extern User* loggedUser;
 extern int userCount;
 
@@ -54,15 +60,16 @@ void deleteUser(UserId id);
 User* getUser(UserId id);
 User* getUserByName(char* name);
 
-void displayUserIO(UserId id);
-
 UserId signUp();
 UserId signIn();
 void signOut();
 
-void displayProfilIO(UserId id);
-void gantiProfilIO();
-void lihatProfilIO(char* name);
-void aturJenisAkunIO();
-void ubahFotoProfilIO();
+void displayProfileIO(char* name);
+void displayPhotoProfileIO(UserId id);
+
+void changeProfileIO();
+void changeAccountTypeIO();
+void changePhotoProfileIO();
+
+void userToConfig();
 #endif

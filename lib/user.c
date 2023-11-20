@@ -1,28 +1,22 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "user.h"
+#include "relation.h"
 #include "string.h"
 #include "get_string.h"
 #include "pcolor.h"
 
-User* users[MAX_USER];
 User* loggedUser;
-int userCount;
-
-int getEmptyId(){
-    for(int i = 0; i < MAX_USER; ++i)
-        if(users[i] == NULL)
-            return i;
-    return -1;
-}
+int userCount = 0;
+static User* users[MAX_USER];
 
 int isFull(){
-    return getEmptyId() == -1;
+    return userCount == MAX_USER;
 }
 
 UserId createUser(char* name, char* pass){
-    int newId = getEmptyId();
-    if(newId == -1) return -1;
+    int newId = userCount;
+    ++userCount;
 
     User* user = malloc(sizeof(User));
     if(!user) return -1;
@@ -45,20 +39,12 @@ User* getUser(UserId id){
 }
 
 User* getUserByName(char* name){
-    for(int i = 0; i < MAX_USER; ++i){
+    for(int i = 0; i < userCount; ++i){
         User* user = getUser(i);
         if(!user) continue;
         if(string_compare(name, user->name) == 0) return user;
     }
     return NULL;
-}
-
-void displayUserIO(UserId id){
-    User* user = getUser(id);
-    printf("| Nama: %s\n", user->name);
-    printf("| Bio Akun: %s\n", user->bio);
-    printf("| No HP: %s\n", user->phone);
-    printf("| Weton: %s\n", user->weton);
 }
 
 boolean checkPhoneValid(char* phone){
@@ -174,29 +160,35 @@ void deleteUser(UserId id){
     users[id] = NULL;
 }
 
-void displayProfilIO(UserId id){
-    int i;
+void displayPhotoProfileIO(UserId id){
     User* user = getUser(id);
-    for (i = 0; i < MAX_COLOR; i++){
-        if ((i + 1) % 5 == 1 && i != 0){
-            printf("\n");
+    for (int i = 0; i < PICTURE_LENGTH; i++){
+        void (*printer) (char) = NULL;
+
+        switch (user->picturecolor[i]){
+            case 'R':
+                printer = print_red;
+                break;
+            case 'G':
+                printer = print_green;
+                break;
+            case 'B':
+                printer = print_blue;
+                break;
         }
-        // printf("%d",i);
-        if (user->picturecolor[i] == 'R'){
-            print_red(user->picture[i]);
-        } else if (user->picturecolor[i] == 'G'){
-            print_green(user->picture[i]);
-        } else if (user->picturecolor[i] == 'B'){
-            print_blue(user->picture[i]);
-        }
+
+        if(printer != NULL) printer(user->picture[i]);
+        else printf("%c", user->picture[i]);
+
+        if(i % 5 == 4) printf("\n");
     }
-    printf("\n");
 }
-void gantiProfilIO(){
+
+void changeProfileIO(){
     char tmpBio[MAX_BIO], tmpPhone[MAX_PHONE],tmpWeton[MAX_WETON];
     User* user = getUser(loggedUser->id);
 
-    displayUserIO(user->id);
+    displayProfileIO(user->name);
     printf("Masukkan Bio Akun:\n");
     get_string(tmpBio,MAX_BIO);
     if (string_length(tmpBio) != 0){
@@ -234,21 +226,25 @@ void gantiProfilIO(){
 
 }
 
-void lihatProfilIO(char* name){
+void displayProfileIO(char* name){
     User* user = getUserByName(name);
-    if (user->type == PUBLIC_USER){
-        displayUserIO(user->id);
-        printf("\n");
-        printf("Foto profil akun %s\n",user->name);
-        displayProfilIO(user->id);
-    } else {
-        printf("Wah, akun Tuan Prim diprivat nih. ");
-        printf("Ikuti dulu yuk untuk bisa melihat profil Tuan Prim!\n");
+    
+    if(user->type == PRIVATE_USER && isFriend(user->id, loggedUser->id)){
+        printf("Wah, akun %s diprivat nih.\n", user->name);
+        printf("Ikuti dulu yuk untuk bisa melihat profil %s!\n", user->name);
+        return;
     }
 
+    printf("| Nama: %s\n", user->name);
+    printf("| Bio Akun: %s\n", user->bio);
+    printf("| No HP: %s\n", user->phone);
+    printf("| Weton: %s\n\n", user->weton);
+    printf("Foto profil akun %s\n", user->name);
+    displayPhotoProfileIO(user->id);
+    printf("\n");
 }
 
-void aturJenisAkunIO(){
+void changeAccountTypeIO(){
     char input[MAX_BIO];
     User* user = getUser(loggedUser->id);
     if (user->type == PUBLIC_USER){
@@ -280,16 +276,36 @@ void aturJenisAkunIO(){
     }
 }
 
-void ubahFotoProfilIO(){
+void changePhotoProfileIO(){
     char inputcolor[MAX_COLOR], inputpicture[MAX_PICTURE];
-    User* user = getUser(loggedUser->id);
+    User *user = getUser(loggedUser->id);
     printf("Foto profil Anda saat ini adalah\n");
-    displayProfilIO(user->id);
+    displayPhotoProfileIO(user->id);
     printf("\nMasukkan foto profil yang baru\n");
-    get_string_foto_profil(inputcolor,inputpicture,MAX_PICTURE);
+    get_string_foto_profil(inputcolor, inputpicture, MAX_PICTURE);
 
-    string_copy(inputcolor,user->picturecolor,MAX_COLOR);
-    string_copy(inputpicture,user->picture,MAX_PICTURE);
+    string_copy(inputcolor, user->picturecolor, MAX_COLOR);
+    string_copy(inputpicture, user->picture, MAX_PICTURE);
 
     printf("\nFoto profil anda sudah berhasil diganti!\n");
+}
+
+void userToConfig(){
+    printf("%d\n", userCount);
+
+    for (int i = 0; i < userCount; ++i){
+        User *user = getUser(i);
+        printf("%s\n", user->name);
+        printf("%s\n", user->pass);
+        printf("%s\n", user->bio);
+
+        printf("%s\n", user->phone);
+        printf("%s\n", user->weton);
+        printf("%s\n", user->type == PUBLIC_USER ? "Publik" : "Private");
+
+        for(int i = 0; i < PICTURE_LENGTH; ++i){
+            printf("%c %c ", user->picturecolor[i], user->picture[i]);
+            if(i % 5 == 4) printf("\n");
+        }
+    }
 }

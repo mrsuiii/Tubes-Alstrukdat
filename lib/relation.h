@@ -13,6 +13,10 @@ typedef struct requestqueue{
     RequestQueuePointer next;
 } RequestQueue;
 
+static char relation[MAX_USER][MAX_USER];
+static int relationCount[MAX_USER];
+static RequestQueuePointer requestQueue[MAX_USER];
+
 void requestFriend(UserId requester, UserId requestee);
 void addFriend(UserId a, UserId b);
 void removeFriend(UserId a, UserId b);
@@ -25,5 +29,6 @@ void displayRequestedFriendIO();
 void acceptFriendIO();
 
 void relationCleanUpRoutine();
+void relationToConfig();
 
 #endif

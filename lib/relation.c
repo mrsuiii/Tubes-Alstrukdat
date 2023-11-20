@@ -5,9 +5,9 @@
 #include "relation.h"
 #include "user.h"
 
-char relation[MAX_USER][MAX_USER];
-int relationCount[MAX_USER];
-RequestQueuePointer requestQueue[MAX_USER];
+static char relation[MAX_USER][MAX_USER];
+static int relationCount[MAX_USER];
+static RequestQueuePointer requestQueue[MAX_USER];
 
 void requestFriend(UserId requester, UserId requestee){
     RequestQueuePointer n = malloc(sizeof(RequestQueue));
@@ -148,6 +148,16 @@ void requestFriendIO(){
     printf("Permintaan pertemanan kepada %s telah dikirim. Tunggu beberapa saat hingga permintaan Anda disetujui.\n", tmpName);
 };
 
+int countFriendRequest(UserId requestee){
+    int size = 0;
+    RequestQueuePointer curr = requestQueue[requestee];
+    while(curr != NULL){
+        curr = curr->next;
+    }
+
+    return size;
+}
+
 void displayRequestedFriendIO(){
     RequestQueuePointer top = requestQueue[loggedUser->id];
 
@@ -156,15 +166,11 @@ void displayRequestedFriendIO(){
         return;
     }
 
-    int size = 0;
-    RequestQueuePointer curr = top;
-    while(curr != NULL){
-        curr = curr->next;
-    }
+    int size = countFriendRequest(loggedUser->id);
 
     printf("Terdapat %d permintaan pertemanan untuk Anda\n\n", size);
 
-    curr = top;
+    RequestQueuePointer curr = top;
     while (curr != NULL){
         printf("| %s\n", getUser(curr->userId)->name);
         printf("| Jumlah teman: %d\n\n", curr->friendCount);
@@ -216,4 +222,27 @@ void relationCleanUpRoutine(){
             relation[i][j] = IsNothing;
         }
     }   
+}
+
+void relationToConfig(){
+    for(int i = 0; i < userCount; ++i){
+        for(int j = 0; j < userCount; ++j){
+            printf("%d ", relation[i][j]);
+        }
+        printf("\n");
+    }
+
+    int friendRequestCount = 0;
+    for(int i = 0; i < userCount; ++i){
+        friendRequestCount += countFriendRequest(i);
+    }
+    printf("%d\n", friendRequestCount);
+
+    for(int i = 0; i < userCount; ++i){
+        RequestQueuePointer curr = requestQueue[i];
+        while(curr != NULL){
+            printf("%d %d %d\n", curr->userId, i, curr->friendCount);
+            curr = curr->next;
+        }
+    }
 }

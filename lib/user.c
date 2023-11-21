@@ -143,6 +143,7 @@ UserId signIn(){
     }
 
     loggedUser = user;
+    printf("Anda telah berhasil masuk dengan nama pengguna Tuan Bri. Mari menjelajahi BurBir bersama Ande-Ande Lumut!\n");
     return user->id;
 }
 
@@ -296,6 +297,13 @@ void changePhotoProfileIO(){
     string_copy(inputChar, user->pictureChar, MAX_PICTURE);
 
     printf("\nFoto profil anda sudah berhasil diganti!\n");
+}
+
+void userCleanupRoutine(){
+    for(int i = 0; i < userCount; ++i){
+        free(users[i]);
+        users[i] = NULL;
+    }
 }
 
 void userToConfig(){

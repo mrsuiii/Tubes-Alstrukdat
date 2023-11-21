@@ -43,14 +43,12 @@ TweetId createTweet(char* content, UserId author){
     return tweet->id ; 
 }
 
-TweetId editTweet(TweetId id, UserId author, char* newContent){
+void editTweet(TweetId id, UserId author, char* newContent){
     Tweet* tweet = getTweet(id) ; 
     string_copy(newContent, tweet->content, MAX_TWEET) ; 
-
-    return  id; 
 }
 
-TweetId likeTweet(TweetId id){
+void likeTweet(TweetId id){
     Tweet* tweet = getTweet(id); 
     tweet->like ++ ; 
 }
@@ -91,7 +89,7 @@ void editTweetIO(TweetId id) {
             else {
                 printf("Selamat! kicauan telah diterbitkan!\n");
                 printf("Detil kicauan:\n");
-                TweetId tweetId = editTweet(id, loggedUser->id, newContent);
+                editTweet(id, loggedUser->id, newContent);
                 displayTweetIO(id);
             }
         }

@@ -6,9 +6,9 @@
 #include "user.h"
 #include "config.h"
 
-static char relation[MAX_USER][MAX_USER];
-static int relationCount[MAX_USER];
-static RequestQueuePointer requestQueue[MAX_USER];
+char relation[MAX_USER][MAX_USER];
+int relationCount[MAX_USER];
+RequestQueuePointer requestQueue[MAX_USER];
 
 void requestFriend(UserId requester, UserId requestee, int friendCount){
     RequestQueuePointer n = malloc(sizeof(RequestQueue));
@@ -30,6 +30,10 @@ void requestFriend(UserId requester, UserId requestee, int friendCount){
             curr->next = n;
         }
     }
+}
+
+int getFriendCount(UserId userId){
+    return relationCount[userId];
 }
 
 boolean checkAlreadyRequested(UserId requester, UserId requestee){
@@ -93,7 +97,9 @@ void removeFriendIO(){
         return;
     }
 
-    if(!isFriend(friend->id, loggedUser->id)){
+    // addFriend(friend->id, loggedUser->id);
+    printf("%d %d", loggedUser->id, friend->id);
+    if(isFriend(friend->id, loggedUser->id) != IsFriend){
         printf("%s bukan teman Anda\n", tmpName);
         return;
     }
@@ -145,7 +151,7 @@ void requestFriendIO(){
         return;
     }
 
-    requestFriend(loggedUser->id, user->id, relationCount[user->id]);
+    requestFriend(loggedUser->id, user->id, getFriendCount(user->id));
     printf("Permintaan pertemanan kepada %s telah dikirim. Tunggu beberapa saat hingga permintaan Anda disetujui.\n", tmpName);
 };
 

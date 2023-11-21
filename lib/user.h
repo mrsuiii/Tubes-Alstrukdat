@@ -70,6 +70,7 @@ void changeProfileIO();
 void changeAccountTypeIO();
 void changePhotoProfileIO();
 
+void userCleanupRoutine();
 void userToConfig();
 void configToUser();
 #endif

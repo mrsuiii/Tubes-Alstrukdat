@@ -32,8 +32,8 @@ extern Tweets tweets;
 boolean isIdValid(TweetId id) ; 
 Tweet* getTweet(TweetId id);
 TweetId createTweet(char* content, UserId author);
-TweetId editTweet(TweetId id, UserId author, char* newContent) ; 
-TweetId likeTweet(TweetId id);
+void editTweet(TweetId id, UserId author, char* newContent) ; 
+void likeTweet(TweetId id);
 
 void createTweetIO();
 void editTweetIO(TweetId id) ; 

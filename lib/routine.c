@@ -9,6 +9,7 @@ void setup(){
 }
 
 void cleanup(){
+    userCleanupRoutine();
     relationCleanUpRoutine();
     draftCleanUpRoutine();
 }

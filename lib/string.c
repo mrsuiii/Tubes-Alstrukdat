@@ -36,6 +36,10 @@ int string_compare(char* a, char* b){
     else return 1;
 }
 
+boolean string_equal(char* a, char* b){
+    return string_compare(a, b) == 0;
+}
+
 int string_length(char* a){
     int i = 0;
     while (a[i] != '\0'){

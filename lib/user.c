@@ -178,6 +178,8 @@ void deleteUser(UserId id){
 void displayProfilIO(UserId id){
     int i;
     User* user = getUser(id);
+    displayUserIO(id);
+    printf("\nFoto Profil akun %s\n",user->name);
     for (i = 0; i < MAX_COLOR; i++){
         if ((i + 1) % 5 == 1 && i != 0){
             printf("\n");
@@ -240,7 +242,7 @@ void lihatProfilIO(char* name){
     if (user->type == PUBLIC_USER){
         displayUserIO(user->id);
         printf("\n");
-        printf("Foto profil akun %s\n",user->name);
+        printf("Foto profil:\n");
         displayProfilIO(user->id);
     } else {
         printf("Wah, akun Tuan Prim diprivat nih. ");

@@ -209,9 +209,6 @@ int main(){
             prependError(err, "Perintah SETUJUI_PERTEMANAN. Gagal, menyetujui pertemanan. ");
         ,err)
 
-
-        
-
         cleanup();
     , err)
 }

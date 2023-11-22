@@ -44,6 +44,11 @@ int main(){
         else if(argv == 1 && string_equal(argc[0], "ATUR_JENIS_AKUN")) changeAccountTypeIO();
         else if(argv == 1 && string_equal(argc[0], "UBAH_FOTO_PROFIIL")) changePhotoProfileIO();
 
+        // Relation
+        else if(argv == 1 && string_equal(argc[0], "TAMBAH_TEMAN")) requestFriendIO();
+        else if(argv == 1 && string_equal(argc[0], "DAFTAR_TAMBAH_TEMAN")) displayRequestedFriendIO();
+        else if(argv == 1 && string_equal(argc[0], "SETUJUI_PERTEMANAN")) acceptFriendIO();
+
         else {
             printf("Command \"%s\" dengan %d argumen tidak diketahui\n", argc[0], argv);
         }

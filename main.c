@@ -6,6 +6,8 @@
 #include "lib/relation.h"
 #include "lib/tweet.h"
 #include "lib/string.h"
+#include "lib/draft.h"
+#include "lib/thread.h"
 
 int main(){
     setup();
@@ -48,6 +50,27 @@ int main(){
         else if(argv == 1 && string_equal(argc[0], "TAMBAH_TEMAN")) requestFriendIO();
         else if(argv == 1 && string_equal(argc[0], "DAFTAR_TAMBAH_TEMAN")) displayRequestedFriendIO();
         else if(argv == 1 && string_equal(argc[0], "SETUJUI_PERTEMANAN")) acceptFriendIO();
+
+        // Tweet
+        else if(argv == 1 && string_equal(argc[0], "KICAU")) createTweetIO();
+        else if(argv == 1 && string_equal(argc[0], "KICAUAN")) displayAllTweetIO();
+        // else if(argv == 2 && string_equal(argc[0], "SUKA_KICAUAN")) likeTweetIO(???);
+        // else if(argv == 2 && string_equal(argc[0], "UBAH_KICAUAN")) editTweetIO(???)
+
+        // Reply
+        // else if(argv == 3 && string_equal(argc[0], "BALAS")) createReplyIO(???, ???);
+        // else if(argv == 2 && string_equal(argc[0], "BALASAN")) displayReplyIO(???);
+        // else if(argv == 3 && string_equal(argc[0], "HAPUS_BALASAN")) deleteReplyIO(???, ???);
+
+        // Draft
+        else if(argv == 1 && string_equal(argc[0], "BUAT_DRAF")) createDraftIO();
+        else if(argv == 1 && string_equal(argc[0], "LIHAT_DRAF")) displayDraftIO();
+
+        // Thread
+        // else if(argv == 2 && string_equal(argc[0], "UTAS")) makeMainThreadIO(???);
+        // else if(argv == 3 && string_equal(argc[0], "SAMBUNG_UTAS")) continueThreadAtIO(???, ???);
+        // else if(argv == 3 && string_equal(argc[0], "HAPUS_TAS")) deleteThreadAtIO(???, ???)
+        // else if(argv == 2 && string_equal(argc[0], "CETAK_UTAS")) displayThreadSeqIO(???)
 
         else {
             printf("Command \"%s\" dengan %d argumen tidak diketahui\n", argc[0], argv);

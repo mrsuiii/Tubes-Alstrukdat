@@ -178,25 +178,7 @@ int main(){
       cleanup();
     , err);
 
-    DEFINE_TEST("Tutup Program", 
-        setup();
-        char err[MAX_ERROR] = "\0";
-
-        SUB_TEST(
-            char in[] = ""; char* out;
-            
-            interceptStdIO(in, &out);
-            // quit program
-            clearStdIO();
-
-            assert_string_include(err, out, "keluar dari program");
-            prependError(err, "Perintah TUTUP_PROGRAM. Gagal, program tidak berhenti. ");
-        ,err);
-
-      cleanup();
-    , err);
-
-        DEFINE_TEST("Ganti Profil", 
+    DEFINE_TEST("Ganti Profil", 
         setup();
         char err[MAX_ERROR] = "\0";
         UserId id = createUser("TuanHak","");

@@ -90,7 +90,7 @@ int main(){
         requestFriend(idb, ida);
         acceptFriend(idb, ida);
 
-        createTweet("haloo ini ciko!",ida);
+        TweetId tId1 = createTweet("haloo ini ciko!",ida);
         createTweet("haloo ini afif!",idb);
 
         SUB_TEST(
@@ -108,7 +108,7 @@ int main(){
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            likeTweetIO(2);
+            likeTweetIO(tId1);
             clearStdIO();
 
             assert_string_include(err, out, "kicauan telah disukai");
@@ -117,13 +117,13 @@ int main(){
 
         UserId idc = createUser("Berto", "");
         getUser(idc)->type = PRIVATE_USER;
-        TweetId tId = createTweet("Halo ini berto!",idc);
+        TweetId tId2 = createTweet("Halo ini berto!",idc);
         
         SUB_TEST(
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            likeTweetIO(tId);
+            likeTweetIO(tId2);
             clearStdIO();
 
             assert_string_include(err, out, "kicauan telah disukai");

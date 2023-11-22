@@ -143,7 +143,7 @@ UserId signIn(){
     }
 
     loggedUser = user;
-    printf("Anda telah berhasil masuk dengan nama pengguna Tuan Bri. Mari menjelajahi BurBir bersama Ande-Ande Lumut!\n");
+    printf("Anda telah berhasil masuk dengan nama pengguna \"%s\". Mari menjelajahi BurBir bersama Ande-Ande Lumut!\n", loggedUser->name);
     return user->id;
 }
 

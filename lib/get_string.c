@@ -2,9 +2,8 @@
 #include "ADT/boolean.h"
 #include <stdio.h>
 
-#define GET_STRING_MARK ';'
 
-static char currentChar;
+char currentChar;
 
 static FILE *pita;
 static int retval;

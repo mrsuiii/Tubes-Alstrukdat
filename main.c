@@ -18,27 +18,36 @@ int main(){
     configToTweet();
 
     while(true){
-        printf(">");
-        char command[100];
-        get_word(command, 100);
+        printf("> ");
 
-        if(string_equal(command, "TUTUP_PROGRAM;")){
+        int argv = 0;
+        char argc[4][100];
+        currentChar = '\0';
+        while(currentChar != GET_STRING_MARK){
+            get_word(argc[argv], 100);
+            argv += 1;
+            if(argv >= 4) continue;
+        }
+
+        if(argv == 1 && string_equal(argc[0], "TUTUP_PROGRAM")){
             break;
         } 
-        
-        else if(string_equal(command, "DAFTAR;")){
-            signUp();
-        } 
-        else if(string_equal(command, "MASUK;")){
-            signIn();
-        } 
-        else if(string_equal(command, "KELUAR;")){
-            signOut();
-        } 
-        
+
+        // User
+        else if(argv == 1 && string_equal(argc[0], "DAFTAR")) signUp();
+        else if(argv == 1 && string_equal(argc[0], "MASUK")) signIn();
+        else if(argv == 1 && string_equal(argc[0], "KELUAR")) signOut();
+
+        // Profile
+        else if(argv == 1 && string_equal(argc[0], "GANTI PROFIL")) changeProfileIO();
+        else if(argv == 2 && string_equal(argc[0], "LIHAT_PROFIL")) displayProfileIO(argc[1]);
+        else if(argv == 1 && string_equal(argc[0], "ATUR_JENIS_AKUN")) changeAccountTypeIO();
+        else if(argv == 1 && string_equal(argc[0], "UBAH_FOTO_PROFIIL")) changePhotoProfileIO();
+
         else {
-            printf("Command \"%s\" tidak diketahui\n", command);
+            printf("Command \"%s\" dengan %d argumen tidak diketahui\n", argc[0], argv);
         }
+        
     }
 
     cleanup();

@@ -229,6 +229,18 @@ void changeProfileIO(){
 }
 
 void displayProfileIO(char* name){
+    if(loggedUser == NULL){
+        printf("Anda belum login\n");
+        return;
+    }
+
+    UserId userId = getUserIdByName(name);
+
+    if(userId == -1) {
+        printf("Profil tidak ditemukan\n");
+        return;
+    }
+
     User* user = getUser(getUserIdByName(name));
     
     if(user->type == PRIVATE_USER && isFriend(user->id, loggedUser->id)){

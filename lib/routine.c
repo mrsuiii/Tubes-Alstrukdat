@@ -18,8 +18,7 @@ void setup(){
 }
 
 void cleanup(){
-    for(int i = 0; i < MAX_USER; ++i) free(users[i]);
-
+    userCleanupRoutine();
     relationCleanUpRoutine();
     draftCleanUpRoutine();
 }

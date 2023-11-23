@@ -34,11 +34,12 @@ Replies* getReplies(TweetId tweetId, ReplyId replyId);
 
 ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base, ReplyPointer* result);
 ReplyNodePointer* getReplies(TweetId tweetId, ReplyId replyId);
+int countReply(TweetId tweetId);
 void deleteReply(ReplyNodePointer target);
 
-void createReplyIO(TweetId tweetId, ReplyId replyId);
-void displayReplyIO(TweetId tweetId);
-void deleteReplyIO(TweetId tweetId, ReplyId replyId);
+void createReplyIO(char* rawTweetId, char* rawReplyId);
+void displayReplyIO(char* rawTweetId);
+void deleteReplyIO(char* rawTweetId, char* rawReplyId);
 
 void replyToConfig();
 

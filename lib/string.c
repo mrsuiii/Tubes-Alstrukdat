@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "string.h"
-# include "ADT/boolean.h"
+#include "ADT/boolean.h"
 
 void string_append(char* start, char* end, char* to, int max){
     int startLength = string_length(start);
@@ -34,6 +34,10 @@ int string_compare(char* a, char* b){
     if(a[ia] == '\0' && b[ib] == '\0') return 0;
     else if(a[ia] == '\0') return -1;
     else return 1;
+}
+
+boolean string_equal(char* a, char* b){
+    return string_compare(a, b) == 0;
 }
 
 int string_length(char* a){
@@ -99,4 +103,23 @@ void string_replace(char* target, char* result, char* from, char* to, int max){
         }
     }
     result[p] = '\0';
+}
+
+boolean string_to_integer(char* buffer, int* value){
+    int r = 0;
+
+    int i = 0;
+    boolean status = true;
+    while(buffer[i] != '\0'){
+        int v = buffer[i] - '0';
+        if(0 <= v && v <= 9){
+            r = (r * 10) + v;
+        } else {
+            status = false;
+        };
+        ++i;
+    }
+
+    *value = r;
+    return status;
 }

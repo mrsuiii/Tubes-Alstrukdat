@@ -10,8 +10,14 @@
 #define MAX_BIO 136
 #define MAX_PHONE 100
 #define MAX_WETON 100
-#define MAX_COLOR 26
-#define MAX_PICTURE 26
+
+#define PICTURE_WIDTH 5
+#define PICTURE_HEIGHT 5
+#define PICTURE_LENGTH PICTURE_WIDTH * PICTURE_HEIGHT
+
+#define MAX_PICTURE PICTURE_LENGTH + 1
+#define MAX_COLOR MAX_PICTURE
+
 /* Account type */
 #define PUBLIC_USER 0
 #define PRIVATE_USER 1
@@ -26,15 +32,10 @@ typedef struct{
     char bio[MAX_BIO];
     char phone[MAX_PHONE];
     char weton[MAX_WETON];
-    char picturecolor[MAX_COLOR];
-    char picture[MAX_PICTURE];
+    char pictureColor[MAX_COLOR];
+    char pictureChar[MAX_PICTURE];
     UserType type; /* Account type */
 } User;
-
-typedef struct{
-    UserId ids[MAX_USER];
-    int size;
-} Users;
 
 #define USERNAME(x) (x).username
 #define PASSWORD(x) (x).password
@@ -45,7 +46,6 @@ typedef struct{
 #define PICTURE(x) (x).picture
 
 /* All user pointer saved here, initialized in setup function */
-extern User* users[MAX_USER];
 extern User* loggedUser;
 extern int userCount;
 
@@ -55,19 +55,22 @@ UserId createUser(char* name, char* pass);
 /* Delete user by id */
 void deleteUser(UserId id);
 
-/* Get user by id */
 User* getUser(UserId id);
-User* getUserByName(char* name);
+UserId getUserIdByName(char* name);
 
-void displayUserIO(UserId id);
 
 UserId signUp();
 UserId signIn();
 void signOut();
 
-void displayProfilIO(UserId id);
-void gantiProfilIO();
-void lihatProfilIO(char* name);
-void aturJenisAkunIO();
-void ubahFotoProfilIO();
+void displayProfileIO(char* name);
+void displayPhotoProfileIO(UserId id);
+
+void changeProfileIO();
+void changeAccountTypeIO();
+void changePhotoProfileIO();
+
+void userCleanupRoutine();
+void userToConfig();
+void configToUser();
 #endif

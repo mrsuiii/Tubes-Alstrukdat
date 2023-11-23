@@ -22,7 +22,7 @@ int hash(char* hastag){
     long long key = 0;
     long long power = 1;
     int n;
-    n = string_length(&hastag);
+    n = string_length(hastag);
     for (int i = 0; i < n; i++){
         key += (hastag[i] - 'a' + 1 * (power)) % m;
         power = (power * p) % m;

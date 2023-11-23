@@ -4,6 +4,7 @@
 #define MAX_TWEET 280
 
 typedef int TweetId;
+typedef struct tweet* TweetPointer ;
 
 #include "user.h"
 #include "reply.h"
@@ -11,41 +12,36 @@ typedef int TweetId;
 
 typedef struct tweet{
     TweetId id;
-    char tweet[MAX_TWEET];
+    char content[MAX_TWEET];
     int like;
     UserId author;
     //DATETIME datetime;
     ThreadPointer firstThread; // firstThread = kicauan sambungan pertama
     int threadCount;
     Replies replies;
-    int replyCount;
+    int lastReplyId;
 } Tweet;
 
 typedef struct{
-    Tweet *buffer;
+    TweetPointer buffer;
     int nEff; 
     int capacity ; 
 }Tweets;
-
-// #include "relation.h"
-// #include "thread.h"
-// #include "ADT/datetime.h"
-
-
 
 extern Tweets tweets;
 
 boolean isIdValid(TweetId id) ; 
 Tweet* getTweet(TweetId id);
 TweetId createTweet(char* content, UserId author);
-TweetId editTweet(TweetId id, UserId author, char* newContent) ; 
-TweetId likeTweet(TweetId id);
+void editTweet(TweetId id, UserId author, char* newContent) ; 
+void likeTweet(TweetId id);
+void displayTweet(TweetId id) ; 
 
 void createTweetIO();
-void editTweetIO(TweetId id) ; 
-void likeTweetIO(TweetId id) ; 
-void displayTweetIO(TweetId id) ; 
+void editTweetIO(char* rawTweetId) ; 
+void likeTweetIO(char* rawTweetId) ; 
 void displayAllTweetIO() ; 
 
 void tweetToConfig();
+void configToTweet();
 #endif

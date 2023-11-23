@@ -192,7 +192,7 @@ Instruksi-instruksi yang dapat dilakukan :
 ### 1. Initialization (Inisialisasi)
 
 &ensp;&ensp;
-Ketika Program dijalankan dilakukan Inisialisasi Program seperti memuat konfigurasi dan output pembuka program.
+Ketika Program dijalankan dilakukan Inisialisasi Program seperti memuat konfigurasi dan output pembuka program.  
 
 ### 2. Commands (Perintah)
 
@@ -202,50 +202,108 @@ Membaca dan Mengeksekusi Perintah-Perintah Program.
 ### 3. User (Pengguna)
 
 &ensp;&ensp;
-Program dapat membuat seorang pengguna yang terdiri dari Nama dan Password Akun.
+Program dapat membuat seorang pengguna yang terdiri dari Nama dan Password Akun.  
+
+`DAFTAR` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menambahkan pengguna.  
+`MASUK`  :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login dengan menggunakan nama dan kata sandi.  
+`KELUAR` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log out dan kembali ke menu utama.
+
 
 ### 4. Profile (Profil)
 
 &ensp;&ensp;
-Seorang Pengguna memiliki profil yang terdiri dari bio, nomor hp, weton, jenis akun, dan foto profil.
+Seorang Pengguna memiliki profil yang terdiri dari bio, nomor hp, weton, jenis akun, dan foto profil.  
+
+`GANTI_PROFIL` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mengubah profil pengguna yang terdiri dari nama, bio, no. HP, weton.  
+`LIHAT_PROFIL [NAMA]` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Melihat profil lengkap dari user dengan nama [NAMA].  
+`ATUR_JENIS_AKUN` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mengubah akun menjadi akun privat dari publik dan sebaliknya.   
+`UBAH_FOTO_PROFIL` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mengubah foto profil dari pengguna yang sedang login. Foto profil direpresentasikan dengan matrix. 
 
 ### 5. Friend (Teman)
 
 &ensp;&ensp;
-Dapat dijalinkan Pertemanan antara Pengguna.
+Dapat dijalinkan Pertemanan antara Pengguna.  
+`DAFTAR_TEMAN` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menampilkan banyak teman dan daftar teman dari pengguna saat ini.  
+`HAPUS_TEMAN` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menghapus salah satu teman dari pengguna saat ini.  
 
 ### 6. Friend Request (Permintaan Pertemanan)
 
 &ensp;&ensp;
-Seorang Pengguna dapat melakukan permintaan pertemanan kepada Pengguna lain.
+Seorang Pengguna dapat melakukan permintaan pertemanan kepada Pengguna lain.  
+`TAMBAH_TEMAN` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mengirimkan perimintaan pertemanan ke pengguna lain.  
+`DAFTAR_PERMINTAAN_PERTEMANAN` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menampilkan daftar permintaan pertemanan yang diajukan ke pengguna sekarang.  
+`SETUJUI_PERTEMANAN` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menyetujui permintaan pertemanan yang diajukan ke user sekarang.  
 
 ### 7. Tweet (Kicauan)
 
 &ensp;&ensp;
-Membuat Kicauan atau tweet yang memiliki isi, pembuat, waktu, dan jumlah like.
+Membuat Kicauan atau tweet yang memiliki isi, pembuat, waktu, dan jumlah like.  
+`KICAU` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menerbitkan kicauan baru.  
+`KICAUAN` :  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menampilkan semua kicauan yang telah dibuat oleh user sekarang.  
+`SUKA_KICAUAN [IDKicau]` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menyukai kicauan dengan id = IDKicau.  
+`UBAH_KICAUAN [IDKicau]` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mengubah isi kicauan dari kicauan dengan id = IDKicau.  
+
 
 ### 8. Reply (Balasan)
 
 &ensp;&ensp;
-Membuat balasan terhadap suatu kicauan atau balasan lain.
+Membuat balasan terhadap suatu kicauan atau balasan lain.  
+`BALAS [IDKicau] [IDBalasan]` :  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menambah balasan pada balasan dengan id = IDBalasan pada kicauan dengan id = IDKicau.  
+`BALASAN [IDKicau]` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Melihat daftar balasan pada kicau. Jika terdapat balasan dalam balasan maka tampilkan balasan yang di dalam lebih ke kanan. Jika akun pengguna diprivat, nama, waktu, dan balasan dari pengguna diubah menjadi PRIVAT.  
+`HAPUS_BALASAN [IDKicau] [IDBalasan]` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menghapus balasan pada balasan dengan id = IDBalasan pada kicauan dengan id = IDKicau.
+
 
 ### 9. Tweet Draft (Draf Kicauan)
 
 &ensp;&ensp;
-Membuat Draf Kicauan yang dapat disimpan, diubah, dihapus, dan diterbitkan menjadi Kicauan.
+Membuat Draf Kicauan yang dapat disimpan, diubah, dihapus, dan diterbitkan menjadi Kicauan.  
+`BUAT_DRAFT` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menambahkan sebuah draft kicauan. Setelah itu, draft dapat dihapus, disimpan, atau diterbitkan.   
+`LIHAT_DRAF` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Melihat draf terakhir yang dibuat.  
 
 ### 10. Thread (Utas)
 
 &ensp;&ensp;
-Suatu Kicauan mungkin tidak cukup untuk menulis suatu pesan. Maka suatu kicauan dapat dibuat menjadi 
+Suatu Kicauan mungkin tidak cukup untuk menulis suatu pesan. Maka suatu kicauan dapat dibuat menjadi utas.  
+`UTAS [IDKicau]`  :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Membuat sebuah utas baru dengan kicauan pertamanya adalah kicauan dengan id = IDKicau.  
+`SAMBUNG_UTAS [IDUtas] [index]` :  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menambah sebuah kicauan baru dalam sebuah utas dengan id = IDUtas pada posisi index.  
+`HAPUS_UTAS [IDUtas] [index]`  :  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menghapus kicauan dalam sebuah utas dengan id = IDUtas. Kicauan utas yang dihapus sesuai dengan index.   
+`CETAK_UTAS [IDUtas]`  :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mencetak keseluruhan kicauan dalam sebuah utas dengan id = IDUtas termasuk kicauan utama.  
 
 ### 11. Save & Load (Simpan dan Muat)
 
 &ensp;&ensp;
 State Akhir program dapat disimpan pada file konfigurasi.  
 &ensp;&ensp;
-Konfigurasi dapat dimuat saat program dimulai.   
-
+Konfigurasi dapat dimuat saat program dimulai.    
+`SIMPAN`  :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menyimpan konfigurasi pengguna, kicauan, balasan, draft, dan utas ke folder yang akan dipilih kemudian.  
+`MUAT` :   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Memuat setiap konfigurasi dari folder yang akan dipilih kemudian.  
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -53,7 +53,7 @@ void displayHastag(HashMap* map, char* hastag){
     HashmapValue* hashmap = map->tagar[index];
     while (hashmap->next != NULL){
         if (string_compare(hashmap->key,hastag) == 0){
-            displayTweetIO(hashmap->id);
+            displayTweet(hashmap->id);
         }
         hashmap = hashmap->next;
     }

@@ -70,7 +70,7 @@ void publishDraftIO(){
     deleteDraft(id);
     printf("\nSelamat! Draf kicauan telah diterbitkan!\n");
     printf("Detil balasan:\n");
-    displayTweetIO(newTweetId);
+    displayTweet(newTweetId);
 }
 
 /* Display last Draft */

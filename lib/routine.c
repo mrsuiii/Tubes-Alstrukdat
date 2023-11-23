@@ -6,17 +6,10 @@
 #include "draft.h"
 
 void setup(){
-
-    /* User */
-    for(int i = 0; i < MAX_USER; ++i) users[i] = NULL;
-    loggedUser = NULL;
-    userCount = 0;
-
 }
 
 void cleanup(){
-    for(int i = 0; i < MAX_USER; ++i) free(users[i]);
-
+    userCleanupRoutine();
     relationCleanUpRoutine();
     draftCleanUpRoutine();
 }

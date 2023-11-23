@@ -17,7 +17,7 @@ boolean isIdValid(TweetId id){
     return (id >= 1 && id <= tweets.nEff);
 }
 
-Tweet* getTweet(TweetId id){
+TweetPointer getTweet(TweetId id){
     return &(tweets.buffer[id - 1]) ; 
 }
 

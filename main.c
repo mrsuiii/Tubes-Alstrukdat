@@ -19,6 +19,15 @@ int main(){
     startReadFile("./config/kicauan.config");
     configToTweet();
 
+    startReadFile("./config/balasan.config");
+    configToReply();
+
+    startReadFile("./config/draf.config");
+    configToDraft();
+
+    startReadFile("./config/utas.config");
+    configToThread();
+
     while(true){
         printf("> ");
 

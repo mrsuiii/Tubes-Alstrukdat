@@ -59,8 +59,7 @@ int main(){
         UserId ida = createUser("Ciko", "");
         UserId idb = createUser("Afif", "");
         loggedUser = getUser(ida);
-        requestFriend(idb, ida);
-        acceptFriend(idb, ida);
+        addFriend(idb, ida);
 
         createTweet("haloo ini ciko!",ida);
         createTweet("haloo ini afif!",idb);
@@ -87,8 +86,8 @@ int main(){
         UserId ida = createUser("Ciko", "");
         UserId idb = createUser("Afif", "");
         loggedUser = getUser(ida);
-        requestFriend(idb, ida);
-        acceptFriend(idb, ida);
+        addFriend(idb, ida);
+
 
         TweetId tId1 = createTweet("haloo ini ciko!",ida);
         createTweet("haloo ini afif!",idb);
@@ -97,7 +96,7 @@ int main(){
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            likeTweetIO(1000);
+            likeTweetIO("1000");
             clearStdIO();
 
             assert_string_include(err, out, "Tidak ditemukan");
@@ -108,7 +107,7 @@ int main(){
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            likeTweetIO(tId1);
+            likeTweetIO("6");
             clearStdIO();
 
             assert_string_include(err, out, "kicauan telah disukai");
@@ -123,7 +122,7 @@ int main(){
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            likeTweetIO(tId2);
+            likeTweetIO("6");
             clearStdIO();
 
             assert_string_include(err, out, "kicauan telah disukai");
@@ -149,7 +148,7 @@ int main(){
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            editTweetIO(tId2);
+            editTweetIO("1");
             clearStdIO();
 
             assert_string_include(err, out, "bukan milikmu");
@@ -160,7 +159,7 @@ int main(){
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            editTweetIO(999);
+            editTweetIO("999");
             clearStdIO();
 
             assert_string_include(err, out, "Tidak ditemukan");
@@ -171,7 +170,7 @@ int main(){
             char in[] = "Wilujeng enjing, BurBir!;"; char* out;
 
             interceptStdIO(in, &out);
-            editTweetIO(tId1);
+            editTweetIO("9");
             clearStdIO();
 
             assert_string_include(err, out, "telah diterbitkan");

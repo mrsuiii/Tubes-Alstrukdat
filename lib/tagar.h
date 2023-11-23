@@ -24,6 +24,6 @@ extern HashMap hashmapHastag;
 
 HashMap* createHastag();
 int hash(char* hastag);
-void insertHastag(int key, TweetId id);
+void insertHastag(char* key, TweetId id);
 void displayHastag(char* hastag);
 #endif

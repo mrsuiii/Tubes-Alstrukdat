@@ -9,7 +9,7 @@
 #include "string.h"
 #include "thread.h"
 #include "ADT/datetime.h"
-
+#include "tagar.h"
 Tweets tweets; 
 
 boolean isIdValid(TweetId id){
@@ -62,9 +62,13 @@ void createTweetIO(){
 
     TweetId newTweetId = createTweet(content, loggedUser->id);
     
+    printf("Masukkan tagar:\n");
+    char hastag [MAX_TAGAR];
+    get_string(hastag,MAX_TAGAR);
+    insertHastag(hastag,newTweetId);
     if (isAllBlank(content)){
         printf("Kicauan tidak boleh hanya berisi spasi!\n");
-    } else {         
+    } else {
         printf("Selamat! kicauan telah diterbitkan!\n"); 
         displayTweetIO(newTweetId);
     }

@@ -17,52 +17,71 @@ HashMap* createHastag(){
 }
 
 /* menerima tagar (tanpa pagar) dari kicauan dan mengembalikan nilai kuncinya*/
-int hash(char* hastag){ 
-    int key = 0, p = 1, m = CAPACITY;
-    for (int i = 0; i < string_length(hastag);i++){
-        if (hastag[i] < 'a'){
-            hastag[i] += 32;
-        }
-        key+= ((hastag[i] - 'a' + 1) * p) % m;
-        printf("karakter: %c ; hash: %d ; key = %d\n",hastag[i],hastag[i] - 'a' + 1,key);
-        p *= 31;
+int hash(char* hastag){
+    long long p = 31, m = 1e9 + 7;
+    long long key = 0;
+    long long power = 1;
+    int n;
+    n = string_length(&hastag);
+    for (int i = 0; i < n; i++){
+        key += (hastag[i] - 'a' + 1 * (power)) % m;
+        power = (power * p) % m;
     }
-    
+
     return key;
 }
 
-// void insertHastag(HashMap* map, char* hastag, TweetId id){
-//     int index = hash(hastag);
-//     HashmapValue* hashmap = (HashmapValue*)malloc(sizeof(HashmapValue));
-//     hashmap->id = id;
-//     string_copy(hastag,hashmap->key,MAX_TAGAR);
-//     if (map->tagar[index] == NULL){
-//         hashmap->next = map->tagar[index]; /*next == NULL (kalo ngga collide)*/
-//     } else { /* yah collide*/
-//         while (map->tagar[index]->next != NULL)
-//         {
-//             map->tagar[index] = map->tagar[index]->next;
-//         }
-//         map->tagar[index]->next = 
-//     }
-//     map->tagar[index] = hashmap;
-// }
-
-void displayHastag(HashMap* map, char* hastag){
-    int index = hash(hastag);
-    HashmapValue* hashmap = map->tagar[index];
-    while (hashmap->next != NULL){
-        if (string_compare(hashmap->key,hastag) == 0){
-            displayTweetIO(hashmap->id);
+void insertHastag(char* hastag, TweetId id){
+    int n = string_length(hastag);
+    char hastagtemp[MAX_TAGAR];
+    string_copy(hastag,hastagtemp,MAX_TAGAR);
+    for (int i = 0; i < n; i++){
+        if (hastagtemp[i] < 'a'){
+            hastagtemp[i] += 32;
         }
-        hashmap = hashmap->next;
+    }
+    int index = hash(hastagtemp);
+    HashmapValue* hashmap = (HashmapValue*)malloc(sizeof(HashmapValue));
+
+    if (hashmapHastag.tagar[index] == NULL){
+        hashmapHastag.tagar[index] = hashmap; /*next == NULL (kalo ngga collide)*/
+    } else { /* yah collide */
+        Address m = hashmapHastag.tagar[index];
+        while (m->next != NULL)
+        {
+            m = m->next;
+        }
+        m->id = id;
+        string_copy(hastagtemp,m->key,MAX_TAGAR);
+        m->next = NULL;
+    }
+    
+    hashmapHastag.tagar[index] = hashmap;
+}
+
+void displayHastag(char* hastag){
+    int n = string_length(hastag);
+    char hastagtemp[MAX_TAGAR];
+    string_copy(hastag,hastagtemp,MAX_TAGAR);
+    for (int i = 0; i < n; i++){
+        if (hastagtemp[i] < 'a'){
+            hastagtemp[i] += 32;
+        }
+    }
+    int index = hash(hastagtemp);
+
+    if (string_compare(hashmapHastag.tagar[index]->key,hastagtemp) == 0){
+        Address m = hashmapHastag.tagar[index];
+        while (m->next != NULL){
+            if (string_compare(m->key,hastagtemp) == 0){
+                displayTweetIO(m->id);
+            }
+            m = m->next;
+        }
+        if (string_compare(m->key,hastagtemp) == 0){
+            displayTweetIO(m->id);
+        }
+    } else {
+        printf("Tidak ditemukan kicauan dengan tagar #%s",hastag);
     }
 }
-// [x,x,x,x,x,x,x,x,...,10^7]
-//      v
-//      x2
-// tweet
-// hastag: #bluebir
-// #bluebir -> key
-// key mod m , m = 10^7
-// 

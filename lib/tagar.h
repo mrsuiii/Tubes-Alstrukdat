@@ -6,12 +6,13 @@
 
 #define MAX_TAGAR 300
 #define MARK -9999
-#define CAPACITY 10000000
+#define CAPACITY 1e9 + 7
 
+typedef struct HashmapValue* Address;
 typedef struct HashmapValue{
     TweetId id;
     char key[MAX_TAGAR];
-    struct HashmapValue* next;
+    Address next;
 } HashmapValue;
 
 typedef struct HashMap {
@@ -23,5 +24,6 @@ extern HashMap hashmapHastag;
 
 HashMap* createHastag();
 int hash(char* hastag);
-void insertHastag(HashMap* map, int key, TweetId id);
+void insertHastag(int key, TweetId id);
+void displayHastag(char* hastag);
 #endif

@@ -26,8 +26,8 @@ int main(){
             prependError(err, "Perintah DAFTAR_TEMAN. Gagal, tidak memiliki teman. ");
         ,err);
 
-        requestFriend(ida,idb);
-        acceptFriend(ida,idb); 
+        requestFriend(ida,idb, getFriendCount(idb));
+        addFriend(ida,idb); 
         
         SUB_TEST(
             char in[] = ""; char* out;
@@ -64,8 +64,7 @@ int main(){
             prependError(err, "Perintah HAPUS_TEMAN. Gagal, menghapus teman. ");
         ,err)
 
-        requestFriend(ida,idb);
-        acceptFriend(ida,idb);
+        addFriend(ida, idb);
 
         SUB_TEST( 
             char in[] = "Afif;TIDAK;"; char* out;

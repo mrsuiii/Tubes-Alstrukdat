@@ -255,7 +255,8 @@ void repliesToConfig(Replies replies, int parent){
     while(current){
         Reply reply = current->reply;
 
-        printf("%d %d\n%s\n%s\n", parent, reply.id, reply.content, getUser(reply.author)->name);
+        User *user = getUser(reply.author);
+        printf("%d %d\n%s\n%s\n", parent, reply.id, reply.content, user != NULL ? getUser(reply.author)->name : "UNKNOWN_USER");
 
         repliesToConfig(reply.replies, reply.id);
         current = current->next;

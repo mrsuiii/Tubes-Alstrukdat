@@ -4,6 +4,7 @@
 #include "string.h"
 #include "relation.h"
 #include "get_string.h"
+#include "config.h"
 
 void insertLastReplies(Replies* base, ReplyNodePointer value){
     if(*base == NULL){
@@ -278,5 +279,32 @@ void replyToConfig(){
         printf("%d\n", tweet[i]->id);
         printf("%d\n", countReply(tweet[i]->id));
         repliesToConfig(tweet[i]->replies, -1);
+    }
+}
+
+void configToReply(){
+    int tweetCount = readInt(); nextLine();
+
+    for(int i = 0; i < tweetCount; ++i){
+        TweetId tweetId = readInt(); nextLine();
+
+        int replyCount = readInt(); nextLine();
+        for(int j = 0; j < replyCount; ++j){
+            ReplyId parent = readInt(); nextWord();
+            ReplyId id = readInt(); nextLine();
+
+            char content[MAX_REPLY];
+            readTill(content, "\n", MAX_REPLY); nextLine();
+
+            char name[MAX_USER];
+            readTill(name, "\n", MAX_USER); nextLine();
+
+            char datetime[100];
+            readTill(datetime, "\n", 100); nextLine();
+
+            ReplyPointer res;
+            createReply(content, getUserIdByName(name), tweetId, getReplies(tweetId, parent), &res);
+            res->id = id;
+        }
     }
 }

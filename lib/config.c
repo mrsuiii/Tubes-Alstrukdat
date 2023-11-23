@@ -56,10 +56,20 @@ void readTill(char* buff, char* mark, int max){
 
 int readInt(){
     int r = 0;
+    boolean negated = false;
+
+    if(currentChar == '-'){
+        negated = true;
+        readChar();
+    };
+
     while(!finished && '0' <= currentChar && currentChar <= '9'){
         r = (r * 10) + (currentChar - '0');
         readChar();
     }
+
+    if(negated) r *= -1;
+
     return r;
 }
 

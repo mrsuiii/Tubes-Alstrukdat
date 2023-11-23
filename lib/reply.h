@@ -42,5 +42,6 @@ void displayReplyIO(char* rawTweetId);
 void deleteReplyIO(char* rawTweetId, char* rawReplyId);
 
 void replyToConfig();
+void configToReply();
 
 #endif

@@ -12,7 +12,7 @@
 #include "ADT/datetime.h"
 #include "tagar.h"
 Tweets tweets; 
-
+HashMap* hashmapHastag;
 boolean isIdValid(TweetId id){
     return (id >= 1 && id <= tweets.nEff);
 }
@@ -61,10 +61,10 @@ void createTweetIO(){
 
     TweetId newTweetId = createTweet(content, loggedUser->id);
     
-    printf("Masukkan tagar:\n");
+    printf("\nMasukkan tagar:\n");
     char hastag [MAX_TAGAR];
     get_string(hastag,MAX_TAGAR);
-    insertHastag(hastag,newTweetId);
+    insertHastag(hashmapHastag,hastag,newTweetId);
     if (isAllBlank(content)){
         printf("Kicauan tidak boleh hanya berisi spasi!\n");
     } else {
@@ -172,7 +172,7 @@ void tweetToConfig(){
 void configToTweet(){
     int count = readInt(); nextLine();
 
-    Tweet tweets[count];
+    Tweet tweets[100];
     for(int i = 0; i < count; ++i){
         int id = readInt(); nextLine();
         Tweet* tweet = &(tweets[id - 1]);

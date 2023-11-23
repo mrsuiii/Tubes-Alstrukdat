@@ -4,6 +4,7 @@
 #include "user.h"
 #include "relation.h"
 #include "draft.h"
+#include "tagar.h"
 
 void setup(){
 
@@ -11,6 +12,8 @@ void setup(){
     for(int i = 0; i < MAX_USER; ++i) users[i] = NULL;
     loggedUser = NULL;
     userCount = 0;
+
+    createHastag();
 
 }
 

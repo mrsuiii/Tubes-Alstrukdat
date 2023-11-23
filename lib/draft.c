@@ -151,40 +151,33 @@ void readDraftCommandIO(){
     }
 }
 
-int MAX_CONFIG = 100000;
-
-/* Convert Draft data to Config */
-void draftToConfig(char* buffer){
-    buffer[0] = '\0';
-    char line[1000];
-
-    int count = 0;
-    for(int i = 0; i < MAX_USER; i++){
-        if(!isDraftEmpty(i)){
-            count ++;
-        }
-    }
-
-    snprintf(line, 1000, "%d\n", count);
-    string_append(buffer, line, buffer, MAX_CONFIG);
-    for(int i = 0; i < MAX_USER; i++){
-        if(!isDraftEmpty(i)){
-            snprintf(line,1000,"%s %d\n",getUser(i)->name, draftLength(i));
-            string_append(buffer, line, buffer, MAX_CONFIG);
-
-            for(int j = 0; j < draftLength(i); j++){
-                snprintf(line, 1000, "%s\n%s\n", getDraft(i)->content, getDraft(i)->datetime);
-                string_append(buffer, line, buffer, MAX_CONFIG);
-            }
-        }
-    }
-}
-
 /* Memberishkan draft */
 void draftCleanUpRoutine(){
     for(int i = 0; i < MAX_USER; ++i){
         while(!isDraftEmpty(i)){
             deleteDraft(i);
         }
+    }
+}
+
+/* Convert Draft data to Config */
+void draftToConfig(){
+    int userIdx[20];
+    int i, count = 0;
+    for(i = 0; i < MAX_USER; i++){
+        if(!isDraftEmpty(i)){
+            userIdx[count] = i;
+            count ++;
+        }
+    }
+    printf("%d\n", count);
+
+    for(int i = 0; i < count; i++){
+        printf("%s %d\n", getUser(userIdx[i])->name, draftLength(userIdx[i]));
+        while(!isDraftEmpty(userIdx[i])){
+            printf("%s\n",getDraft(userIdx[i])->content);
+            // printf("%s\n",getDraft(userIdx[i])->datetime);
+            deleteDraft(userIdx[i]);
+        }       
     }
 }

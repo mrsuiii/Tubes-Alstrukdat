@@ -113,7 +113,7 @@ UserId signUp(){
     char tmpPass[MAX_PASS];
     printf("Masukkan kata sandi: \n");
     get_string(tmpPass, MAX_PASS);
-
+    printf("Pengguna berhasil terdaftar.\nMasuk untuk menikmati fitur-fitur BurBir.\n");
     return createUser(tmpName, tmpPass);
 }
 
@@ -154,6 +154,7 @@ void signOut(){
     }
 
     loggedUser = NULL;
+    printf("Anda berhasil logout.\n");
 }
 
 // TODO: Clear relation after delete

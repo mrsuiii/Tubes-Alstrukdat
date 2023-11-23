@@ -256,7 +256,8 @@ void repliesToConfig(Replies replies, int parent){
         Reply reply = current->reply;
 
         User *user = getUser(reply.author);
-        printf("%d %d\n%s\n%s\n", parent, reply.id, reply.content, user != NULL ? getUser(reply.author)->name : "UNKNOWN_USER");
+        char* datetime = "DATETIME";
+        printf("%d %d\n%s\n%s\n%s\n", parent, reply.id, reply.content, user != NULL ? getUser(reply.author)->name : "UNKNOWN_USER", datetime);
 
         repliesToConfig(reply.replies, reply.id);
         current = current->next;
@@ -289,10 +290,13 @@ void configToReply(){
     for(int i = 0; i < tweetCount; ++i){
         TweetId tweetId = readInt(); nextLine();
 
+        int maxId = 0;
         int replyCount = readInt(); nextLine();
         for(int j = 0; j < replyCount; ++j){
             ReplyId parent = readInt(); nextWord();
             ReplyId id = readInt(); nextLine();
+
+            if(id > maxId) maxId = id;
 
             char content[MAX_REPLY];
             readTill(content, "\n", MAX_REPLY); nextLine();
@@ -307,5 +311,7 @@ void configToReply(){
             createReply(content, getUserIdByName(name), tweetId, getReplies(tweetId, parent), &res);
             res->id = id;
         }
+
+        getTweet(tweetId)->lastReplyId = maxId;
     }
 }

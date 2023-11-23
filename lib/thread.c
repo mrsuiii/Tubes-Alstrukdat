@@ -288,7 +288,6 @@ void configToThread(){
 
             char date[1000];
             readTill(date, "\n", 1000);
-
         }
     }
 }

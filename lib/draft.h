@@ -11,7 +11,7 @@ typedef struct Draft* DraftAddress;
 typedef struct Draft{
     char content[MAX_TWEET];
     DraftAddress next;    
-    char* datetime;
+    char datetime[1000];
 } Draft;
 
 /* Create new empty Draft */
@@ -49,6 +49,7 @@ void readDraftCommandIO();
 
 /* Convert Draft data to Config */
 void draftToConfig();
+void configToDraft();
 
 /* Memberishkan draft */
 void draftCleanUpRoutine();

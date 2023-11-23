@@ -12,6 +12,6 @@ int string_length(char* a);
 boolean string_include(char* str, char* substr);
 boolean isAllBlank(char* a);
 void string_replace(char* target, char* result, char* from, char* to, int max);
-int string_to_number(char* buffer);
+boolean string_to_integer(char* buffer, int* value);
 
 #endif

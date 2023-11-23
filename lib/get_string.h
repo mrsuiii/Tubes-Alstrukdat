@@ -8,5 +8,4 @@ extern char currentChar;
 
 void get_string(char* res, int size);
 void get_word(char* res, int size);
-boolean get_int(int *res);
 #endif

@@ -1,5 +1,5 @@
-# include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "tweet.h"
 #include "user.h"
@@ -23,8 +23,8 @@ boolean isThreadIdxValid(ThreadId mainThreadId, int threadIdx){
     return !(threadIdx > (threads.buffer[mainThreadId])->threadCount || threadIdx < 1);
 }
 
-// return true if Tweet * pointing into a tweet that is also a thread 
-boolean isThread(Tweet * tweetPointer){
+// return true if TweetPointer pointing into a tweet that is also a thread 
+boolean isThread(TweetPointer tweetPointer){
     for (int i = 1; i <= threads.nEff; i++){
         if (threads.buffer[i] == tweetPointer) return true ; 
     }
@@ -40,12 +40,12 @@ ThreadPointer newThread(char* content){
 }
 
 // make a pointer into a thread and return the pointer into that tweet
-Tweet * makeMainThread(Tweet * mainThread) {
+TweetPointer makeMainThread(TweetPointer mainThread) {
     if (threads.capacity == 0 ){
-        threads.buffer = (Tweet **) malloc (sizeof(Tweet *));
+        threads.buffer = (TweetPointer*) malloc (sizeof(TweetPointer));
         threads.capacity = 1; 
     } else if (threads.capacity == threads.nEff){
-        threads.buffer = (Tweet * *) realloc (threads.buffer, sizeof(Tweet *) * (threads.capacity * 2)) ;
+        threads.buffer = (TweetPointer *) realloc (threads.buffer, sizeof(TweetPointer) * (threads.capacity * 2)) ;
         threads.capacity = threads.capacity * 2 ; 
     }
 
@@ -57,12 +57,12 @@ Tweet * makeMainThread(Tweet * mainThread) {
 }
 
 // reutrn the pointer of a thread with Id == mainThreadId
-Tweet * getMainThread(ThreadId mainThreadId) {
+TweetPointer getMainThread(ThreadId mainThreadId) {
     return (threads.buffer[mainThreadId]);
 }
 
 // return the pointer of thread with threadId == mainThread and threadIdx == threadIdx
-ThreadPointer getThread(Tweet * mainThread, int threadIdx){
+ThreadPointer getThread(TweetPointer mainThread, int threadIdx){
     ThreadPointer currThread = mainThread->firstThread;
 
     for(int i = 1 ; i < threadIdx ; i++){
@@ -73,7 +73,7 @@ ThreadPointer getThread(Tweet * mainThread, int threadIdx){
 
 // I.S : mainThread is a valid Thread, threadIdx -1 is a valid thread IDx for that mainThread or threadIdx ==1
 // F.S : insert new thread at mainThread with threadIdx and .content == content
-void continueThreadAt(Tweet * mainThread, int threadIdx, char* content) {
+void continueThreadAt(TweetPointer mainThread, int threadIdx, char* content) {
     ThreadPointer new = newThread(content);
     
     if (threadIdx == 1){
@@ -91,7 +91,7 @@ void continueThreadAt(Tweet * mainThread, int threadIdx, char* content) {
 
 // I.S : mainThread is a valid Thread, threadIdx is a valid thread 
 // F.S : delete the thread of mainThread at idx == threadIdx
-void deleteThreadAt(Tweet * mainThread, int threadIdx){
+void deleteThreadAt(TweetPointer mainThread, int threadIdx){
     if (threadIdx == 1 ){
         printf("hehe;");
         ThreadPointer first = mainThread->firstThread;
@@ -108,7 +108,14 @@ void deleteThreadAt(Tweet * mainThread, int threadIdx){
 
 // I.S : mainThreadId is a valid thread 
 // F.S : display the tweet with ThreadId == mainThreadId 
-void displayThreadSeqIO(ThreadId mainThreadId){
+void displayThreadSeqIO(char* rawThreadId){
+    ThreadId mainThreadId;
+
+    if(!string_to_integer(rawThreadId, &mainThreadId)){
+        printf("\"%s\" bukanlah id thread yang valid\n", rawThreadId);
+        return;
+    }
+
     printf("\n");
     if (!loggedUser){
         printf("Anda belum login\n");
@@ -118,14 +125,14 @@ void displayThreadSeqIO(ThreadId mainThreadId){
     if (mainThreadId > threads.nEff || mainThreadId < 1){
         printf("Utas tidak ditemukan!\n");
     } else {
-        Tweet * mainThread = getMainThread(mainThreadId);
+        TweetPointer mainThread = getMainThread(mainThreadId);
         User* user = getUser(mainThread->author);
         if(user->type && !isFriend(loggedUser->id, user->id) && user->id != loggedUser->id){
             printf("Akun yang membuat utas ini adalah akun privat! Ikuti dahulu akun ini untuk melihat utasnya!\n");
         } else {
             ThreadPointer currThread = mainThread->firstThread;
             int count = 1 ; 
-            displayTweetIO(mainThread->id);
+            displayTweet(mainThread->id);
             while (currThread != NULL){
                 printf("   | INDEX: %d\n", count);
                 printf("   | %s\n", user->name);
@@ -143,7 +150,7 @@ void displayThreadSeqIO(ThreadId mainThreadId){
 // F.S menampilkan pesan kesalahan jika parameter tidak valid atau menginsert thread baru pada parameter yang diberikan
 // I.S bebas 
 // F.S menampilkan pesan kesalahan jika parameter tidak valid atau menginsert thread baru pada parameter yang diberikan
-void continueThreadAtIO(ThreadId mainThreadId, int threadIdx) {
+void continueThreadAtIOParsed(ThreadId mainThreadId, int threadIdx){
     printf("\n");
     if (!(isMainThreadIdValid(mainThreadId)) && mainThreadId != 1){
         printf("Utas tidak ditemukan!\n");
@@ -151,7 +158,7 @@ void continueThreadAtIO(ThreadId mainThreadId, int threadIdx) {
         printf("Index terlalu tinggi!\n");
 
     } else {
-        Tweet * mainThread = getMainThread(mainThreadId);
+        TweetPointer mainThread = getMainThread(mainThreadId);
 
         if (loggedUser->id != mainThread->author){
             printf("Anda tidak bisa menyambung kicauan dalam utas ini!\n");
@@ -165,9 +172,37 @@ void continueThreadAtIO(ThreadId mainThreadId, int threadIdx) {
     }
 }
 
+void continueThreadAtIO(char* rawMainThreadId, char* rawThreadIdx){
+    ThreadId mainThreadId; int threadIdx;
+
+    if(!string_to_integer(rawMainThreadId, &mainThreadId)){
+        printf("\"%s\" bukanlah id thread yang valid\n", rawMainThreadId);
+        return;
+    }
+
+    if(!string_to_integer(rawThreadIdx, &threadIdx)){
+        printf("\"%s\" buknalah index thread yang valid\n", rawThreadIdx);
+        return;
+    }
+
+    continueThreadAtIOParsed(mainThreadId, threadIdx);
+}
+
 // I.S bebas 
 // F.S menampilkan pesan kesalahan jika parameter tidak valid atau menghapus thread pada parameter yang diberikan
-void deleteThreadAtIO(ThreadId mainThreadId, int threadIdx){
+void deleteThreadAtIO(char* rawMainThreadId, char* rawThreadIdx){
+    ThreadId mainThreadId; int threadIdx;
+
+    if(!string_to_integer(rawMainThreadId, &mainThreadId)){
+        printf("\"%s\" bukanlah id thread yang valid\n", rawMainThreadId);
+        return;
+    }
+
+    if(!string_to_integer(rawThreadIdx, &threadIdx)){
+        printf("\"%s\" buknalah index thread yang valid\n", rawThreadIdx);
+        return;
+    }
+
     printf("\n");
     if (!(isMainThreadIdValid(mainThreadId)) && mainThreadId != 1){
         printf("Utas tidak ditemukan!\n");
@@ -175,14 +210,22 @@ void deleteThreadAtIO(ThreadId mainThreadId, int threadIdx){
         printf("Index terlalu tinggi!\n");
     } else {
         printf("masuk");
-        Tweet * mainThread = getMainThread(mainThreadId);
+        TweetPointer mainThread = getMainThread(mainThreadId);
         deleteThreadAt(mainThread, threadIdx);
     }
 }
 
 // I.S bebas
 // F.S menjadikan tweet dengan Id == tweetId menjadi sebuah thread 
-void makeMainThreadIO(TweetId tweetId){
+void makeMainThreadIO(char* rawTweetId){
+    TweetId tweetId;
+
+    if(!string_to_integer(rawTweetId, &tweetId)){
+        printf("\"%s\" bukanlah id tweet yang valid\n", rawTweetId);
+        return;
+    }
+
+
     printf("\n");
     if (tweetId < 1 || tweetId > tweets.nEff){
         printf("Kicauan tidak ditemukan!\n");
@@ -193,13 +236,13 @@ void makeMainThreadIO(TweetId tweetId){
     } else{
         printf("Utas berhasil dibuat!\n");
 
-        Tweet * mainThread =  getTweet(tweetId);
+        TweetPointer mainThread =  getTweet(tweetId);
         makeMainThread(mainThread);
         ThreadId mainThreadId = threads.nEff;
 
         char input[6];
         do {
-            continueThreadAtIO(mainThreadId, (mainThread->threadCount) + 1);
+            continueThreadAtIOParsed(mainThreadId, (mainThread->threadCount) + 1);
             printf("\n");
             printf("Apakah Anda ingin melanjutkan Utas ini? (YA/TIDAK) ");
             get_string(input, 6);

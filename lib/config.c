@@ -42,7 +42,6 @@ void ignore(char* chars){
     while(!finished && string_include(chars, charContainer)) readChar();
 }
 
-
 void readTill(char* buff, char* mark, int max){
     int size = 0;
     while(!finished && !string_include(mark, charContainer)){

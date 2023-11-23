@@ -105,17 +105,21 @@ void string_replace(char* target, char* result, char* from, char* to, int max){
     result[p] = '\0';
 }
 
-int string_to_number(char* buffer){
+boolean string_to_integer(char* buffer, int* value){
     int r = 0;
 
     int i = 0;
+    boolean status = true;
     while(buffer[i] != '\0'){
         int v = buffer[i] - '0';
         if(0 <= v && v <= 9){
             r = (r * 10) + v;
+        } else {
+            status = false;
         };
         ++i;
     }
 
-    return r;
+    *value = r;
+    return status;
 }

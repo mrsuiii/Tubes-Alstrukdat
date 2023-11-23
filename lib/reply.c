@@ -129,7 +129,14 @@ void displayReplyRecurIO(ReplyNodePointer start, int tab){
     }
 }
 
-void displayReplyIO(TweetId tweetId){
+void displayReplyIO(char* rawTweetId){
+    TweetId tweetId;
+
+    if(!string_to_integer(rawTweetId, &tweetId)){
+        printf("\"%s\" bukanlah id tweet yang valid\n", rawTweetId);
+        return;
+    }
+
     displayReplyRecurIO(getTweet(tweetId)->replies, 0);
 }
 
@@ -161,7 +168,19 @@ void deleteReply(ReplyNodePointer target){
     free(target);
 }
 
-void createReplyIO(TweetId tweetId, ReplyId replyId){
+void createReplyIO(char* rawTweetId, char* rawReplyId){
+    TweetId tweetId; ReplyId replyId;
+
+    if(!string_to_integer(rawTweetId, &tweetId)){
+        printf("\"%s\" bukanlah id tweet yang valid\n", rawTweetId);
+        return;
+    }
+
+    if(!string_to_integer(rawReplyId, &replyId)){
+        printf("\"%s\" bukanlah id reply yang valid\n", rawTweetId);
+        return;
+    }
+
     Tweet* tweet = getTweet(tweetId);
     if(!tweet){
         printf("Wah, tidak terdapat kicauan yang ingin Anda balas!\n");
@@ -193,7 +212,19 @@ void createReplyIO(TweetId tweetId, ReplyId replyId){
     displaySingleReply(rp, loggedUser, 0);
 }
 
-void deleteReplyIO(TweetId tweetId, ReplyId replyId){
+void deleteReplyIO(char* rawTweetId, char* rawReplyId){
+    TweetId tweetId; ReplyId replyId;
+
+    if(!string_to_integer(rawTweetId, &tweetId)){
+        printf("\"%s\" bukanlah id tweet yang valid\n", rawTweetId);
+        return;
+    }
+
+    if(!string_to_integer(rawReplyId, &replyId)){
+        printf("\"%s\" bukanlah id reply yang valid\n", rawReplyId);
+        return;
+    }
+
     Tweet* tweet = getTweet(tweetId);
     if(!tweet){
         printf("Kicauan tidak ditemukan\n");

@@ -4,6 +4,7 @@
 #define MAX_TWEET 280
 
 typedef int TweetId;
+typedef struct tweet* TweetPointer ;
 
 #include "user.h"
 #include "reply.h"
@@ -22,7 +23,7 @@ typedef struct tweet{
 } Tweet;
 
 typedef struct{
-    Tweet *buffer;
+    TweetPointer buffer;
     int nEff; 
     int capacity ; 
 }Tweets;
@@ -34,11 +35,11 @@ Tweet* getTweet(TweetId id);
 TweetId createTweet(char* content, UserId author);
 void editTweet(TweetId id, UserId author, char* newContent) ; 
 void likeTweet(TweetId id);
+void displayTweet(TweetId id) ; 
 
 void createTweetIO();
-void editTweetIO(TweetId id) ; 
-void likeTweetIO(TweetId id) ; 
-void displayTweetIO(TweetId id) ; 
+void editTweetIO(char* rawTweetId) ; 
+void likeTweetIO(char* rawTweetId) ; 
 void displayAllTweetIO() ; 
 
 void tweetToConfig();

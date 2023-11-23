@@ -3,9 +3,7 @@
 
 #define MAX_THREADS 280
 
-
 typedef int ThreadId ; 
-typedef struct tweet* TweetPointer ;
 typedef struct thread* ThreadPointer ;
 #include "tweet.h"
 
@@ -33,10 +31,11 @@ ThreadPointer getThread(TweetPointer mainThread, int idx);
 void continueThreadAt(TweetPointer mainThread, int threadIdx, char* content) ;
 void deleteThreadAt(TweetPointer mainThread, int threadIdx);
 
-void displayThreadSeqIO(ThreadId threadId);
-void continueThreadAtIO(ThreadId mainThreadId, int threadIdx) ;
-void deleteThreadAtIO(ThreadId mainThreadId, int threadIdx);
-void makeMainThreadIO(TweetId tweetId);
+void displayThreadSeqIO(char* rawThreadId);
+void continueThreadAtIO(char* rawMainThreadId, char* rawThreadIdx) ;
+void continueThreadAtIOParsed(ThreadId mainThreadId, int threadIdx) ;
+void deleteThreadAtIO(char* rawMainThreadId, char* rawThreadIdx);
+void makeMainThreadIO(char* rawTweetId);
 
 void threadToConfig();
 void configToThread();

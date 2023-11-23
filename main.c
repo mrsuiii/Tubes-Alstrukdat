@@ -54,23 +54,23 @@ int main(){
         // Tweet
         else if(argv == 1 && string_equal(argc[0], "KICAU")) createTweetIO();
         else if(argv == 1 && string_equal(argc[0], "KICAUAN")) displayAllTweetIO();
-        // else if(argv == 2 && string_equal(argc[0], "SUKA_KICAUAN")) likeTweetIO(???);
-        // else if(argv == 2 && string_equal(argc[0], "UBAH_KICAUAN")) editTweetIO(???)
+        else if(argv == 2 && string_equal(argc[0], "SUKA_KICAUAN")) likeTweetIO(argc[1]);
+        else if(argv == 2 && string_equal(argc[0], "UBAH_KICAUAN")) editTweetIO(argc[1]);
 
         // Reply
-        // else if(argv == 3 && string_equal(argc[0], "BALAS")) createReplyIO(???, ???);
-        // else if(argv == 2 && string_equal(argc[0], "BALASAN")) displayReplyIO(???);
-        // else if(argv == 3 && string_equal(argc[0], "HAPUS_BALASAN")) deleteReplyIO(???, ???);
+        else if(argv == 3 && string_equal(argc[0], "BALAS")) createReplyIO(argc[1], argc[2]);
+        else if(argv == 2 && string_equal(argc[0], "BALASAN")) displayReplyIO(argc[1]);
+        else if(argv == 3 && string_equal(argc[0], "HAPUS_BALASAN")) deleteReplyIO(argc[1], argc[2]);
 
         // Draft
         else if(argv == 1 && string_equal(argc[0], "BUAT_DRAF")) createDraftIO();
         else if(argv == 1 && string_equal(argc[0], "LIHAT_DRAF")) displayDraftIO();
 
         // Thread
-        // else if(argv == 2 && string_equal(argc[0], "UTAS")) makeMainThreadIO(???);
-        // else if(argv == 3 && string_equal(argc[0], "SAMBUNG_UTAS")) continueThreadAtIO(???, ???);
-        // else if(argv == 3 && string_equal(argc[0], "HAPUS_TAS")) deleteThreadAtIO(???, ???)
-        // else if(argv == 2 && string_equal(argc[0], "CETAK_UTAS")) displayThreadSeqIO(???)
+        else if(argv == 2 && string_equal(argc[0], "UTAS")) makeMainThreadIO(argc[1]);
+        else if(argv == 3 && string_equal(argc[0], "SAMBUNG_UTAS")) continueThreadAtIO(argc[1], argc[2]);
+        else if(argv == 3 && string_equal(argc[0], "HAPUS_TAS")) deleteThreadAtIO(argc[1], argc[2]);
+        else if(argv == 2 && string_equal(argc[0], "CETAK_UTAS")) displayThreadSeqIO(argc[1]);
 
         else {
             printf("Command \"%s\" dengan %d argumen tidak diketahui\n", argc[0], argv);

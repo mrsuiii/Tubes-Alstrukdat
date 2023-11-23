@@ -65,11 +65,18 @@ void createTweetIO(){
         printf("Kicauan tidak boleh hanya berisi spasi!\n");
     } else {         
         printf("Selamat! kicauan telah diterbitkan!\n"); 
-        displayTweetIO(newTweetId);
+        displayTweet(newTweetId);
     }
 }
 
-void editTweetIO(TweetId id) {
+void editTweetIO(char* rawTweetId) {
+    int id;
+
+    if(!string_to_integer(rawTweetId, &id)){
+        printf("\"%s\" bukan id yang valid\n", rawTweetId);
+
+    }
+
     if (!isIdValid(id)){
         printf("Tidak ditemukan kicauan dengan ID ==%d!\n",id);
     } else {
@@ -90,13 +97,20 @@ void editTweetIO(TweetId id) {
                 printf("Selamat! kicauan telah diterbitkan!\n");
                 printf("Detil kicauan:\n");
                 editTweet(id, loggedUser->id, newContent);
-                displayTweetIO(id);
+                displayTweet(id);
             }
         }
     }
 }
 
-void likeTweetIO(TweetId id){
+void likeTweetIO(char* rawTweetId){
+    int id;
+
+    if(!string_to_integer(rawTweetId, &id)){
+        printf("\"%s\" bukan id yang valid\n", rawTweetId);
+        return;
+    }
+
     if (!isIdValid(id)){
         printf("Tidak ditemukan kicauan dengan ID ==%d;\n",id);
     } else {
@@ -110,7 +124,7 @@ void likeTweetIO(TweetId id){
     }
 }
 
-void displayTweetIO(TweetId id){
+void displayTweet(TweetId id){
     Tweet* tweet = getTweet(id) ; 
     User* user = getUser(tweet->author);
     
@@ -133,7 +147,7 @@ void displayAllTweetIO() {
             !isFriend(loggedUser->id, tweet->author) &&
             tweet->author != loggedUser->id
         ) continue;
-        displayTweetIO(i); 
+        displayTweet(i); 
     }
 }
 

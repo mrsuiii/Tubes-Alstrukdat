@@ -9,7 +9,8 @@
 #include "string.h"
 #include "thread.h"
 #include "config.h"
-#include "ADT/datetime.h"
+#include "getCurrentTime.h"
+
 
 Tweets tweets; 
 
@@ -17,13 +18,13 @@ boolean isIdValid(TweetId id){
     return (id >= 1 && id <= tweets.nEff);
 }
 
-Tweet* getTweet(TweetId id){
+TweetPointer getTweet(TweetId id){
     return &(tweets.buffer[id - 1]) ; 
 }
 
 TweetId createTweet(char* content, UserId author){
     if (tweets.capacity == 0 ){
-        tweets.buffer = (Tweet*) malloc (sizeof(Tweet));
+        tweets.buffer = (TweetPointer) malloc (sizeof(Tweet));
         tweets.capacity = 1; 
     } else if (tweets.capacity == tweets.nEff){
         tweets.buffer = (Tweet *) realloc (tweets.buffer, sizeof(Tweet) * (tweets.capacity * 2)) ;
@@ -32,24 +33,27 @@ TweetId createTweet(char* content, UserId author){
 
     if(!tweets.buffer) return -1; 
     tweets.nEff ++ ; 
-    Tweet* tweet = getTweet(tweets.nEff) ; 
+    TweetPointer tweet = getTweet(tweets.nEff) ; 
     tweet -> id =  tweets.nEff ; 
-    string_copy(content, tweet->content, MAX_TWEET) ; 
+    string_copy(content, tweet->content, MAX_TWEET) ;
+    getCurrentDATETIME(tweet->dateTime);
     tweet -> like = 0 ; 
     tweet -> author =  author;   
-    // tweet -> datetime =  DetikToTIME(0) ; 
-    // tweet -> subreply = NULL ;  
+    tweet->firstThread = NULL ; 
+    tweet->threadCount = 0 ; 
+    tweet -> replies = NULL ;  
+    tweet->lastReplyId = 0 ;  
 
     return tweet->id ; 
 }
 
 void editTweet(TweetId id, UserId author, char* newContent){
-    Tweet* tweet = getTweet(id) ; 
+    TweetPointer tweet = getTweet(id) ; 
     string_copy(newContent, tweet->content, MAX_TWEET) ; 
 }
 
 void likeTweet(TweetId id){
-    Tweet* tweet = getTweet(id); 
+    TweetPointer tweet = getTweet(id); 
     tweet->like ++ ; 
 }
 
@@ -80,7 +84,7 @@ void editTweetIO(char* rawTweetId) {
     if (!isIdValid(id)){
         printf("Tidak ditemukan kicauan dengan ID ==%d!\n",id);
     } else {
-        Tweet* tweet = getTweet(id) ; 
+        TweetPointer tweet = getTweet(id) ; 
         User* tweeter = getUser(tweet->author) ;  // tweeeter = pengicau
         if (loggedUser != tweeter){
             printf("Kicauan dengan ID = %d bukan milikmu!\n",id);
@@ -114,23 +118,26 @@ void likeTweetIO(char* rawTweetId){
     if (!isIdValid(id)){
         printf("Tidak ditemukan kicauan dengan ID ==%d;\n",id);
     } else {
-        Tweet* tweet = getTweet(id) ; 
+        TweetPointer tweet = getTweet(id) ; 
         User* tweeter = getUser(tweet->author) ;  // tweeeter = pengicau
         if (tweeter->type == 1  && !isFriend(loggedUser->id, tweeter->id)){
             printf("Wah, kicauan tersebut dibuat oleh akun privat! Ikuti akun itu dulu ya\n");
         } else {
             likeTweet(id);
+            printf("Selamat! kicauan telah disukai!\n");
+            printf("Detik kicauan: \n");
+            displayTweet(id);
         }
     }
 }
 
 void displayTweet(TweetId id){
-    Tweet* tweet = getTweet(id) ; 
+    TweetPointer tweet = getTweet(id) ; 
     User* user = getUser(tweet->author);
     
     printf("| ID: %d\n", tweet-> id);
     printf("| %s\n", user-> name);
-    // printf("| %s\n", tweet->datetime);
+    printf("| %s\n", tweet->dateTime);
     printf("| %s\n", tweet -> content);
     printf("| Disukai: %d\n\n", tweet->like);
 }
@@ -161,7 +168,7 @@ void tweetToConfig(){
         printf("%s\n", tweet->content);
         printf("%d\n", tweet->like);
         printf("%s\n", author ? author->name : "UNKNOWN_USER");
-        printf("%s\n", "DATETIME");
+        printf("%s\n", tweet->dateTime);
     }
 }
 
@@ -171,7 +178,7 @@ void configToTweet(){
     Tweet tweets[count];
     for(int i = 0; i < count; ++i){
         int id = readInt(); nextLine();
-        Tweet* tweet = &(tweets[id - 1]);
+        TweetPointer tweet = &(tweets[id - 1]);
 
         readTill(tweet->content, "\n", MAX_TWEET); nextLine();
 
@@ -182,8 +189,7 @@ void configToTweet(){
         readTill(author, "\n", MAX_NAME); nextLine();
         tweet->author = getUserIdByName(author);
 
-        char datetime[100];
-        readTill(datetime, "\n", 100); nextLine();
+        readTill(tweet->dateTime, "\n", 20); nextLine();
     }
 
     for(int i = 0; i < count; ++i){

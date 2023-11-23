@@ -120,7 +120,7 @@ void readDraftCommandIO(){
     char command[10]; 
     /* command yang mungkin: HAPUS; SIMPAN; UBAH; TERBIT; KEMBALI;*/ 
     get_string(command, 10);
-    printf("ini isi command : %s\n",command);
+    // printf("ini isi command : %s\n",command);
     if(string_compare(command,"SIMPAN") == 0){
         printf("\nDraf telah berhasil disimpan!\n");
     } else if(string_compare(command, "TERBIT") == 0){

@@ -4,6 +4,7 @@
 #include "string.h"
 #include "relation.h"
 #include "get_string.h"
+#include "config.h"
 
 void insertLastReplies(Replies* base, ReplyNodePointer value){
     if(*base == NULL){
@@ -254,7 +255,9 @@ void repliesToConfig(Replies replies, int parent){
     while(current){
         Reply reply = current->reply;
 
-        printf("%d %d\n%s\n%s\n", parent, reply.id, reply.content, getUser(reply.author)->name);
+        User *user = getUser(reply.author);
+        char* datetime = "DATETIME";
+        printf("%d %d\n%s\n%s\n%s\n", parent, reply.id, reply.content, user != NULL ? getUser(reply.author)->name : "UNKNOWN_USER", datetime);
 
         repliesToConfig(reply.replies, reply.id);
         current = current->next;
@@ -278,5 +281,37 @@ void replyToConfig(){
         printf("%d\n", tweet[i]->id);
         printf("%d\n", countReply(tweet[i]->id));
         repliesToConfig(tweet[i]->replies, -1);
+    }
+}
+
+void configToReply(){
+    int tweetCount = readInt(); nextLine();
+
+    for(int i = 0; i < tweetCount; ++i){
+        TweetId tweetId = readInt(); nextLine();
+
+        int maxId = 0;
+        int replyCount = readInt(); nextLine();
+        for(int j = 0; j < replyCount; ++j){
+            ReplyId parent = readInt(); nextWord();
+            ReplyId id = readInt(); nextLine();
+
+            if(id > maxId) maxId = id;
+
+            char content[MAX_REPLY];
+            readTill(content, "\n", MAX_REPLY); nextLine();
+
+            char name[MAX_USER];
+            readTill(name, "\n", MAX_USER); nextLine();
+
+            char datetime[100];
+            readTill(datetime, "\n", 100); nextLine();
+
+            ReplyPointer res;
+            createReply(content, getUserIdByName(name), tweetId, getReplies(tweetId, parent), &res);
+            res->id = id;
+        }
+
+        getTweet(tweetId)->lastReplyId = maxId;
     }
 }

@@ -37,6 +37,6 @@ void continueThreadAtIOParsed(ThreadId mainThreadId, int threadIdx) ;
 void deleteThreadAtIO(char* rawMainThreadId, char* rawThreadIdx);
 void makeMainThreadIO(char* rawTweetId);
 
-void threadToConfig();
 void configToThread();
+void threadToConfig();
 #endif

@@ -276,19 +276,22 @@ void configToThread(){
     int tweetCount = readInt(); nextLine();
 
     for(int i = 0; i < tweetCount; ++i){
-        TweetId tweet = readInt(); nextLine();
+        TweetId tweetId = readInt(); nextLine();
+        TweetPointer tweet = getTweet(tweetId);
+        makeMainThread(tweet);
 
-        int threadCount = readInt();
+        int threadCount = readInt(); nextLine();
         for(int j = 0; j < threadCount; ++j){
             char content[MAX_THREADS];
-            readTill(content, "\n", MAX_THREADS);
+            readTill(content, "\n", MAX_THREADS); nextLine();
 
             char name[MAX_NAME];
-            readTill(name, "\n", MAX_NAME);
+            readTill(name, "\n", MAX_NAME); nextLine();
 
             char date[1000];
-            readTill(date, "\n", 1000);
+            readTill(date, "\n", 1000); nextLine();
 
+            continueThreadAt(tweet, j + 1, content);
         }
     }
 }

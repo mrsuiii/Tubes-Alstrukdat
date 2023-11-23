@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "config.h"
 #include "draft.h"
 
 DraftAddress drafts[MAX_USER];
@@ -176,8 +177,54 @@ void draftToConfig(){
         printf("%s %d\n", getUser(userIdx[i])->name, draftLength(userIdx[i]));
         while(!isDraftEmpty(userIdx[i])){
             printf("%s\n",getDraft(userIdx[i])->content);
-            // printf("%s\n",getDraft(userIdx[i])->datetime);
+            printf("%s\n",getDraft(userIdx[i])->datetime);
             deleteDraft(userIdx[i]);
         }       
+    }
+}
+
+void readLastNumber(char *buff, int *res){
+    int len = string_length(buff);
+
+    int r = 0;
+    int i = len - 1; int b = 1;
+    char curr = buff[i];
+    while(i > 0 && ('0' <= curr && curr <= '9')){
+        buff[i] = '\0';
+        r = r + (curr - '0') * b;
+        b *= 10;
+        --i; curr = buff[i];
+    }
+
+    if(buff[i] == ' '){
+        buff[i] = '\0';
+        --i;
+    }
+
+    *res = r;
+}
+
+void configToDraft(){
+    int userCount = readInt(); nextLine();
+
+    for(int i = 0; i < userCount; ++i){
+        int draftCount;
+        char name[MAX_USER + MAX_NUMBER + 3];
+        readTill(name, "\n", MAX_USER + MAX_NUMBER + 3);
+        readLastNumber(name, &draftCount); nextLine();
+
+        UserId userId = getUserIdByName(name);
+        if(userId == -1) continue;
+
+        DraftAddress last = NULL;
+        for(int j = 0; j < draftCount; ++j){
+            DraftAddress new = newDraft();
+            readTill(new->content, "\n", MAX_TWEET); nextLine();
+            readTill(new->datetime, "\n", 1000); nextLine();
+
+            if(last == NULL) drafts[userId] = new;
+            else last->next = new;
+            last = new;
+        }
     }
 }

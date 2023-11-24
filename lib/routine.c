@@ -7,15 +7,12 @@
 #include "tagar.h"
 
 void setup(){
-    HashMap* hashmapHastag = (HashMap*)malloc(sizeof(HashMap));
-    if (hashmapHastag == NULL){
-        exit(EXIT_FAILURE);
-    }
-    createHastag(hashmapHastag); 
+    setupHastag(hashmapHastag); 
 }
 
 void cleanup(){
     userCleanupRoutine();
     relationCleanUpRoutine();
     draftCleanUpRoutine();
+    hastagCleanupRoutine();
 }

@@ -30,8 +30,8 @@ void finishWriteFile(){
 static FILE* fileReadIO;
 
 boolean finished = false;
-char currentChar;
-char charContainer[2] = " \0";
+static char currentChar;
+static char charContainer[2] = " \0";
 void readChar(){
     fscanf(fileReadIO, "%c", &currentChar);
     charContainer[0] = currentChar;

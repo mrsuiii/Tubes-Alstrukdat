@@ -49,44 +49,44 @@ void insertHastag(HashMap* hashmapHastag,char* hastag, TweetId id){
 }
 
 void insertLastHastag(HashmapValue** root, HashmapValue* node){
-    if (*root == NULL){
-        *root = node;
-    } else {
-        HashmapValue* m = *root;
-        while (m->next != NULL){
-            m = m->next;
-        }
+    // if (*root == NULL){
+    //     *root = node;
+    // } else {
+    //     HashmapValue* m = *root;
+    //     while (m->next != NULL){
+    //         m = m->next;
+    //     }
 
-        m->next = node;
-    }
+    //     m->next = node;
+    // }
 }
 
 void displayHastag(HashMap* hashmapHastag, char* hastag){
-    int count = 0;
-    char hastagtemp[MAX_TAGAR];
-    lowercase(hastag,hastagtemp, MAX_TAGAR);
+//     int count = 0;
+//     char hastagtemp[MAX_TAGAR];
+//     lowercase(hastag,hastagtemp, MAX_TAGAR);
     
-    int index = hash(hastagtemp);
-    HashmapValue* m = hashmapHastag->tagar[index];
+//     int index = hash(hastagtemp);
+//     HashmapValue* m = hashmapHastag->tagar[index];
 
-    char ayam [MAX_TAGAR];
-    string_copy(m->key,ayam,MAX_TAGAR);
-    lowercase(ayam,ayam,MAX_TAGAR);
+//     char ayam [MAX_TAGAR];
+//     string_copy(m->key,ayam,MAX_TAGAR);
+//     lowercase(ayam,ayam,MAX_TAGAR);
 
-    if (string_compare(ayam,hastagtemp) == 0){
-        while(m != NULL){
-            if(string_compare(ayam,hastagtemp) == 0){
-                displayTweet(m->id);
-                count++;
-            }
-            m = m->next;
-        }
-        if(count > 1 && string_compare(ayam,hastagtemp) == 0){
-            displayTweet(m->id);
-        }
-    } else {
-        printf("Tidak ditemukan kicauan dengan tagar\n");
-        printf("#%s!\n",hastag);
+//     if (string_compare(ayam,hastagtemp) == 0){
+//         while(m != NULL){
+//             if(string_compare(ayam,hastagtemp) == 0){
+//                 displayTweet(m->id);
+//                 count++;
+//             }
+//             m = m->next;
+//         }
+//         if(count > 1 && string_compare(ayam,hastagtemp) == 0){
+//             displayTweet(m->id);
+//         }
+//     } else {
+//         printf("Tidak ditemukan kicauan dengan tagar\n");
+//         printf("#%s!\n",hastag);
 
-    }
+//     }
 }

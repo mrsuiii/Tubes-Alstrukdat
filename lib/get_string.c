@@ -44,7 +44,7 @@ void get_string(char* res, int size){
     if(currentChar == '\n') ADV(); 
 
     int i = 0;
-    while(currentChar != GET_STRING_MARK && i + 1 < size){
+    while(currentChar != GET_STRING_MARK && currentChar != '\n' && i + 1 < size){
         res[i] = currentChar; ++i;
         ADV();
     }

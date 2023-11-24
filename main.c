@@ -107,7 +107,7 @@ int main(){
         else if(argv == 1 && string_equal(argc[0], "KELUAR")) signOut();
 
         // Profile
-        else if(argv == 1 && string_equal(argc[0], "GANTI PROFIL")) changeProfileIO();
+        else if(argv == 1 && string_equal(argc[0], "GANTI_PROFIL")) changeProfileIO();
         else if(argv == 2 && string_equal(argc[0], "LIHAT_PROFIL")) displayProfileIO(argc[1]);
         else if(argv == 1 && string_equal(argc[0], "ATUR_JENIS_AKUN")) changeAccountTypeIO();
         else if(argv == 1 && string_equal(argc[0], "UBAH_FOTO_PROFIIL")) changePhotoProfileIO();

@@ -8,6 +8,9 @@
 #include "../lib/string.h"
 
 int main(){
+    char rawTweetId[10];
+    char rawReplyId[10];
+
     DEFINE_TEST("Balas", 
         setup();
         
@@ -18,16 +21,17 @@ int main(){
         loggedUser = getUser(idb);
         getUser(ida)->type = PUBLIC_USER;
 
-        TweetId tId1 = createTweet("haloo ini ciko!",ida);
+        TweetId tweetId = createTweet("haloo ini ciko!",ida);
+        snprintf(rawTweetId, 10, "%d", tweetId);
 
         SUB_TEST(
             char in[] = "Hello BurBir!;"; char* out;
 
             interceptStdIO(in, &out);
-            createReplyIO(tId1, -1);
+            createReplyIO(rawTweetId, "-1");
             clearStdIO();
 
-            assert_string_include(err, out, "berhasil dibuat");
+            assert_string_include(err, out, "terbit");
             prependError(err, "Perintah BALAS [IDKicau] [IDBalasan]. Gagal, membuat balasan akun publik. ");
         ,err); 
 
@@ -37,32 +41,31 @@ int main(){
             char in[] = "Hello BurBir!;"; char* out;
 
             interceptStdIO(in, &out);
-            createReplyIO(tId1, -1);
+            createReplyIO(rawTweetId, "-1");
             clearStdIO();
 
             assert_string_include(err, out, "akun privat");
             prependError(err, "Perintah BALAS [IDKicau] [IDBalasan]. Gagal, membuat balasan akun privat. ");
         ,err); 
         
-        requestFriend(ida,idb);
-        acceptFriend(ida,idb);
+        addFriend(ida,idb);
 
         SUB_TEST(
             char in[] = "Hello BurBir!;"; char* out;
 
             interceptStdIO(in, &out);
-            createReplyIO(tId1, -1);
+            createReplyIO(rawTweetId, "-1");
             clearStdIO();
 
             assert_string_include(err, out, "balasan telah diterbitkan");
-            prependError(err, "Perintah BALAS [IDKicau] [IDBalasan]. Gagal, membuat balasan akun publik. ");
+            prependError(err, "Perintah BALAS [IDKicau] [IDBalasan]. Gagal, membuat balasan akun privat yang telah bertaman. ");
         ,err); 
 
         SUB_TEST(
             char in[] = "Hello BurBir!;"; char* out;
 
             interceptStdIO(in, &out);
-            createReplyIO(tId1, 100);
+            createReplyIO(rawTweetId, "100");
             clearStdIO();
 
             assert_string_include(err, out, "tidak terdapat balasan");
@@ -73,7 +76,7 @@ int main(){
             char in[] = "Hello BurBir!;"; char* out;
 
             interceptStdIO(in, &out);
-            createReplyIO(100, -1);
+            createReplyIO("100", "-1");
             clearStdIO();
 
             assert_string_include(err, out, "tidak terdapat kicauan");
@@ -95,51 +98,31 @@ int main(){
 
         TweetId tId1 = createTweet("haloo ini ciko1!",ida);
         TweetId tId2 = createTweet("haloo ini ciko2!",ida);
-
-        // using the IO to make the reply
-        SUB_TEST( 
-            char in[] = "balasan ke 1 !;"; char* out;
-
-            interceptStdIO(in, &out);
-            createReplyIO(tId1, -1);
-            clearStdIO();
-
-            assert_string_include(err, out, "");
-            prependError(err, "");
-        ,err); 
-
-        // using the IO to make the reply
-        SUB_TEST(
-            char in[] = "balasan ke 2 !;"; char* out;
-
-            interceptStdIO(in, &out);
-            createReplyIO(tId1, 1);
-            clearStdIO();
-
-            assert_string_include(err, out, "");
-            prependError(err, "");
-        ,err); 
+        snprintf(rawTweetId, 10, "%d", tId1);
 
         SUB_TEST(
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            displayReplyIO(tId1);
-            clearStdIO();
-
-            assert_string_include(err, out, "adadwad");
-            prependError(err, "Perintah BALASAN [IDKicau]. Gagal, menampilkan balasan. ");
-        ,err); 
-
-        SUB_TEST(
-            char in[] = ""; char* out;
-
-            interceptStdIO(in, &out);
-            displayReplyIO(tId1);
+            displayReplyIO(rawTweetId);
             clearStdIO();
 
             assert_string_include(err, out, "Belum terdapat balasan");
             prependError(err, "Perintah BALASAN [IDKicau]. Gagal, tidak ada balasan. ");
+        ,err); 
+
+        ReplyPointer r;
+        createReply("Ini reply", ida, tId1, getReplies(tId1, -1), &r);
+
+        SUB_TEST(
+            char in[] = ""; char* out;
+
+            interceptStdIO(in, &out);
+            displayReplyIO(rawTweetId);
+            clearStdIO();
+
+            assert_string_include(err, out, "Ini reply");
+            prependError(err, "Perintah BALASAN [IDKicau]. Gagal, menampilkan balasan. ");
         ,err); 
 
         getUser(ida)->type = PRIVATE_USER;
@@ -148,10 +131,10 @@ int main(){
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            displayReplyIO(tId1);
+            displayReplyIO(rawTweetId);
             clearStdIO();
 
-            assert_string_include(err, out, "akun privat");
+            assert_string_include(err, out, "PRIVAT");
             prependError(err, "Perintah BALASAN [IDKicau]. Gagal, balasan kicauan akun privat. ");
         ,err); 
 
@@ -159,11 +142,11 @@ int main(){
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            displayReplyIO(100);
+            displayReplyIO("100");
             clearStdIO();
 
-            assert_string_include(err, out, "Tidak terdapat balasan");
-            prependError(err, "Perintah BALASAN [IDKicau]. Gagal, tidak ada balasan dengan id. ");
+            assert_string_include(err, out, "Tidak ditemukan tweet");
+            prependError(err, "Perintah BALASAN [IDKicau]. Gagal, tidak ditemukan tweet id. ");
         ,err); 
 
         cleanup();
@@ -171,7 +154,7 @@ int main(){
 
     DEFINE_TEST("Hapus Balasan", 
         setup();
-        
+
         char err[MAX_ERROR] = "\0";
         
         UserId ida = createUser("Ciko", "");
@@ -180,36 +163,17 @@ int main(){
         loggedUser->type = PUBLIC_USER;
 
         TweetId tId1 = createTweet("haloo ini ciko1!",ida);
-
-        // using the IO to make the reply
-        SUB_TEST( 
-            char in[] = "balasan ke 1 !;"; char* out;
-
-            interceptStdIO(in, &out);
-            createReplyIO(tId1, -1);
-            clearStdIO();
-
-            assert_string_include(err, out, "");
-            prependError(err, "");
-        ,err); 
-
-        // using the IO to make the reply
-        SUB_TEST(
-            char in[] = "balasan ke 2 !;"; char* out;
-
-            interceptStdIO(in, &out);
-            createReplyIO(tId1, 1);
-            clearStdIO();
-
-            assert_string_include(err, out, "");
-            prependError(err, "");
-        ,err); 
+        snprintf(rawTweetId, 10, "%d", tId1);
+            
+        ReplyPointer r;
+        createReply("Ini reply", idb, tId1, getReplies(tId1, -1), &r);
+        snprintf(rawReplyId, 10, "%d", r->id);
 
         SUB_TEST(
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            deleteReplyIO(tId1, 1);
+            deleteReplyIO(rawTweetId, rawReplyId);
             clearStdIO();
 
             assert_string_include(err, out, "berhasil dihapus");
@@ -220,21 +184,24 @@ int main(){
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            deleteReplyIO(tId1, 10);
+            deleteReplyIO(rawTweetId, "5");
             clearStdIO();
 
             assert_string_include(err, out, "tidak ditemukan");
             prependError(err, "Perintah HAPUS_BALASAN [IDKicau] [IDBalasan]. Gagal, balasan tidak ditemukan. ");
         ,err); 
 
+        createReply("Ini reply", ida, tId1, getReplies(tId1, -1), &r);
+        snprintf(rawReplyId, 10, "%d", r->id);
+
         SUB_TEST(
             char in[] = ""; char* out;
 
             interceptStdIO(in, &out);
-            deleteReplyIO(tId1, 10);
+            deleteReplyIO(rawTweetId, rawReplyId);
             clearStdIO();
 
-            assert_string_include(err, out, "Jangan dihapus ya!");
+            assert_string_include(err, out, "bukan milik anda");
             prependError(err, "Perintah HAPUS_BALASAN [IDKicau] [IDBalasan]. Gagal, balasan bukan milik pengguna. ");
         ,err); 
 

@@ -358,4 +358,5 @@ void cleanupThread(){
         freeThread(threads.buffer[i]);
         free(threads.buffer[i]);
     }
+    free(threads.buffer);
 }

@@ -18,4 +18,6 @@ void cleanup(){
     userCleanupRoutine();
     relationCleanUpRoutine();
     draftCleanUpRoutine();
+    cleanupThread();
+    cleanupTweet();
 }

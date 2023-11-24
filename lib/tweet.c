@@ -225,3 +225,9 @@ void configToTweet(){
         string_copy(src->dateTime, dst->dateTime, MAX_DATETIME);
     }
 }
+
+
+void cleanupTweet(){
+    int i; 
+    free(tweets.buffer);
+}

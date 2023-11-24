@@ -1,7 +1,7 @@
 #ifndef THREAD_H
 #define THREAD_H
 
-#define MAX_THREADS 280
+#define MAX_THREADS 281
 
 typedef int ThreadId ; 
 typedef struct thread* ThreadPointer ;
@@ -11,6 +11,7 @@ typedef struct thread* ThreadPointer ;
 typedef struct thread{
     char content[MAX_THREADS];
     ThreadPointer nextThread ; 
+    char dateTime[MAX_DATETIME];
 }Thread;
 
 // Threads adalah listdin berisi pointer ke Tweet karena tidak semua tweet adalah Thread

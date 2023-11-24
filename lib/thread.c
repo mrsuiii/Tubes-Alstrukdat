@@ -8,8 +8,7 @@
 #include "reply.h"
 #include "string.h"
 #include "config.h"
-#include "ADT/datetime.h"
-
+#include "getCurrentTime.h"
 
 Threads threads ; 
 
@@ -33,8 +32,9 @@ boolean isThread(TweetPointer tweetPointer){
 
 // create a new thread and return the pointer 
 ThreadPointer newThread(char* content){
-    ThreadPointer thread = (ThreadPointer) malloc (sizeof(ThreadPointer));
+    ThreadPointer thread = (ThreadPointer) malloc (sizeof(Thread));
     string_copy(content, thread->content, MAX_THREADS);
+    getCurrentDATETIME(thread->dateTime);
     thread->nextThread = NULL ; 
     return thread ; 
 }
@@ -93,7 +93,6 @@ void continueThreadAt(TweetPointer mainThread, int threadIdx, char* content) {
 // F.S : delete the thread of mainThread at idx == threadIdx
 void deleteThreadAt(TweetPointer mainThread, int threadIdx){
     if (threadIdx == 1 ){
-        printf("hehe;");
         ThreadPointer first = mainThread->firstThread;
         mainThread->firstThread = first->nextThread;
         free(first);
@@ -132,11 +131,15 @@ void displayThreadSeqIO(char* rawThreadId){
         } else {
             ThreadPointer currThread = mainThread->firstThread;
             int count = 1 ; 
-            displayTweet(mainThread->id);
+            printf("| ID: %d\n", mainThread-> id);
+            printf("| %s\n", user-> name);
+            printf("| %s\n", mainThread->dateTime);
+            printf("| %s\n\n", mainThread -> content);
+
             while (currThread != NULL){
                 printf("   | INDEX: %d\n", count);
                 printf("   | %s\n", user->name);
-                // printf("| %s\n", tweet->datetime);
+                printf("   | %s\n", currThread->dateTime);
                 printf("   | %s\n\n",  currThread -> content);
                 currThread = currThread->nextThread;
 
@@ -225,7 +228,6 @@ void makeMainThreadIO(char* rawTweetId){
         return;
     }
 
-
     printf("\n");
     if (tweetId < 1 || tweetId > tweets.nEff){
         printf("Kicauan tidak ditemukan!\n");
@@ -265,7 +267,7 @@ void threadToConfig(){
             do{
               printf("%s\n",currThread->content);
               printf("%s\n", userName);
-              printf("%s\n", "DATETIME");
+              printf("%s\n", currThread->dateTime);
               currThread = currThread->nextThread;
             } while (currThread != NULL);
         }
@@ -282,16 +284,18 @@ void configToThread(){
 
         int threadCount = readInt(); nextLine();
         for(int j = 0; j < threadCount; ++j){
-            char content[MAX_THREADS];
-            readTill(content, "\n", MAX_THREADS); nextLine();
+            ThreadPointer currThread = (ThreadPointer) malloc (sizeof(Thread));
+            readTill(currThread->content, "\n", MAX_THREADS); nextLine();
 
             char name[MAX_NAME];
             readTill(name, "\n", MAX_NAME); nextLine();
 
             char date[1000];
-            readTill(date, "\n", 1000); nextLine();
+            readTill(currThread->dateTime, "\n", 1000); nextLine();
 
-            continueThreadAt(tweet, j + 1, content);
+            if (i == 0 ){
+                tweet->firstThread = currThread; 
+            }
         }
     }
 }

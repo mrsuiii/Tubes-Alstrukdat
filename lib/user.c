@@ -67,6 +67,7 @@ boolean checkWetonValid(char* weton){
     char wageValid[MAX_WETON] = "wage", ponValid[MAX_WETON] = "pon";
     char legiValid[MAX_WETON] = "legi";
 
+
     if (weton[0] == '\0'){
         return true;
     }
@@ -79,6 +80,7 @@ boolean checkWetonValid(char* weton){
     }
 
     if (
+        string_length(weton) == 0 ||
         string_compare(pahingValid,weton) == 0 ||
         string_compare(kliwonValid,weton) == 0 ||
         string_compare(wageValid,weton) == 0 ||
@@ -216,15 +218,13 @@ void changeProfileIO(){
         printf("Masukkan Weton:\n");
         get_string(tmpWeton,MAX_WETON);
         
-        if (string_length(tmpWeton) != 0){
-            if (!checkWetonValid(tmpWeton)){
-                // printf("%s",tmpWeton);
-                printf("Weton anda tidak valid.\n");
-            } else {
-                tmpWeton[0] -= 32;
-                string_copy(tmpWeton,user->weton,MAX_WETON);
-                tmpWeton[0] += 32;
-            }
+        if (!checkWetonValid(tmpWeton)){
+            // printf("%s",tmpWeton);
+            printf("Weton anda tidak valid.\n");
+        } else {
+            tmpWeton[0] -= 32;
+            string_copy(tmpWeton,user->weton,MAX_WETON);
+            tmpWeton[0] += 32;
         }
     } while (!checkWetonValid(tmpWeton));
 

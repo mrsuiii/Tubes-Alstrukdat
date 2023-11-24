@@ -109,6 +109,13 @@ boolean string_to_integer(char* buffer, int* value){
     int r = 0;
 
     int i = 0;
+    boolean negated = false;
+    if(buffer[i] == '-'){
+        negated = true;
+        ++i;
+    }
+
+
     boolean status = true;
     while(buffer[i] != '\0'){
         int v = buffer[i] - '0';
@@ -120,6 +127,7 @@ boolean string_to_integer(char* buffer, int* value){
         ++i;
     }
 
+    if(negated) r *= -1;
     *value = r;
     return status;
 }

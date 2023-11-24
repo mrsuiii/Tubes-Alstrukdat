@@ -20,6 +20,7 @@ boolean isIdValid(TweetId id){
 }
 
 TweetPointer getTweet(TweetId id){
+    if(!isIdValid(id)) return NULL;
     return &(tweets.buffer[id - 1]) ; 
 }
 

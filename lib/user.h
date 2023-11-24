@@ -59,8 +59,8 @@ User* getUser(UserId id);
 UserId getUserIdByName(char* name);
 
 
-UserId signUp();
-UserId signIn();
+void signUp();
+void signIn();
 void signOut();
 
 void displayProfileIO(char* name);

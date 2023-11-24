@@ -283,18 +283,25 @@ void configToThread(){
         makeMainThread(tweet);
 
         int threadCount = readInt(); nextLine();
+        ThreadPointer currThread = (ThreadPointer) malloc (sizeof(Thread));
         for(int j = 0; j < threadCount; ++j){
-            ThreadPointer currThread = (ThreadPointer) malloc (sizeof(Thread));
             readTill(currThread->content, "\n", MAX_THREADS); nextLine();
 
             char name[MAX_NAME];
             readTill(name, "\n", MAX_NAME); nextLine();
 
-            char date[1000];
-            readTill(currThread->dateTime, "\n", 1000); nextLine();
+            readTill(currThread->dateTime, "\n", 20); nextLine();
 
-            if (i == 0 ){
+            if (j == 0 ){
                 tweet->firstThread = currThread; 
+            } else {
+                if (j == threadCount -1){
+                    currThread->nextThread = NULL ; 
+                } else {
+                    ThreadPointer newThread = (ThreadPointer) malloc (sizeof(Thread));
+                    currThread->nextThread = newThread;
+                    currThread = newThread ; 
+                }
             }
         }
     }

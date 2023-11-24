@@ -87,6 +87,10 @@ void displayLastDraftIO(){
 
 /* Display Draft and ask for command */
 void displayDraftIO(){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     UserId id = loggedUser->id;
     DraftAddress draft = drafts[id];
     if(draft == NULL){
@@ -118,6 +122,10 @@ void createDraftIO(){
 
 /* Read commands for Draft (Hapus, Simpan, Ubah, Terbit) */
 void readDraftCommandIO(){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     UserId id = loggedUser->id;
     char command[10]; 
     /* command yang mungkin: HAPUS; SIMPAN; UBAH; TERBIT; KEMBALI;*/ 

@@ -1,87 +1,92 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "user.h"
 #include "tweet.h"
 #include "tagar.h"
 #include "string.h"
-HashMap hashmapHastag;
 
-HashMap* createHastag(){
-    HashMap* hashtag = (HashMap*)malloc(sizeof(HashMap));
-    hashtag->size = CAPACITY;
-    hashtag->tagar = (HashmapValue**)malloc(CAPACITY * sizeof(HashmapValue*));
+void createHastag(HashMap* hashmapHastag){
     for (int i = 0; i < CAPACITY; i++){
-        hashtag->tagar[i] = NULL;
+        hashmapHastag->tagar[i] = NULL;
+        // printf("index: %d\n",i);
     }
-    return hashtag;
 }
 
 /* menerima tagar (tanpa pagar) dari kicauan dan mengembalikan nilai kuncinya*/
 int hash(char* hastag){
-    long long p = 31, m = 1e9 + 7;
-    long long key = 0;
+
+    int p = 31, m = 10007;
+    int key = 0;
     long long power = 1;
     int n;
     n = string_length(hastag);
     for (int i = 0; i < n; i++){
-        key += (hastag[i] - 'a' + 1 * (power)) % m;
+        key = (key + ((hastag[i] - 'a' + 1) * (power))) % m;
         power = (power * p) % m;
     }
-
     return key;
 }
 
-void insertHastag(char* hastag, TweetId id){
-    int n = string_length(hastag);
-    char hastagtemp[MAX_TAGAR];
-    string_copy(hastag,hastagtemp,MAX_TAGAR);
-    for (int i = 0; i < n; i++){
-        if (hastagtemp[i] < 'a'){
-            hastagtemp[i] += 32;
-        }
-    }
-    int index = hash(hastagtemp);
+HashmapValue* newHashmapValue(TweetId id,char* hastag){
     HashmapValue* hashmap = (HashmapValue*)malloc(sizeof(HashmapValue));
-
-    if (hashmapHastag.tagar[index] == NULL){
-        hashmapHastag.tagar[index] = hashmap; /*next == NULL (kalo ngga collide)*/
-    } else { /* yah collide */
-        Address m = hashmapHastag.tagar[index];
-        while (m->next != NULL)
-        {
-            m = m->next;
-        }
-        m->id = id;
-        string_copy(hastagtemp,m->key,MAX_TAGAR);
-        m->next = NULL;
-    }
-    
-    hashmapHastag.tagar[index] = hashmap;
+    hashmap->id = id;
+    string_copy(hastag,hashmap->key,MAX_TAGAR);
+    hashmap->next = NULL;
+    return hashmap;
 }
 
-void displayHastag(char* hastag){
-    int n = string_length(hastag);
+void insertHastag(HashMap* hashmapHastag,char* hastag, TweetId id){
     char hastagtemp[MAX_TAGAR];
-    string_copy(hastag,hastagtemp,MAX_TAGAR);
-    for (int i = 0; i < n; i++){
-        if (hastagtemp[i] < 'a'){
-            hastagtemp[i] += 32;
-        }
-    }
-    int index = hash(hastagtemp);
+    lowercase(hastag,hastagtemp,MAX_TAGAR);
 
-    if (string_compare(hashmapHastag.tagar[index]->key,hastagtemp) == 0){
-        Address m = hashmapHastag.tagar[index];
+    int index = hash(hastagtemp);
+    HashmapValue* hashmap = newHashmapValue(id,hastag);
+
+    if (hashmapHastag->tagar[index] == NULL){
+        hashmapHastag->tagar[index] = hashmap;
+    } else {
+        insertLastHastag(&hashmapHastag->tagar[index],hashmap);
+    }
+}
+
+void insertLastHastag(HashmapValue** root, HashmapValue* node){
+    if (*root == NULL){
+        *root = node;
+    } else {
+        HashmapValue* m = *root;
         while (m->next != NULL){
-            if (string_compare(m->key,hastagtemp) == 0){
-                displayTweetIO(m->id);
+            m = m->next;
+        }
+
+        m->next = node;
+    }
+}
+
+void displayHastag(HashMap* hashmapHastag, char* hastag){
+    int count = 0;
+    char hastagtemp[MAX_TAGAR];
+    lowercase(hastag,hastagtemp, MAX_TAGAR);
+    
+    int index = hash(hastagtemp);
+    HashmapValue* m = hashmapHastag->tagar[index];
+
+    char ayam [MAX_TAGAR];
+    string_copy(m->key,ayam,MAX_TAGAR);
+    lowercase(ayam,ayam,MAX_TAGAR);
+
+    if (string_compare(ayam,hastagtemp) == 0){
+        while(m != NULL){
+            if(string_compare(ayam,hastagtemp) == 0){
+                displayTweet(m->id);
+                count++;
             }
             m = m->next;
         }
-        if (string_compare(m->key,hastagtemp) == 0){
-            displayTweetIO(m->id);
+        if(count > 1 && string_compare(ayam,hastagtemp) == 0){
+            displayTweet(m->id);
         }
     } else {
-        printf("Tidak ditemukan kicauan dengan tagar #%s",hastag);
+        printf("Tidak ditemukan kicauan dengan tagar\n");
+        printf("#%s!\n",hastag);
+
     }
 }

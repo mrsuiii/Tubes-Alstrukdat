@@ -7,14 +7,11 @@
 #include "tagar.h"
 
 void setup(){
-
-    /* User */
-    for(int i = 0; i < MAX_USER; ++i) users[i] = NULL;
-    loggedUser = NULL;
-    userCount = 0;
-
-    createHastag();
-
+    HashMap* hashmapHastag = (HashMap*)malloc(sizeof(HashMap));
+    if (hashmapHastag == NULL){
+        exit(EXIT_FAILURE);
+    }
+    createHastag(hashmapHastag); 
 }
 
 void cleanup(){

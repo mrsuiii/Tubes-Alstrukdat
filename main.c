@@ -10,23 +10,72 @@
 #include "lib/thread.h"
 #include "lib/display.h"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
+boolean checkDirectoryExsistence(char* path){
+    struct stat s;
+    return !stat(path, &s) && (s.st_mode & S_IFDIR);
+}
+
+boolean checkFileExist (char *filename) {
+  struct stat s;   
+  return (stat (filename, &s) == 0);
+}
+
 int main(){
     setup();
 
-    startReadFile("./config/pengguna.config");
+    char basePath[1000], userPath[MAX_PATH], tweetPath[MAX_PATH], replyPath[MAX_PATH], draftPath[MAX_PATH], threadPath[MAX_PATH];
+    while(true){
+        printf("Masukan path konfigurasi: ");
+        get_string(basePath, 1000);
+
+        if(!checkDirectoryExsistence(basePath)){
+            printf("Directory tidak ditemukan\n");
+            continue;
+        }
+
+        char *err = "";
+
+        string_append(basePath, "/pengguna.config", userPath, MAX_PATH);
+        if(!checkFileExist(userPath)) err = "pengguna";
+
+        string_append(basePath, "/kicauan.config", tweetPath, MAX_PATH);
+        if(!checkFileExist(tweetPath)) err = "kicauan";
+
+        string_append(basePath, "/balasan.config", replyPath, MAX_PATH);
+        if(!checkFileExist(replyPath)) err = "balasan";
+
+        string_append(basePath, "/draf.config", draftPath, MAX_PATH);
+        if(!checkFileExist(draftPath)) err = "draf";
+
+        string_append(basePath, "/utas.config", threadPath, MAX_PATH);
+        if(!checkFileExist(threadPath)) err = "utas";
+
+        if(string_length(err) != 0){
+            printf("Konfigurasi %s tidak ditemukan\n", err);
+            continue;
+        } else {
+            printf("Konfigurasi berhasil dimuat\n");
+            break;
+        }
+    }
+
+    startReadFile(userPath);
     configToUser();
     configToRelation();
 
-    startReadFile("./config/kicauan.config");
+    startReadFile(tweetPath);
     configToTweet();
 
-    startReadFile("./config/balasan.config");
+    startReadFile(replyPath);
     configToReply();
 
-    startReadFile("./config/draf.config");
+    startReadFile(draftPath);
     configToDraft();
 
-    startReadFile("./config/utas.config");
+    startReadFile(threadPath);
     configToThread();
 
     printLogo();
@@ -47,7 +96,9 @@ int main(){
             break;
         } 
 
-        if(argv > 1){}
+        if(argv > 1 && string_length(argc[1]) == 0) argv = 1;
+
+        if (argv > 2 && string_length(argc[2]) == 0) argv = 2;
 
         // User
         else if(argv == 1 && string_equal(argc[0], "DAFTAR")) signUp();

@@ -4,7 +4,7 @@
 #define CONFIG_MARK '\n'
 #define MAX_CONFIG 1000000
 #define MAX_LINE 1000
-#define MAX_PATH 100
+#define MAX_PATH 1100
 
 void finishWriteFile();
 void startWriteFile(char* path);

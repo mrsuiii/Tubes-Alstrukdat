@@ -38,27 +38,6 @@ ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base
     return reply->id;
 }
 
-ReplyId createReplyFromConfig(char* content, UserId author, TweetId tweetId, Replies* base, ReplyPointer* result, char* dateTime){
-    ReplyNodePointer newSubreply = malloc(sizeof(ReplyNode));
-    newSubreply->base = base;
-
-    Tweet *tweet = getTweet(tweetId);
-    Reply *reply = &(newSubreply->reply);
-    tweet->lastReplyId++;
-
-    reply->id = tweet->lastReplyId;
-    string_copy(content, (newSubreply->reply).content, MAX_REPLY);
-    reply->author = author;
-    string_copy(dateTime, (newSubreply->reply).dateTime, MAX_DATETIME);
-
-    if(base == NULL) return -1;
-    insertLastReplies(base, newSubreply);
-
-    if(result != NULL) *result = reply;
-
-    return reply->id;
-}
-
 ReplyNodePointer getReplyRecur(Replies start, ReplyId target){
     if(start == NULL) return NULL;
 
@@ -328,8 +307,9 @@ void configToReply(){
             readTill(datetime, "\n", 20); nextLine();
 
             ReplyPointer res;
-            createReplyFromConfig(content, getUserIdByName(name), tweetId, getReplies(tweetId, parent), &res, datetime);
+            createReply(content, getUserIdByName(name), tweetId, getReplies(tweetId, parent), &res);
             res->id = id;
+            string_copy(datetime, res->dateTime, MAX_DATETIME);
         }
 
         getTweet(tweetId)->lastReplyId = maxId;

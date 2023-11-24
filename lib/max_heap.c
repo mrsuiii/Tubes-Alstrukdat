@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "max_heap.h"
-
+#include "string.h"
 
 alamat createMaxHeap(int capacity) {
     alamat maxHeap = (alamat)malloc(sizeof(MaxHeap));
@@ -43,6 +43,9 @@ void insertTweet(alamat maxHeap, Tweet tweet) {
     // Assign values to the new tweet
     maxHeap->elements[maxHeap->size]->like = tweet.like;
     maxHeap->elements[maxHeap->size]->id = tweet.id;
+    maxHeap->elements[maxHeap->size]->author = tweet.author;
+    string_copy(tweet.dateTime, maxHeap->elements[maxHeap->size]->dateTime, 20);
+    // maxHeap->elements[maxHeap->size]->dateTime = tweet.dateTime;
 
     // Increment size
     maxHeap->size++;
@@ -157,7 +160,7 @@ void showFYB(){
     }
     printf("\n");
     while(cnt<8  && cnt<tweets.nEff){
-        TweetPointer topTweet = removeMax(maxHeap);
+        Tweet * topTweet = removeMax(maxHeap);
         printf("Kicauan %d:\n",cnt+1);
         printf(" | %s \n",getUser(topTweet->author)->name);
         printf(" | %s \n", topTweet->dateTime);

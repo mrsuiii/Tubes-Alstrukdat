@@ -9,7 +9,6 @@
 #include "string.h"
 #include "thread.h"
 #include "config.h"
-#include "ADT/datetime.h"
 #include "tagar.h"
 #include "getCurrentTime.h"
 
@@ -21,6 +20,7 @@ boolean isIdValid(TweetId id){
 }
 
 TweetPointer getTweet(TweetId id){
+    if(!isIdValid(id)) return NULL;
     return &(tweets.buffer[id - 1]) ; 
 }
 
@@ -222,5 +222,6 @@ void configToTweet(){
         Tweet *src = &(tweets[i]);
         Tweet *dst = getTweet(createTweet(src->content, src->author));
         dst->like = src->like;
+        string_copy(src->dateTime, dst->dateTime, MAX_DATETIME);
     }
 }

@@ -39,6 +39,14 @@ ThreadPointer newThread(char* content){
     return thread ; 
 }
 
+ThreadPointer newThreadForConfig(char* content, char* dateTime){
+    ThreadPointer thread = (ThreadPointer) malloc (sizeof(Thread));
+    string_copy(content, thread->content, MAX_THREADS);
+    string_copy(dateTime, thread->dateTime, MAX_DATETIME);
+    thread->nextThread = NULL ; 
+    return thread ; 
+}
+
 // make a pointer into a thread and return the pointer into that tweet
 TweetPointer makeMainThread(TweetPointer mainThread) {
     if (threads.capacity == 0 ){
@@ -75,6 +83,22 @@ ThreadPointer getThread(TweetPointer mainThread, int threadIdx){
 // F.S : insert new thread at mainThread with threadIdx and .content == content
 void continueThreadAt(TweetPointer mainThread, int threadIdx, char* content) {
     ThreadPointer new = newThread(content);
+    
+    if (threadIdx == 1){
+        new->nextThread = mainThread->firstThread;
+        mainThread->firstThread = new;
+    } else {
+        ThreadPointer prev = getThread(mainThread, threadIdx -1);
+
+        new->nextThread = prev->nextThread;
+        prev->nextThread = new ; 
+        
+    }   
+    mainThread->threadCount += 1; 
+}
+
+void continueThreadAtForConfig(TweetPointer mainThread, int threadIdx, char* content, char* dateTime) {
+    ThreadPointer new = newThreadForConfig(content, dateTime);
     
     if (threadIdx == 1){
         new->nextThread = mainThread->firstThread;
@@ -296,27 +320,21 @@ void configToThread(){
         TweetPointer tweet = getTweet(tweetId);
         makeMainThread(tweet);
 
-        int threadCount = readInt(); nextLine();
-        ThreadPointer currThread = (ThreadPointer) malloc (sizeof(Thread));
+         int threadCount = readInt(); nextLine();
+
         for(int j = 0; j < threadCount; ++j){
-            readTill(currThread->content, "\n", MAX_THREADS); nextLine();
+            char content[MAX_THREADS];
+            readTill(content, "\n", MAX_THREADS); nextLine();
 
             char name[MAX_NAME];
             readTill(name, "\n", MAX_NAME); nextLine();
 
-            readTill(currThread->dateTime, "\n", 20); nextLine();
+            char date[MAX_DATETIME];
+            readTill(date, "\n", MAX_DATETIME); nextLine();
 
-            if (j == 0 ){
-                tweet->firstThread = currThread; 
-            } else {
-                if (j == threadCount -1){
-                    currThread->nextThread = NULL ; 
-                } else {
-                    ThreadPointer newThread = (ThreadPointer) malloc (sizeof(Thread));
-                    currThread->nextThread = newThread;
-                    currThread = newThread ; 
-                }
-            }
+            continueThreadAtForConfig(tweet, j + 1, content, date);
         }
+
     }
+
 }

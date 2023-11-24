@@ -36,6 +36,7 @@ UserId createUser(char* name, char* pass){
 }
 
 User* getUser(UserId id){
+    if(id == -1) return NULL;
     return users[id];
 }
 
@@ -66,6 +67,7 @@ boolean checkWetonValid(char* weton){
     char wageValid[MAX_WETON] = "wage", ponValid[MAX_WETON] = "pon";
     char legiValid[MAX_WETON] = "legi";
 
+
     if (weton[0] == '\0'){
         return true;
     }
@@ -78,6 +80,7 @@ boolean checkWetonValid(char* weton){
     }
 
     if (
+        string_length(weton) == 0 ||
         string_compare(pahingValid,weton) == 0 ||
         string_compare(kliwonValid,weton) == 0 ||
         string_compare(wageValid,weton) == 0 ||
@@ -90,15 +93,15 @@ boolean checkWetonValid(char* weton){
     }
 }
 
-UserId signUp(){
+void signUp(){
     if(loggedUser){
         printf("Anda telah login\n");
-        return -1;
+        return;
     }
 
     if(isFull()){
         printf("User telah penuh\n");
-        return -1;
+        return;
     }
 
     char tmpName[MAX_NAME];
@@ -114,37 +117,43 @@ UserId signUp(){
     printf("Masukkan kata sandi: \n");
     get_string(tmpPass, MAX_PASS);
     printf("Pengguna berhasil terdaftar.\nMasuk untuk menikmati fitur-fitur BurBir.\n");
-    return createUser(tmpName, tmpPass);
 }
 
-UserId signIn(){
+void signIn(){
     if(loggedUser){
         printf("Anda telah login\n");
-        return -1;
+        return;
     }
 
     char tmpName[MAX_NAME];
-    printf("Masukkan nama: \n");
-    get_string(tmpName, MAX_NAME);
-    User* user = getUser(getUserIdByName(tmpName));
+    User *user;
 
-    if(!user){
-        printf("User tidak ditemukan\n");
-        return -1;
+    while(true){
+        printf("Masukkan nama: \n");
+        get_string(tmpName, MAX_NAME);
+        user = getUser(getUserIdByName(tmpName));
+
+        if(!user){
+            printf("User tidak ditemukan\n");
+            continue;
+        }
+        break;
     }
 
-    char tmpPass[MAX_PASS];
-    printf("Masukkan pass: \n");
-    get_string(tmpPass, MAX_PASS);
+    while(true){
+        char tmpPass[MAX_PASS];
+        printf("Masukkan pass: \n");
+        get_string(tmpPass, MAX_PASS);
 
-    if(string_compare(tmpPass, user->pass) != 0){
-        printf("Password anda salah\n");
-        return -1;
+        if(string_compare(tmpPass, user->pass) != 0){
+            printf("Password anda salah\n");
+            continue;
+        }
+        break;
     }
 
     loggedUser = user;
     printf("Anda telah berhasil masuk dengan nama pengguna \"%s\". Mari menjelajahi BurBir bersama Ande-Ande Lumut!\n", loggedUser->name);
-    return user->id;
 }
 
 void signOut(){
@@ -215,15 +224,12 @@ void changeProfileIO(){
         printf("Masukkan Weton:\n");
         get_string(tmpWeton,MAX_WETON);
         
-        if (string_length(tmpWeton) != 0){
-            if (!checkWetonValid(tmpWeton)){
-                // printf("%s",tmpWeton);
-                printf("Weton anda tidak valid.\n");
-            } else {
-                tmpWeton[0] -= 32;
-                string_copy(tmpWeton,user->weton,MAX_WETON);
-                tmpWeton[0] += 32;
-            }
+        if (!checkWetonValid(tmpWeton)){
+            printf("Weton anda tidak valid.\n");
+        } else {
+            tmpWeton[0] -= 32;
+            string_copy(tmpWeton,user->weton,MAX_WETON);
+            tmpWeton[0] += 32;
         }
     } while (!checkWetonValid(tmpWeton));
 
@@ -244,12 +250,6 @@ void displayProfileIO(char* name){
 
     User* user = getUser(getUserIdByName(name));
     
-    if(user->type == PRIVATE_USER && isFriend(user->id, loggedUser->id)){
-        printf("Wah, akun %s diprivat nih.\n", user->name);
-        printf("Ikuti dulu yuk untuk bisa melihat profil %s!\n", user->name);
-        return;
-    }
-
     printf("| Nama: %s\n", user->name);
     printf("| Bio Akun: %s\n", user->bio);
     printf("| No HP: %s\n", user->phone);

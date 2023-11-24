@@ -1,7 +1,7 @@
 #include "get_string.h"
 #include "ADT/boolean.h"
+#include "display.h"
 #include <stdio.h>
-
 
 char currentChar;
 
@@ -22,6 +22,7 @@ void ignore_blank(){
 }
 
 void get_word(char* res, int size){
+    printf("%s", GREEN);
     START();
     ignore_blank();
 
@@ -32,9 +33,11 @@ void get_word(char* res, int size){
     }
 
     res[i] = '\0';
+    printf("%s", NORMAL);
 }
 
 void get_string(char* res, int size){
+    printf("%s", GREEN);
     START();
 
     /* Ignore carriage return */
@@ -47,4 +50,5 @@ void get_string(char* res, int size){
     }
 
     res[i] = '\0';
+    printf("%s", NORMAL);
 };

@@ -17,7 +17,7 @@ void printGrayString(char * input){
     printf("%s", NORMAL);
 }
 
-void printlogo(){
+void printLogo(){
     printGrayString("................................  "); printBlueString(" .:^~!!~^:. "); printGrayString("  ............\n");
     printGrayString(".............................. "); printBlueString(" .!YB#&@@@@@&B57: ");  printGrayString(" ..........\n");
     printGrayString("............................. ");printBlueString(".J#@@@@@@@@@@@@@@&Y:"); printGrayString(" .........\n");

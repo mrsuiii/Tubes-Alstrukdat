@@ -223,5 +223,6 @@ void configToTweet(){
         Tweet *src = &(tweets[i]);
         Tweet *dst = getTweet(createTweet(src->content, src->author));
         dst->like = src->like;
+        string_copy(src->dateTime, dst->dateTime, MAX_DATETIME);
     }
 }

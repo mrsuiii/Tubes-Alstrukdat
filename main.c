@@ -101,7 +101,7 @@ int main(){
         if (argv > 2 && string_length(argc[2]) == 0) argv = 2;
 
         // User
-        else if(argv == 1 && string_equal(argc[0], "DAFTAR")) signUp();
+        if(argv == 1 && string_equal(argc[0], "DAFTAR")) signUp();
         else if(argv == 1 && string_equal(argc[0], "MASUK")) signIn();
         else if(argv == 1 && string_equal(argc[0], "KELUAR")) signOut();
 

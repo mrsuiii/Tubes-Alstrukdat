@@ -7,7 +7,8 @@
   <h1 align="center">Tugas Besar IF2110 Algoritma & Struktur Data ITB</h1>
 
   <p align="center">
-    <h3> Program simulasi Social Media berbasis CLI (command-line interface) dalam bahasa C </h3>
+    <h3> BurBir (Burung Biru)</h3>
+    <h4> Program simulasi Social Media berbasis CLI (command-line interface) dalam bahasa C </h4>
     <br />
     <a href="https://github.com/mrsuiii/Tubes-Alstrukdat/issues">Report Bug</a>
     ·
@@ -90,6 +91,7 @@
     </li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
+    <li><a href="#special-thanks">Special Thanks</a></li>
   </ol>
 </details>
 
@@ -100,7 +102,7 @@
 - [Link Pedoman](https://docs.google.com/document/d/1vnoqQK18ECL8PEAkYbjM-9g1MRGTI7hOLv6GKHlGnuc/edit)
 - [Link Q&A](https://docs.google.com/spreadsheets/d/1S8pEorkaomHjgonWgp44o_AvLxFdENWVEXE3NrO2P_o/edit#gid=1259903967)
 - [Link Data Kelompok](https://docs.google.com/spreadsheets/d/1Q_TMzWjDSr5ZXc-hv2KoGYySJbb_LyA7Z5_KCdIE6ko/edit#gid=1406958191)
-
+- [Link Laporan](https://docs.google.com/document/d/1fNNBXmFtielWkc9g6uuZ2GXbgkTjwqqK/edit)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -120,26 +122,17 @@ Untuk Lebih dalam mengenal Tugas sekaligus Projek ini, Anda dapat melihat spesif
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
 ### Prerequisites
 
 Untuk melakukan kompilasi dan penggunaan Makefile diperlukan 
 
 * Makefile 
   ```sh
-  # untuk Windows dengan NPM
-  npm install make
-
   # untuk Linux Ubuntu
   sudo apt install make
   ```
 * GCC
   ```sh
-  # untuk Windows dengan NPM
-  npm install gcc
-
   # untuk Linux Ubuntu
   sudo apt install gcc
   ```
@@ -148,7 +141,7 @@ Untuk melakukan kompilasi dan penggunaan Makefile diperlukan
 
 ### Installation
 
-_Di bawah ini adalah contoh installasi dengan asumsi pengguna menggunakan Windows dengan NPM_
+_Di bawah ini adalah contoh installasi dengan asumsi pengguna menggunakan Linux Ubuntu_
 
 1. Clone the repo
    ```sh
@@ -156,19 +149,15 @@ _Di bawah ini adalah contoh installasi dengan asumsi pengguna menggunakan Window
    ```
 2. Install GCC
    ```sh
-   npm install gcc
+   sudo apt install gcc
    ```
 3. Install Make
    ```sh
-   npm install make
+   sudo apt install make
    ```
-4. Use Makefile
+4. Use Makefile to run the program
    ```sh
    make all
-   ```
-5. Run File
-   ```sh
-   ./main
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -191,119 +180,86 @@ Instruksi-instruksi yang dapat dilakukan :
 
 ### 1. Initialization (Inisialisasi)
 
-&ensp;&ensp;
-Ketika Program dijalankan dilakukan Inisialisasi Program seperti memuat konfigurasi dan output pembuka program.  
+Ketika Program dijalankan dilakukan Inisialisasi Program seperti [memuat](#11-save--load-simpan-dan-muat) konfigurasi dan output pembuka program.  
 
 ### 2. Commands (Perintah)
 
-&ensp;&ensp;
-Membaca dan Mengeksekusi Perintah-Perintah Program.
+Membaca Perintah dan mengeksekusi memanggil fungsi-fungsi dari ADT.
 
 ### 3. User (Pengguna)
 
-&ensp;&ensp;
 Program dapat membuat seorang pengguna yang terdiri dari Nama dan Password Akun.  
-
-`DAFTAR` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menambahkan pengguna.  
-`MASUK`  :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login dengan menggunakan nama dan kata sandi.  
-`KELUAR` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log out dan kembali ke menu utama.
+Daftar Perintah :
+- `DAFTAR`: Menambahkan pengguna.  
+- `MASUK`: Login dengan menggunakan nama dan kata sandi.  
+- `KELUAR`: Log out dan kembali ke menu utama.
 
 
 ### 4. Profile (Profil)
 
-&ensp;&ensp;
 Seorang Pengguna memiliki profil yang terdiri dari bio, nomor hp, weton, jenis akun, dan foto profil.  
-
-`GANTI_PROFIL` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mengubah profil pengguna yang terdiri dari nama, bio, no. HP, weton.  
-`LIHAT_PROFIL [NAMA]` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Melihat profil lengkap dari user dengan nama [NAMA].  
-`ATUR_JENIS_AKUN` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mengubah akun menjadi akun privat dari publik dan sebaliknya.   
-`UBAH_FOTO_PROFIL` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mengubah foto profil dari pengguna yang sedang login. Foto profil direpresentasikan dengan matrix. 
+Daftar Perintah : 
+- `GANTI_PROFIL`: Mengubah profil pengguna yang terdiri dari nama, bio, no. HP, weton.  
+- `LIHAT_PROFIL [NAMA]`: Melihat profil lengkap dari user dengan nama [NAMA].  
+- `ATUR_JENIS_AKUN`: Mengubah akun menjadi akun privat dari publik dan sebaliknya.   
+- `UBAH_FOTO_PROFIL`: Mengubah foto profil dari pengguna yang sedang login. Foto profil direpresentasikan dengan matrix. 
 
 ### 5. Friend (Teman)
 
-&ensp;&ensp;
 Dapat dijalinkan Pertemanan antara Pengguna.  
-`DAFTAR_TEMAN` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menampilkan banyak teman dan daftar teman dari pengguna saat ini.  
-`HAPUS_TEMAN` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menghapus salah satu teman dari pengguna saat ini.  
+Daftar Perintah :  
+- `DAFTAR_TEMAN`: Menampilkan banyak teman dan daftar teman dari pengguna saat ini.  
+- `HAPUS_TEMAN`: Menghapus salah satu teman dari pengguna saat ini.  
 
 ### 6. Friend Request (Permintaan Pertemanan)
 
-&ensp;&ensp;
 Seorang Pengguna dapat melakukan permintaan pertemanan kepada Pengguna lain.  
-`TAMBAH_TEMAN` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mengirimkan perimintaan pertemanan ke pengguna lain.  
-`DAFTAR_PERMINTAAN_PERTEMANAN` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menampilkan daftar permintaan pertemanan yang diajukan ke pengguna sekarang.  
-`SETUJUI_PERTEMANAN` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menyetujui permintaan pertemanan yang diajukan ke user sekarang.  
+Daftar Perintah :
+- `TAMBAH_TEMAN`: Mengirimkan perimintaan pertemanan ke pengguna lain.  
+- `DAFTAR_PERMINTAAN_PERTEMANAN`: Menampilkan daftar permintaan pertemanan yang diajukan ke pengguna sekarang.  
+- `SETUJUI_PERTEMANAN`: Menyetujui permintaan pertemanan yang diajukan ke user sekarang.  
 
 ### 7. Tweet (Kicauan)
 
-&ensp;&ensp;
 Membuat Kicauan atau tweet yang memiliki isi, pembuat, waktu, dan jumlah like.  
-`KICAU` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menerbitkan kicauan baru.  
-`KICAUAN` :  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menampilkan semua kicauan yang telah dibuat oleh user sekarang.  
-`SUKA_KICAUAN [IDKicau]` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menyukai kicauan dengan id = IDKicau.  
-`UBAH_KICAUAN [IDKicau]` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mengubah isi kicauan dari kicauan dengan id = IDKicau.  
+Daftar Perintah :  
+- `KICAU`: Menerbitkan kicauan baru.  
+- `KICAUAN`: Menampilkan semua kicauan yang telah dibuat oleh user sekarang.  
+- `SUKA_KICAUAN [IDKicau]`: Menyukai kicauan dengan id = IDKicau.  
+- `UBAH_KICAUAN [IDKicau]`: Mengubah isi kicauan dari kicauan dengan id = IDKicau.  
 
 
 ### 8. Reply (Balasan)
 
-&ensp;&ensp;
 Membuat balasan terhadap suatu kicauan atau balasan lain.  
-`BALAS [IDKicau] [IDBalasan]` :  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menambah balasan pada balasan dengan id = IDBalasan pada kicauan dengan id = IDKicau.  
-`BALASAN [IDKicau]` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Melihat daftar balasan pada kicau. Jika terdapat balasan dalam balasan maka tampilkan balasan yang di dalam lebih ke kanan. Jika akun pengguna diprivat, nama, waktu, dan balasan dari pengguna diubah menjadi PRIVAT.  
-`HAPUS_BALASAN [IDKicau] [IDBalasan]` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menghapus balasan pada balasan dengan id = IDBalasan pada kicauan dengan id = IDKicau.
+Daftar Perintah :
+- `BALAS [IDKicau] [IDBalasan]`: Menambah balasan pada balasan dengan id = IDBalasan pada kicauan dengan id = IDKicau.  
+- `BALASAN [IDKicau]`: Melihat daftar balasan pada kicau. Jika terdapat balasan dalam balasan maka tampilkan balasan yang di dalam lebih ke kanan. Jika akun pengguna diprivat, nama, waktu, dan balasan dari pengguna diubah menjadi PRIVAT.  
+- `HAPUS_BALASAN [IDKicau] [IDBalasan]`: Menghapus balasan pada balasan dengan id = IDBalasan pada kicauan dengan id = IDKicau.
 
 
 ### 9. Tweet Draft (Draf Kicauan)
 
-&ensp;&ensp;
 Membuat Draf Kicauan yang dapat disimpan, diubah, dihapus, dan diterbitkan menjadi Kicauan.  
-`BUAT_DRAFT` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menambahkan sebuah draft kicauan. Setelah itu, draft dapat dihapus, disimpan, atau diterbitkan.   
-`LIHAT_DRAF` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Melihat draf terakhir yang dibuat.  
+Daftar Perintah : 
+- `BUAT_DRAFT`: Menambahkan sebuah draft kicauan. Setelah itu, draft dapat dihapus, disimpan, atau diterbitkan.   
+- `LIHAT_DRAF`: Melihat draf terakhir yang dibuat.  
 
 ### 10. Thread (Utas)
 
-&ensp;&ensp;
 Suatu Kicauan mungkin tidak cukup untuk menulis suatu pesan. Maka suatu kicauan dapat dibuat menjadi utas.  
-`UTAS [IDKicau]`  :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Membuat sebuah utas baru dengan kicauan pertamanya adalah kicauan dengan id = IDKicau.  
-`SAMBUNG_UTAS [IDUtas] [index]` :  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menambah sebuah kicauan baru dalam sebuah utas dengan id = IDUtas pada posisi index.  
-`HAPUS_UTAS [IDUtas] [index]`  :  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Menghapus kicauan dalam sebuah utas dengan id = IDUtas. Kicauan utas yang dihapus sesuai dengan index.   
-`CETAK_UTAS [IDUtas]`  :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mencetak keseluruhan kicauan dalam sebuah utas dengan id = IDUtas termasuk kicauan utama.  
+Daftar Perintah :
+- `UTAS [IDKicau]`: Membuat sebuah utas baru dengan kicauan pertamanya adalah kicauan dengan id = IDKicau.  
+- `SAMBUNG_UTAS [IDUtas] [index]`: Menambah sebuah kicauan baru dalam sebuah utas dengan id = IDUtas pada posisi index.  
+- `HAPUS_UTAS [IDUtas] [index]`: Menghapus kicauan dalam sebuah utas dengan id = IDUtas. Kicauan utas yang dihapus sesuai dengan index.   
+- `CETAK_UTAS [IDUtas]`: Mencetak keseluruhan kicauan dalam sebuah utas dengan id = IDUtas termasuk kicauan utama.  
 
 ### 11. Save & Load (Simpan dan Muat)
 
-&ensp;&ensp;
-State Akhir program dapat disimpan pada file konfigurasi.  
-&ensp;&ensp;
-Konfigurasi dapat dimuat saat program dimulai.    
-`SIMPAN`  :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menyimpan konfigurasi pengguna, kicauan, balasan, draft, dan utas ke folder yang akan dipilih kemudian.  
-`MUAT` :   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Memuat setiap konfigurasi dari folder yang akan dipilih kemudian.  
+State Akhir program dapat disimpan pada file konfigurasi. Konfigurasi dapat dimuat saat program dimulai.    
+Daftar Perintah :
+- `SIMPAN`: Menyimpan konfigurasi pengguna, kicauan, balasan, draft, dan utas ke folder yang akan dipilih kemudian.  
+- `MUAT`: Memuat setiap konfigurasi dari folder yang akan dipilih kemudian.  
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -325,7 +281,8 @@ Permintaan Pull __sangat diperbolehkan dan diterima dengan hangat__.
 The code in this project is licensed under MIT license.  
 Code dalam projek ini berada di bawah lisensi MIT.
 
-
+## Special Thanks
+- [Best-README-Template](https://github.com/othneildrew/Best-README-Template) by othneildrew
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -334,6 +291,6 @@ Code dalam projek ini berada di bawah lisensi MIT.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+[issues-url]: https://github.com/mrsuiii/Tubes-Alstrukdat/issues
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
 [license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt

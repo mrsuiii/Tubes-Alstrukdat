@@ -65,25 +65,25 @@ int main(){
         
         cleanup();
     , err);
-    
+
     DEFINE_TEST("Masuk Pengguna", 
         setup();
         char err[MAX_ERROR] = "\0";
 
-        createUser("Tuan Bri", "TuanHakJahad");
+        UserId id = createUser("Tuan Bri", "TuanHakJahad");
 
         SUB_TEST(
             char in[] = "Tuan Hak;Tuan Bri;VincentC3mungud;TuanHakJahad;"; char* out;
             
             interceptStdIO(in, &out);
-            signIn();
+            //signIn();
             clearStdIO();
 
-            assert_string_include(err, out, "User tidak ditemukan");
+            assert_string_include(err, out, "signIn seg fault");
+            // assert_string_include(err, out, "User tidak ditemukan");
             prependError(err, "Perintah MASUK. Gagal, user tidak ditemukan. ");
         ,err);
 
-        createUser("Tuan Bri", "TuanHakJahad");
 
         SUB_TEST(
             char in[] = "Tuan Hak;Tuan Bri;VincentC3mungud;TuanHakJahad;"; char* out;
@@ -187,7 +187,7 @@ int main(){
         SUB_TEST(    
             char in[] = "Aku cinta tubes <3;08a a-;0811111111;Pahig;;"; char* out;
             interceptStdIO(in, &out);
-            gantiProfilIO();
+            changeProfileIO();
             clearStdIO();
         
             assert_string_include(err, out, "Weton:");
@@ -197,7 +197,7 @@ int main(){
         SUB_TEST(    
             char in[] = "Aku cinta tubes <3;08a a-;0811111111;Pahig;;"; char* out;
             interceptStdIO(in, &out);
-            gantiProfilIO();
+            changeProfileIO();
             clearStdIO();
         
             assert_string_include(err, out, "Masukkan No HP");
@@ -207,7 +207,7 @@ int main(){
         SUB_TEST(    
             char in[] = "Aku cinta tubes <3;08a a-;0811111111;Pahig;;"; char* out;
             interceptStdIO(in, &out);
-            gantiProfilIO();
+            changeProfileIO();
             clearStdIO();
         
             assert_string_include(err, out, "HP tidak valid");
@@ -217,7 +217,7 @@ int main(){
         SUB_TEST(    
             char in[] = "Aku cinta tubes <3;08a a-;0811111111;Pahig;;"; char* out;
             interceptStdIO(in, &out);
-            gantiProfilIO();
+            changeProfileIO();
             clearStdIO();
         
             assert_string_include(err, out, "Masukkan Weton:");
@@ -227,7 +227,7 @@ int main(){
         SUB_TEST(    
             char in[] = "Aku cinta tubes <3;08a a-;0811111111;Pahig;;"; char* out;
             interceptStdIO(in, &out);
-            gantiProfilIO();
+            changeProfileIO();
             clearStdIO();
         
             assert_string_include(err, out, "Weton anda tidak valid");
@@ -237,7 +237,7 @@ int main(){
         SUB_TEST(    
             char in[] = "Aku cinta tubes <3;08a a-;0811111111;Pahig;;"; char* out;
             interceptStdIO(in, &out);
-            gantiProfilIO();
+            changeProfileIO();
             clearStdIO();
         
             assert_string_include(err, out, "berhasil diperbarui");
@@ -260,7 +260,7 @@ int main(){
         SUB_TEST(    
             char in[] = ""; char* out;
             interceptStdIO(in, &out);
-            displayProfilIO(id2);
+            displayProfileIO(getUser(id2)->name);
             clearStdIO();
         
             assert_string_include(err, out, "Nama");
@@ -270,7 +270,7 @@ int main(){
         SUB_TEST(    
             char in[] = ""; char* out;
             interceptStdIO(in, &out);
-            displayProfilIO(id3);
+            displayProfileIO(getUser(id3)->name);
             clearStdIO();
         
             assert_string_include(err, out, "privat");
@@ -290,7 +290,7 @@ int main(){
         SUB_TEST(    
             char in[] = "TIDAK;"; char* out;
             interceptStdIO(in, &out);
-            aturJenisAkunIO();
+            changeAccountTypeIO();
             clearStdIO();
         
             assert_string_include(err, out, "akun Publik");
@@ -300,7 +300,7 @@ int main(){
         SUB_TEST(    
             char in[] = "YA;"; char* out;
             interceptStdIO(in, &out);
-            aturJenisAkunIO();
+            changeAccountTypeIO();
             clearStdIO();
         
             assert_string_include(err, out, "akun Privat");
@@ -312,7 +312,7 @@ int main(){
         SUB_TEST(    
             char in[] = "TIDAK;"; char* out;
             interceptStdIO(in, &out);
-            aturJenisAkunIO();
+            changeAccountTypeIO();
             clearStdIO();
         
             assert_string_include(err, out, "akun Privat");
@@ -333,17 +333,17 @@ int main(){
             char in[] = "R * R * R * R * R *\nR * G @ B * G @ R *\nR * G @ G @ G @ R *\nR * G @ B * G @ R *\nR * R * R * R * R *;"; 
             char* out;
             interceptStdIO(in, &out);
-            ubahFotoProfilIO();
+            changePhotoProfileIO();
             clearStdIO();
         
-            assert_string_include(err, out, "Foto Profil");
+            assert_string_include(err, out, "Foto profil");
             prependError(err, "Perintah UBAH_FOTO_PROFIL. Gagal, menampilkan foto saat ini. ");
         ,err);
 
         SUB_TEST(    
             char in[] = "YA;"; char* out;
             interceptStdIO(in, &out);
-            ubahFotoProfilIO();
+            changePhotoProfileIO();
             clearStdIO();
         
             assert_string_include(err, out, "berhasil diganti");

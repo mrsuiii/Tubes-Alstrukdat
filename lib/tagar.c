@@ -1,68 +1,92 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "user.h"
 #include "tweet.h"
 #include "tagar.h"
 #include "string.h"
-HashMap hashmapHastag;
 
-HashMap* createHastag(){
-    HashMap* hashtag = (HashMap*)malloc(sizeof(HashMap));
-    hashtag->size = CAPACITY;
-    hashtag->tagar = (HashmapValue**)malloc(CAPACITY * sizeof(HashmapValue*));
+void createHastag(HashMap* hashmapHastag){
     for (int i = 0; i < CAPACITY; i++){
-        hashtag->tagar[i] = NULL;
+        hashmapHastag->tagar[i] = NULL;
+        // printf("index: %d\n",i);
     }
-    return hashtag;
 }
 
 /* menerima tagar (tanpa pagar) dari kicauan dan mengembalikan nilai kuncinya*/
-int hash(char* hastag){ 
-    int key = 0, p = 1, m = CAPACITY;
-    for (int i = 0; i < string_length(hastag);i++){
-        if (hastag[i] < 'a'){
-            hastag[i] += 32;
-        }
-        key+= ((hastag[i] - 'a' + 1) * p) % m;
-        printf("karakter: %c ; hash: %d ; key = %d\n",hastag[i],hastag[i] - 'a' + 1,key);
-        p *= 31;
+int hash(char* hastag){
+
+    int p = 31, m = 10007;
+    int key = 0;
+    long long power = 1;
+    int n;
+    n = string_length(hastag);
+    for (int i = 0; i < n; i++){
+        key = (key + ((hastag[i] - 'a' + 1) * (power))) % m;
+        power = (power * p) % m;
     }
-    
     return key;
 }
 
-// void insertHastag(HashMap* map, char* hastag, TweetId id){
-//     int index = hash(hastag);
-//     HashmapValue* hashmap = (HashmapValue*)malloc(sizeof(HashmapValue));
-//     hashmap->id = id;
-//     string_copy(hastag,hashmap->key,MAX_TAGAR);
-//     if (map->tagar[index] == NULL){
-//         hashmap->next = map->tagar[index]; /*next == NULL (kalo ngga collide)*/
-//     } else { /* yah collide*/
-//         while (map->tagar[index]->next != NULL)
-//         {
-//             map->tagar[index] = map->tagar[index]->next;
-//         }
-//         map->tagar[index]->next = 
-//     }
-//     map->tagar[index] = hashmap;
-// }
+HashmapValue* newHashmapValue(TweetId id,char* hastag){
+    HashmapValue* hashmap = (HashmapValue*)malloc(sizeof(HashmapValue));
+    hashmap->id = id;
+    string_copy(hastag,hashmap->key,MAX_TAGAR);
+    hashmap->next = NULL;
+    return hashmap;
+}
 
-void displayHastag(HashMap* map, char* hastag){
-    int index = hash(hastag);
-    HashmapValue* hashmap = map->tagar[index];
-    while (hashmap->next != NULL){
-        if (string_compare(hashmap->key,hastag) == 0){
-            displayTweet(hashmap->id);
-        }
-        hashmap = hashmap->next;
+void insertHastag(HashMap* hashmapHastag,char* hastag, TweetId id){
+    char hastagtemp[MAX_TAGAR];
+    lowercase(hastag,hastagtemp,MAX_TAGAR);
+
+    int index = hash(hastagtemp);
+    HashmapValue* hashmap = newHashmapValue(id,hastag);
+
+    if (hashmapHastag->tagar[index] == NULL){
+        hashmapHastag->tagar[index] = hashmap;
+    } else {
+        insertLastHastag(&hashmapHastag->tagar[index],hashmap);
     }
 }
-// [x,x,x,x,x,x,x,x,...,10^7]
-//      v
-//      x2
-// tweet
-// hastag: #bluebir
-// #bluebir -> key
-// key mod m , m = 10^7
-// 
+
+void insertLastHastag(HashmapValue** root, HashmapValue* node){
+    if (*root == NULL){
+        *root = node;
+    } else {
+        HashmapValue* m = *root;
+        while (m->next != NULL){
+            m = m->next;
+        }
+
+        m->next = node;
+    }
+}
+
+void displayHastag(HashMap* hashmapHastag, char* hastag){
+    int count = 0;
+    char hastagtemp[MAX_TAGAR];
+    lowercase(hastag,hastagtemp, MAX_TAGAR);
+    
+    int index = hash(hastagtemp);
+    HashmapValue* m = hashmapHastag->tagar[index];
+
+    char ayam [MAX_TAGAR];
+    string_copy(m->key,ayam,MAX_TAGAR);
+    lowercase(ayam,ayam,MAX_TAGAR);
+
+    if (string_compare(ayam,hastagtemp) == 0){
+        while(m != NULL){
+            if(string_compare(ayam,hastagtemp) == 0){
+                displayTweet(m->id);
+                count++;
+            }
+            m = m->next;
+        }
+        if(count > 1 && string_compare(ayam,hastagtemp) == 0){
+            displayTweet(m->id);
+        }
+    } else {
+        printf("Tidak ditemukan kicauan dengan tagar\n");
+        printf("#%s!\n",hastag);
+
+    }
+}

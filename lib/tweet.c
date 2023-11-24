@@ -9,11 +9,13 @@
 #include "string.h"
 #include "thread.h"
 #include "config.h"
+#include "ADT/datetime.h"
+#include "tagar.h"
 #include "getCurrentTime.h"
 
 
 Tweets tweets; 
-
+HashMap* hashmapHastag;
 boolean isIdValid(TweetId id){
     return (id >= 1 && id <= tweets.nEff);
 }
@@ -71,9 +73,15 @@ void createTweetIO(){
 
     TweetId newTweetId = createTweet(content, loggedUser->id);
     
+    printf("\nMasukkan tagar:\n");
+    char hastag [MAX_TAGAR];
+    get_string(hastag,MAX_TAGAR);
+    HashMap* cobadulu = (HashMap*)malloc(sizeof(HashMap));
+    createHastag(cobadulu);
+    insertHastag(cobadulu,hastag,newTweetId);
     if (isAllBlank(content)){
         printf("Kicauan tidak boleh hanya berisi spasi!\n");
-    } else {         
+    } else {
         printf("Selamat! kicauan telah diterbitkan!\n"); 
         displayTweet(newTweetId);
     }
@@ -194,7 +202,7 @@ void tweetToConfig(){
 void configToTweet(){
     int count = readInt(); nextLine();
 
-    Tweet tweets[count];
+    Tweet tweets[100];
     for(int i = 0; i < count; ++i){
         int id = readInt(); nextLine();
         TweetPointer tweet = &(tweets[id - 1]);

@@ -13,5 +13,5 @@ boolean string_include(char* str, char* substr);
 boolean isAllBlank(char* a);
 void string_replace(char* target, char* result, char* from, char* to, int max);
 boolean string_to_integer(char* buffer, int* value);
-
+void lowercase(char* from, char* to, int max);
 #endif

@@ -123,3 +123,14 @@ boolean string_to_integer(char* buffer, int* value){
     *value = r;
     return status;
 }
+
+void lowercase(char* from, char* to, int max){
+    int n;
+    n = string_length(from);
+    string_copy(from,to,max);
+    for (int i = 0; i < n; i++){
+        if (to[i] < 'a'){
+            to[i] += 32;
+        }
+    }
+}

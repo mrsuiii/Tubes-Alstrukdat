@@ -1,7 +1,7 @@
 #ifndef REPLY_H
 #define REPLY_H
 
-#define MAX_REPLY 280
+#define MAX_REPLY 281
 
 typedef int ReplyId;
 typedef struct reply* ReplyPointer;
@@ -16,7 +16,7 @@ typedef struct reply{
     ReplyId id;
     char content[MAX_REPLY];
     UserId author;
-    char dateTime[20];
+    char dateTime[MAX_DATETIME];
     ReplyNodePointer replies;
 } Reply;
 

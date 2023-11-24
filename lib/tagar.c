@@ -92,9 +92,21 @@ void displayHastag(HashMap* hashmapHastag, char* hastag){
 
     }
 }
-// void hastagCleanupRoutine(){
-//     for (int i = 0; i < CAPACITY; i++){
-//         free(hashmapHastag->tagar[i]);
-//         hashmapHastag->tagar[i] = NULL;
-//     }
-// }
+void hastagCleanupRoutine(){
+
+    for (int i = 0; i < CAPACITY; i++){
+        if (hashmapHastag->tagar[i] == NULL){
+            free(hashmapHastag->tagar[i]);
+            hashmapHastag->tagar[i] = NULL;
+        } else {
+            HashmapValue* m = hashmapHastag->tagar[i];
+            while (hashmapHastag->tagar[i] != NULL){
+                m = hashmapHastag->tagar[i];
+                while(m != NULL){
+                    m = m->next;
+                }
+                free(m);
+            }
+        }
+    }
+}

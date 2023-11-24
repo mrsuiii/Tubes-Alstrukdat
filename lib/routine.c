@@ -14,5 +14,5 @@ void cleanup(){
     userCleanupRoutine();
     relationCleanUpRoutine();
     draftCleanUpRoutine();
-    // hastagCleanupRoutine();
+    hastagCleanupRoutine();
 }

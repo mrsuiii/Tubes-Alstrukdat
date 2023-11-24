@@ -59,9 +59,11 @@ void likeTweet(TweetId id){
 
 // Pemrosesan IO //
 void createTweetIO(){
+
     if(!loggedUser){
         printf("Anda belum login!\n");
         return;
+
     }
     char content[MAX_TWEET];
     do{
@@ -91,6 +93,10 @@ void editTweetIO(char* rawTweetId) {
     if(!string_to_integer(rawTweetId, &id)){
         printf("\"%s\" bukan id yang valid\n", rawTweetId);
 
+    }
+    if( loggedUser->id == 0 ){
+        printf("Anda belum login");
+        return ; 
     }
 
     if (!isIdValid(id)){

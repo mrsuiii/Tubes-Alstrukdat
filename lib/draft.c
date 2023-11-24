@@ -22,6 +22,7 @@ void createDraft(UserId id, char* newcontent){
         string_copy(newcontent, drafts[id]->content, MAX_TWEET);
     } else {
         string_copy(newcontent, n->content, MAX_TWEET);
+        getCurrentDATETIME(n->dateTime);
         n->next = drafts[id];
         drafts[id] = n;
     }
@@ -79,13 +80,17 @@ void displayLastDraftIO(){
     UserId id = loggedUser->id;
     if(!isDraftEmpty(id)){
         printf("Ini draf terakhir anda:\n");
-        printf("| <time made>"); /* print datetime */ printf("\n");
+        printf("| %s\n", getDraft(id)->dateTime); 
         printf("| %s\n", getDraft(id)->content);
     }
 }
 
 /* Display Draft and ask for command */
 void displayDraftIO(){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     UserId id = loggedUser->id;
     DraftAddress draft = drafts[id];
     if(draft == NULL){
@@ -117,6 +122,10 @@ void createDraftIO(){
 
 /* Read commands for Draft (Hapus, Simpan, Ubah, Terbit) */
 void readDraftCommandIO(){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     UserId id = loggedUser->id;
     char command[10]; 
     /* command yang mungkin: HAPUS; SIMPAN; UBAH; TERBIT; KEMBALI;*/ 
@@ -177,7 +186,7 @@ void draftToConfig(){
         printf("%s %d\n", getUser(userIdx[i])->name, draftLength(userIdx[i]));
         while(!isDraftEmpty(userIdx[i])){
             printf("%s\n",getDraft(userIdx[i])->content);
-            printf("%s\n",getDraft(userIdx[i])->datetime);
+            printf("%s\n",getDraft(userIdx[i])->dateTime);
             deleteDraft(userIdx[i]);
         }       
     }
@@ -220,7 +229,7 @@ void configToDraft(){
         for(int j = 0; j < draftCount; ++j){
             DraftAddress new = newDraft();
             readTill(new->content, "\n", MAX_TWEET); nextLine();
-            readTill(new->datetime, "\n", 1000); nextLine();
+            readTill(new->dateTime, "\n", MAX_DATETIME); nextLine();
 
             if(last == NULL) drafts[userId] = new;
             else last->next = new;

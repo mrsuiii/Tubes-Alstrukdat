@@ -235,7 +235,8 @@ void relationCleanUpRoutine(){
 void relationToConfig(){
     for(int i = 0; i < userCount; ++i){
         for(int j = 0; j < userCount; ++j){
-            printf("%d ", relation[i][j]);
+            if(i == j) printf("1 ");
+            else printf("%d ", relation[i][j]);
         }
         printf("\n");
     }

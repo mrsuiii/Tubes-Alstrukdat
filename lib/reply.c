@@ -117,15 +117,16 @@ void displayReplyRecurIO(ReplyNodePointer start, int tab){
     ReplyNodePointer curr = start;
     while (curr != NULL){
         ReplyPointer reply = &(curr->reply);
-        User* author = getUser(curr->reply.author);
+        User* author = getUser(reply->author);
 
         if(
-            isFriend(author->id, loggedUser->id) ||
-            loggedUser->id == author->id
-        ){
-            displaySingleReply(reply, author, tab);
-        } else {
+            author->type == PRIVATE_USER &&
+            !isFriend(author->id, loggedUser->id) &&
+            loggedUser->id != author->id
+        ) {
             displaySinglePrivateReply(reply, tab);
+        } else {
+            displaySingleReply(reply, author, tab);
         }
         printf("\n");
 
@@ -146,6 +147,15 @@ void displayReplyIO(char* rawTweetId){
         return;
     }
 
+    if(getTweet(tweetId) == NULL){
+        printf("Tidak ditemukan tweet dengan id %d", tweetId);
+        return;
+    }
+
+    if(getTweet(tweetId)->replies == NULL){
+        printf("Belum terdapat balasan\n");
+        return;
+    }
     displayReplyRecurIO(getTweet(tweetId)->replies, 0);
 }
 
@@ -190,7 +200,7 @@ void createReplyIO(char* rawTweetId, char* rawReplyId){
     }
 
     if(!string_to_integer(rawReplyId, &replyId)){
-        printf("\"%s\" bukanlah id reply yang valid\n", rawTweetId);
+        printf("\"%s\" bukanlah id reply yang valid\n", rawReplyId);
         return;
     }
 
@@ -206,9 +216,11 @@ void createReplyIO(char* rawTweetId, char* rawReplyId){
         return;
     }
 
+    User *parentAuthor = getUser(replyId == -1 ? tweet->author : (*replies)->reply.author);
     if(
-        !isFriend(tweet->author, loggedUser->id) &&
-        loggedUser->id != tweet->author
+        parentAuthor->type == PRIVATE_USER &&
+        !isFriend(parentAuthor->id, loggedUser->id) &&
+        loggedUser->id != parentAuthor->id
     ){
         printf("Wah, akun tersebut merupakan akun privat dan anda belum berteman akun tersebu!\n");
         return;

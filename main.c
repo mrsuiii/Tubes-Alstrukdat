@@ -37,17 +37,17 @@ int main(){
         int argv = 0;
         char argc[4][100];
         currentChar = '\0';
-        printf("%s", GREEN);
         while(currentChar != GET_STRING_MARK){
             get_word(argc[argv], 100);
             argv += 1;
             if(argv >= 4) continue;
         }
-        printf("%s", NORMAL);
 
         if(argv == 1 && string_equal(argc[0], "TUTUP_PROGRAM")){
             break;
         } 
+
+        if(argv > 1){}
 
         // User
         else if(argv == 1 && string_equal(argc[0], "DAFTAR")) signUp();
@@ -87,7 +87,7 @@ int main(){
         else if(argv == 2 && string_equal(argc[0], "CETAK_UTAS")) displayThreadSeqIO(argc[1]);
 
         else {
-            printf("Command \"%s%s%s\" dengan %d argumen tidak diketahui\n", GREEN, argc[0], NORMAL, argv);
+            printf("Command \"%s%s%s\" dengan %d argumen tidak diketahui\n", GREEN, argc[0], NORMAL, argv - 1);
         }
         
     }

@@ -334,7 +334,28 @@ void configToThread(){
 
             continueThreadAtForConfig(tweet, j + 1, content, date);
         }
-
     }
+}
 
+void freeLast(ThreadPointer mainThread){
+    ThreadPointer curr = mainThread->nextThread;
+    while (curr != NULL){
+        curr == NULL ; 
+        free(curr);
+    }
+}
+
+void freeThread(ThreadPointer mainThread){
+    while (mainThread->nextThread != NULL){
+        freeLast(mainThread);
+    }
+    mainThread = NULL;
+}
+
+void cleanupThread(){
+    int i; 
+    for (i = 1 ; i <= threads.nEff ; i ++){
+        freeThread(threads.buffer[i]);
+        free(threads.buffer[i]);
+    }
 }

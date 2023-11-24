@@ -5,6 +5,7 @@
 #include "relation.h"
 #include "get_string.h"
 #include "config.h"
+#include "getCurrentTime.h"
 
 void insertLastReplies(Replies* base, ReplyNodePointer value){
     if(*base == NULL){
@@ -27,7 +28,7 @@ ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base
     reply->id = tweet->lastReplyId;
     string_copy(content, (newSubreply->reply).content, MAX_REPLY);
     reply->author = author;
-    // TODO: Datetime
+    getCurrentDATETIME(reply->dateTime);
 
     if(base == NULL) return -1;
     insertLastReplies(base, newSubreply);
@@ -97,8 +98,7 @@ void pt(int tab){
 void displaySingleReply(ReplyPointer reply, User* author, int t){
     pt(t); printf("| ID = %d\n", reply->id);
     pt(t); printf("| %s\n", author->name);
-    // TODO: Date
-    pt(t); printf("| date\n");
+    pt(t); printf("| %s\n", reply->dateTime);
     pt(t); printf("| %s\n", reply->content);
 }
 
@@ -256,8 +256,7 @@ void repliesToConfig(Replies replies, int parent){
         Reply reply = current->reply;
 
         User *user = getUser(reply.author);
-        char* datetime = "DATETIME";
-        printf("%d %d\n%s\n%s\n%s\n", parent, reply.id, reply.content, user != NULL ? getUser(reply.author)->name : "UNKNOWN_USER", datetime);
+        printf("%d %d\n%s\n%s\n%s\n", parent, reply.id, reply.content, user != NULL ? getUser(reply.author)->name : "UNKNOWN_USER", reply.dateTime);
 
         repliesToConfig(reply.replies, reply.id);
         current = current->next;
@@ -304,12 +303,13 @@ void configToReply(){
             char name[MAX_USER];
             readTill(name, "\n", MAX_USER); nextLine();
 
-            char datetime[100];
-            readTill(datetime, "\n", 100); nextLine();
+            char datetime[20];
+            readTill(datetime, "\n", 20); nextLine();
 
             ReplyPointer res;
             createReply(content, getUserIdByName(name), tweetId, getReplies(tweetId, parent), &res);
             res->id = id;
+            string_copy(datetime, res->dateTime, MAX_DATETIME);
         }
 
         getTweet(tweetId)->lastReplyId = maxId;

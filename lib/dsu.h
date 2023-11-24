@@ -1,6 +1,6 @@
 #ifndef DSU_h
 #define DSU_h
-#include "adt.h"
+#include "user.h"
 typedef struct 
 
 {

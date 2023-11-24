@@ -159,10 +159,9 @@ void showFYB(){
     while(cnt<8  && cnt<tweets.nEff){
         TweetPointer topTweet = removeMax(maxHeap);
         printf("Kicauan %d:\n",cnt+1);
-        printf(" | ");
-        printf(" %s \n",getUser(topTweet->author)->name);
-        printf(" |  %s \n", topTweet->dateTime);
-        printf(" |   plz FYB (For Your Burbir) ! \n");
+        printf(" | %s \n",getUser(topTweet->author)->name);
+        printf(" | %s \n", topTweet->dateTime);
+        printf(" | plz FYB (For Your Burbir) ! \n");
         printf(" | Disukai:  %d\n",topTweet->like);
         cnt++;
     }

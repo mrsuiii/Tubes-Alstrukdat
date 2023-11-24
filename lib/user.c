@@ -36,6 +36,7 @@ UserId createUser(char* name, char* pass){
 }
 
 User* getUser(UserId id){
+    if(id == -1) return NULL;
     return users[id];
 }
 

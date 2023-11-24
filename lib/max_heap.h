@@ -1,9 +1,6 @@
 #ifndef MAX_HEAP_H
 #define MAX_HEAP_H
-#include "adt.h"
-
-
-typedef  int Eltype;
+#include "tweet.h"
 
 typedef struct maxHeap 
 {
@@ -12,8 +9,8 @@ typedef struct maxHeap
     int capacity;
 }MaxHeap;
 typedef struct maxHeap* alamat;
-
-
+boolean isEmpty(alamat maxHeap);
+boolean isFullTree(alamat maxHeap);
 void heapifyUp(alamat maxHeap, int index);
 
 alamat createMaxHeap(int capacity);
@@ -27,5 +24,5 @@ Tweet* removeMax(alamat maxHeap);
 void destroyMaxHeap(alamat maxHeap);
 
 void increaseCapacity(alamat maxHeap);
-
+void showFYB();
 #endif

@@ -9,7 +9,8 @@
 #include "lib/draft.h"
 #include "lib/thread.h"
 #include "lib/display.h"
-
+#include "lib/max_heap.h"
+#include "lib/kelompokteman.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -136,7 +137,9 @@ int main(){
         else if(argv == 3 && string_equal(argc[0], "SAMBUNG_UTAS")) continueThreadAtIO(argc[1], argc[2]);
         else if(argv == 3 && string_equal(argc[0], "HAPUS_TAS")) deleteThreadAtIO(argc[1], argc[2]);
         else if(argv == 2 && string_equal(argc[0], "CETAK_UTAS")) displayThreadSeqIO(argc[1]);
-
+        //bonus
+        else if(argv == 1 && string_equal(argc[0], "FYB")) showFYB();
+        else if(argv == 1 && string_equal(argc[0], "KELOMPOK_TEMAN")) showFriendGroup();
         else {
             printf("Command \"%s%s%s\" dengan %d argumen tidak diketahui\n", GREEN, argc[0], NORMAL, argv - 1);
         }

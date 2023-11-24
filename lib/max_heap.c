@@ -1,34 +1,59 @@
+
 #include<stdio.h>
 #include <stdlib.h>
 
 #include "max_heap.h"
 
-alamat createMaxHeap(int capacity){
+
+alamat createMaxHeap(int capacity) {
     alamat maxHeap = (alamat)malloc(sizeof(MaxHeap));
-    maxHeap->elements = (Tweet**)malloc(capacity*sizeof(Tweet*));
+    if (maxHeap == NULL) {
+        // Handle allocation failure
+        fprintf(stderr, "Memory allocation failed for maxHeap\n");
+        exit(EXIT_FAILURE);
+    }
+
+    maxHeap->elements = (Tweet**)malloc(capacity * sizeof(Tweet*));
+    if (maxHeap->elements == NULL) {
+        // Handle allocation failure
+        fprintf(stderr, "Memory allocation failed for maxHeap->elements\n");
+        free(maxHeap);  // Free previously allocated memory
+        exit(EXIT_FAILURE);
+    }
+
     maxHeap->size = 0;
     maxHeap->capacity = capacity;
+
     return maxHeap;
 }
-    
-void insertTweet(alamat maxHeap,Tweet tweet){
-    if(isFullTree)increaseCapacity(maxHeap){
+
+void insertTweet(alamat maxHeap, Tweet tweet) {
+    if (isFullTree(maxHeap)) {
         increaseCapacity(maxHeap);
     }
+
+    // Allocate memory for the new tweet
     maxHeap->elements[maxHeap->size] = (Tweet*)malloc(sizeof(Tweet));
+    if (maxHeap->elements[maxHeap->size] == NULL) {
+        // Handle allocation failure
+        fprintf(stderr, "Memory allocation failed for maxHeap->elements[%d]\n", maxHeap->size);
+        exit(EXIT_FAILURE);
+    }
+
+    // Assign values to the new tweet
     maxHeap->elements[maxHeap->size]->like = tweet.like;
     maxHeap->elements[maxHeap->size]->id = tweet.id;
 
     // Increment size
     maxHeap->size++;
 
-    // Lakukan proses heapifyUp untuk memastikan properti heap terjaga
+    // Perform heapifyUp to ensure heap property is maintained
     heapifyUp(maxHeap, maxHeap->size - 1);
 }
-int isEmpty(alamat maxHeap){
-    return maxHeap->size ==0;
-}
 
+boolean isEmpty(alamat maxHeap){
+    return maxHeap->size == 0;
+}
 Tweet* removeMax(alamat maxHeap) {
     if (isEmpty(maxHeap)) {
         // Heap kosong, tidak ada yang dihapus
@@ -68,23 +93,36 @@ void destroyMaxHeap(alamat maxHeap){
     free(maxHeap);
 }
 
-void heapifyDown(alamat maxHeap,int index){
-    int largest=index;
+void heapifyDown(alamat maxHeap, int index) {
+    int largest = index;
     int left = getLeftChildIndex(index);
     int right = getRightChildIndex(index);
-    if (left <= maxHeap->size && maxHeap->elements[left]->like > maxHeap->elements[largest]->like) {
+
+    // Check if left child exists and is greater than the largest
+    if (left < maxHeap->size &&
+        (maxHeap->elements[left]->like > maxHeap->elements[largest]->like ||
+         (maxHeap->elements[left]->like == maxHeap->elements[largest]->like &&
+          maxHeap->elements[left]->id < maxHeap->elements[largest]->id))) {
         largest = left;
     }
-    if(right <= maxHeap->size && maxHeap->elements[right]->like > maxHeap->elements[largest]->like) {
-        largest = right;}
-    if( largest!=index){
+
+    // Check if right child exists and is greater than the largest
+    if (right < maxHeap->size &&
+        (maxHeap->elements[right]->like > maxHeap->elements[largest]->like ||
+         (maxHeap->elements[right]->like == maxHeap->elements[largest]->like &&
+          maxHeap->elements[right]->id < maxHeap->elements[largest]->id))) {
+        largest = right;
+    }
+
+    // Swap and recursively heapify down if needed
+    if (largest != index) {
         swap(&maxHeap->elements[index], &maxHeap->elements[largest]);
         heapifyDown(maxHeap, largest);
     }
 }
 
+
 void heapifyUp(alamat maxHeap, int index){
-    
     while(index >0 && maxHeap->elements[index]->like >=maxHeap->elements[getParentIndex(index)]->like){
         swap(&maxHeap->elements[index],&maxHeap->elements[getParentIndex(index)]);
         index = getParentIndex(index);
@@ -105,21 +143,28 @@ void increaseCapacity(alamat maxHeap){
     // }
 }
 
-void showFYB(alamat maxHeap){
+void showFYB(){
+    alamat maxHeap;
+    maxHeap = createMaxHeap(10);
     int cnt = 0;
     for (int i=0;i<tweets.nEff;i++){
         insertTweet(maxHeap,tweets.buffer[i]);
     }
+    if(tweets.nEff>=8){
     printf("Berikut %d kicauan dengan like tertinggi di FYB\n", 8);
+    }else{
+        printf("Berikut %d kicaucan dengan like tertinggi di FYB\n", tweets.nEff);
+    }
     printf("\n");
-    while(cnt<8&&cnt<tweets.nEff){
-        Tweet* topTweet = removeMax(maxHeap);
-        printf("Kicauan %d: ",cnt+1);
+    while(cnt<8  && cnt<tweets.nEff){
+        TweetPointer topTweet = removeMax(maxHeap);
+        printf("Kicauan %d:\n",cnt+1);
         printf(" | ");
-        printf(" %s \n",topTweet->author);
+        printf(" %s \n",getUser(topTweet->author)->name);
         printf(" |  %s \n", topTweet->dateTime);
         printf(" |   plz FYB (For Your Burbir) ! \n");
-        printf(" | Disukai:  %d",topTweet->like);
+        printf(" | Disukai:  %d\n",topTweet->like);
+        cnt++;
     }
     destroyMaxHeap(maxHeap);
 }

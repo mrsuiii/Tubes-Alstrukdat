@@ -27,5 +27,5 @@ Tweet* removeMax(alamat maxHeap);
 void destroyMaxHeap(alamat maxHeap);
 
 void increaseCapacity(alamat maxHeap);
-
+void showFYB();
 #endif

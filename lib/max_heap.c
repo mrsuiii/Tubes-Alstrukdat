@@ -105,14 +105,16 @@ void increaseCapacity(alamat maxHeap){
     // }
 }
 
-void showFYB(alamat maxHeap){
+void showFYB(){
+    alamat maxHeap;
+    createMaxHeap(10);
     int cnt = 0;
     for (int i=0;i<tweets.nEff;i++){
         insertTweet(maxHeap,tweets.buffer[i]);
     }
     printf("Berikut %d kicauan dengan like tertinggi di FYB\n", 8);
     printf("\n");
-    while(cnt<8&&cnt<tweets.nEff){
+    while(cnt<8  && cnt<tweets.nEff){
         Tweet* topTweet = removeMax(maxHeap);
         printf("Kicauan %d: ",cnt+1);
         printf(" | ");

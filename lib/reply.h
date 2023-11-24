@@ -10,15 +10,13 @@ typedef ReplyNodePointer Replies;
 
 #include "user.h"
 #include "tweet.h"
-// #include "ADT/datetime.h"
-// #include "ADT/listdin.h"
 
 
 typedef struct reply{
     ReplyId id;
     char content[MAX_REPLY];
     UserId author;
-    // DATETIME datetime;
+    char dateTime[20];
     ReplyNodePointer replies;
 } Reply;
 
@@ -33,6 +31,7 @@ ReplyNodePointer getReplyNode(TweetId tweetId, ReplyId replyId);
 Replies* getReplies(TweetId tweetId, ReplyId replyId);
 
 ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base, ReplyPointer* result);
+ReplyId createReplyFromConfig(char* content, UserId author, TweetId tweetId, Replies* base, ReplyPointer* result, char* dateTime);
 ReplyNodePointer* getReplies(TweetId tweetId, ReplyId replyId);
 int countReply(TweetId tweetId);
 void deleteReply(ReplyNodePointer target);

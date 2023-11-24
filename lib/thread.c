@@ -108,6 +108,10 @@ void deleteThreadAt(TweetPointer mainThread, int threadIdx){
 // I.S : mainThreadId is a valid thread 
 // F.S : display the tweet with ThreadId == mainThreadId 
 void displayThreadSeqIO(char* rawThreadId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     ThreadId mainThreadId;
 
     if(!string_to_integer(rawThreadId, &mainThreadId)){
@@ -115,11 +119,6 @@ void displayThreadSeqIO(char* rawThreadId){
         return;
     }
 
-    printf("\n");
-    if (!loggedUser){
-        printf("Anda belum login\n");
-        return ; 
-    }
 
     if (mainThreadId > threads.nEff || mainThreadId < 1){
         printf("Utas tidak ditemukan!\n");
@@ -154,7 +153,10 @@ void displayThreadSeqIO(char* rawThreadId){
 // I.S bebas 
 // F.S menampilkan pesan kesalahan jika parameter tidak valid atau menginsert thread baru pada parameter yang diberikan
 void continueThreadAtIOParsed(ThreadId mainThreadId, int threadIdx){
-    printf("\n");
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     if (!(isMainThreadIdValid(mainThreadId)) && mainThreadId != 1){
         printf("Utas tidak ditemukan!\n");
     } else if (!(isThreadIdxValid(mainThreadId, threadIdx-1)) && threadIdx!=1){
@@ -176,6 +178,10 @@ void continueThreadAtIOParsed(ThreadId mainThreadId, int threadIdx){
 }
 
 void continueThreadAtIO(char* rawMainThreadId, char* rawThreadIdx){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     ThreadId mainThreadId; int threadIdx;
 
     if(!string_to_integer(rawMainThreadId, &mainThreadId)){
@@ -194,6 +200,10 @@ void continueThreadAtIO(char* rawMainThreadId, char* rawThreadIdx){
 // I.S bebas 
 // F.S menampilkan pesan kesalahan jika parameter tidak valid atau menghapus thread pada parameter yang diberikan
 void deleteThreadAtIO(char* rawMainThreadId, char* rawThreadIdx){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     ThreadId mainThreadId; int threadIdx;
 
     if(!string_to_integer(rawMainThreadId, &mainThreadId)){
@@ -221,6 +231,10 @@ void deleteThreadAtIO(char* rawMainThreadId, char* rawThreadIdx){
 // I.S bebas
 // F.S menjadikan tweet dengan Id == tweetId menjadi sebuah thread 
 void makeMainThreadIO(char* rawTweetId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     TweetId tweetId;
 
     if(!string_to_integer(rawTweetId, &tweetId)){

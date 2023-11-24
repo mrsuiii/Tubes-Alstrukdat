@@ -76,9 +76,8 @@ void createTweetIO(){
     printf("\nMasukkan tagar:\n");
     char hastag [MAX_TAGAR];
     get_string(hastag,MAX_TAGAR);
-    HashMap* cobadulu = (HashMap*)malloc(sizeof(HashMap));
-    createHastag(cobadulu);
-    insertHastag(cobadulu,hastag,newTweetId);
+
+    insertHastag(hashmapHastag,hastag,newTweetId);
     if (isAllBlank(content)){
         printf("Kicauan tidak boleh hanya berisi spasi!\n");
     } else {

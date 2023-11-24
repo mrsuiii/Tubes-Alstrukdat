@@ -4,10 +4,12 @@
 #include "tagar.h"
 #include "string.h"
 
-void createHastag(HashMap* hashmapHastag){
+HashMap* hashmapHastag;
+
+void setUpHastag(){
+    hashmapHastag = (HashMap*)malloc(sizeof(HashMap));
     for (int i = 0; i < CAPACITY; i++){
         hashmapHastag->tagar[i] = NULL;
-        // printf("index: %d\n",i);
     }
 }
 
@@ -90,3 +92,9 @@ void displayHastag(HashMap* hashmapHastag, char* hastag){
 
     }
 }
+// void hastagCleanupRoutine(){
+//     for (int i = 0; i < CAPACITY; i++){
+//         free(hashmapHastag->tagar[i]);
+//         hashmapHastag->tagar[i] = NULL;
+//     }
+// }

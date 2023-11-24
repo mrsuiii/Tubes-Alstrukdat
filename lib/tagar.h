@@ -30,6 +30,7 @@ typedef struct hashMap {
 } HashMap;
 typedef struct HashmapValue;
 
+extern HashMap* hashmapHastag;
 void createHastag(HashMap* hashmapHastag);
 int hash(char* hastag);
 HashmapValue* newHashmapValue(TweetId id,char* key);

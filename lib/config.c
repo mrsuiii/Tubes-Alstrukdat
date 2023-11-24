@@ -2,6 +2,16 @@
 #include "string.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "get_string.h"
+
+#include "user.h"
+#include "relation.h"
+#include "tweet.h"
+#include "draft.h"
+#include "thread.h"
+
+#include <sys/types.h>
+#include <sys/stat.h>
 
 static FILE* originalStdout;
 static FILE* fileWriteIO;
@@ -19,8 +29,8 @@ void finishWriteFile(){
 
 static FILE* fileReadIO;
 
-static boolean finished = false;
-static char currentChar;
+boolean finished = false;
+char currentChar;
 char charContainer[2] = " \0";
 void readChar(){
     fscanf(fileReadIO, "%c", &currentChar);
@@ -104,4 +114,51 @@ void readNext(char* str, char* mark, int max){
     }
 
     str[size] = '\0';
+}
+
+boolean checkDirectoryExsistence(char* path){
+    struct stat s;
+    return !stat(path, &s) && (s.st_mode & S_IFDIR);
+}
+
+boolean checkFileExist (char *filename) {
+  struct stat s;   
+  return (stat (filename, &s) == 0);
+}
+
+void saveIO(){
+    printf("Masukkan nama folder penyimpana:\n");
+
+    char basePath[1000];
+    get_string(basePath, 1000);
+
+    char userPath[MAX_PATH], tweetPath[MAX_PATH], replyPath[MAX_PATH], draftPath[MAX_PATH], threadPath[MAX_PATH];
+    if(!checkDirectoryExsistence(basePath)) mkdir(basePath, 0777);
+
+    string_append(basePath, "/pengguna.config", userPath, MAX_PATH);
+    string_append(basePath, "/kicauan.config", tweetPath, MAX_PATH);
+    string_append(basePath, "/balasan.config", replyPath, MAX_PATH);
+    string_append(basePath, "/draf.config", draftPath, MAX_PATH);
+    string_append(basePath, "/utas.config", threadPath, MAX_PATH);
+
+    startWriteFile(userPath);
+    userToConfig();
+    relationToConfig();
+    finishWriteFile();
+
+    startWriteFile(tweetPath);
+    tweetToConfig();
+    finishWriteFile();
+
+    startWriteFile(replyPath);
+    replyToConfig();
+    finishWriteFile();
+
+    startWriteFile(draftPath);
+    draftToConfig();
+    finishWriteFile();
+
+    startWriteFile(threadPath);
+    threadToConfig();
+    finishWriteFile();
 }

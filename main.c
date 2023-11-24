@@ -14,16 +14,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-boolean checkDirectoryExsistence(char* path){
-    struct stat s;
-    return !stat(path, &s) && (s.st_mode & S_IFDIR);
-}
-
-boolean checkFileExist (char *filename) {
-  struct stat s;   
-  return (stat (filename, &s) == 0);
-}
-
 int main(){
     setup();
 
@@ -137,9 +127,13 @@ int main(){
         else if(argv == 3 && string_equal(argc[0], "SAMBUNG_UTAS")) continueThreadAtIO(argc[1], argc[2]);
         else if(argv == 3 && string_equal(argc[0], "HAPUS_TAS")) deleteThreadAtIO(argc[1], argc[2]);
         else if(argv == 2 && string_equal(argc[0], "CETAK_UTAS")) displayThreadSeqIO(argc[1]);
+
         //bonus
         else if(argv == 1 && string_equal(argc[0], "FYB")) showFYB();
         else if(argv == 1 && string_equal(argc[0], "KELOMPOK_TEMAN")) showFriendGroup();
+
+        // Save
+        else if(argv == 1 && string_equal(argc[0], "SIMPAN")) saveIO();
         else {
             printf("Command \"%s%s%s\" dengan %d argumen tidak diketahui\n", GREEN, argc[0], NORMAL, argv - 1);
         }

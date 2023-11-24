@@ -1,5 +1,5 @@
 #ifndef KELOMPOKTEMAN_H
-#define KELOMPOKTEMAN__H
+#define KELOMPOKTEMAN_H
 #include "dsu.h"
 #include "user.h"
 #include "relation.h"

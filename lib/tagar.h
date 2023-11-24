@@ -28,7 +28,6 @@ typedef struct hashMap {
     HashmapValue* tagar[CAPACITY];
     int size;
 } HashMap;
-typedef struct HashmapValue;
 
 void createHastag(HashMap* hashmapHastag);
 int hash(char* hastag);

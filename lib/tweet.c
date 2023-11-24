@@ -63,18 +63,22 @@ void createTweetIO(){
         printf("Anda belum login!\n");
         return;
     }
-    printf("Masukkan kicauan: \n"); 
-    char content [MAX_TWEET] ; 
-    get_string(content, MAX_TWEET) ; 
+    char content[MAX_TWEET];
+    do{
+        printf("Masukkan kicauan:\n");
+        get_string(content,MAX_TWEET);
+        if (isAllBlank(content)){
+            printf("Kicauan tidak boleh hanya berisi spasi!\n");
+        } else if (string_include(content, "\n")){
+            printf("Kicauan tidak boleh mengandung newline\n");
+        }
+    } while(isAllBlank(content) || (string_include(content, "\n"))); 
+
 
     TweetId newTweetId = createTweet(content, loggedUser->id);
-    
-    if (isAllBlank(content)){
-        printf("Kicauan tidak boleh hanya berisi spasi!\n");
-    } else {         
-        printf("Selamat! kicauan telah diterbitkan!\n"); 
-        displayTweet(newTweetId);
-    }
+            
+    printf("Selamat! kicauan telah diterbitkan!\n"); 
+    displayTweet(newTweetId);
 }
 
 void editTweetIO(char* rawTweetId) {

@@ -59,9 +59,11 @@ void likeTweet(TweetId id){
 
 // Pemrosesan IO //
 void createTweetIO(){
-    if( loggedUser->id == 0 ){
-        printf("Anda belum login");
-        return ; 
+
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+
     }
     printf("Masukkan kicauan: \n"); 
     char content [MAX_TWEET] ; 
@@ -78,6 +80,10 @@ void createTweetIO(){
 }
 
 void editTweetIO(char* rawTweetId) {
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     int id;
 
     if(!string_to_integer(rawTweetId, &id)){
@@ -116,6 +122,11 @@ void editTweetIO(char* rawTweetId) {
 }
 
 void likeTweetIO(char* rawTweetId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
+
     int id;
 
     if(!string_to_integer(rawTweetId, &id)){

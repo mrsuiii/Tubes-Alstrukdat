@@ -110,6 +110,10 @@ void displaySinglePrivateReply(ReplyPointer reply, int t){
 }
 
 void displayReplyRecurIO(ReplyNodePointer start, int tab){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     ReplyNodePointer curr = start;
     while (curr != NULL){
         ReplyPointer reply = &(curr->reply);
@@ -131,6 +135,10 @@ void displayReplyRecurIO(ReplyNodePointer start, int tab){
 }
 
 void displayReplyIO(char* rawTweetId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     TweetId tweetId;
 
     if(!string_to_integer(rawTweetId, &tweetId)){
@@ -170,6 +178,10 @@ void deleteReply(ReplyNodePointer target){
 }
 
 void createReplyIO(char* rawTweetId, char* rawReplyId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     TweetId tweetId; ReplyId replyId;
 
     if(!string_to_integer(rawTweetId, &tweetId)){
@@ -214,6 +226,10 @@ void createReplyIO(char* rawTweetId, char* rawReplyId){
 }
 
 void deleteReplyIO(char* rawTweetId, char* rawReplyId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     TweetId tweetId; ReplyId replyId;
 
     if(!string_to_integer(rawTweetId, &tweetId)){

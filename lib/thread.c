@@ -8,8 +8,7 @@
 #include "reply.h"
 #include "string.h"
 #include "config.h"
-#include "ADT/datetime.h"
-
+#include "getCurrentTime.h"
 
 Threads threads ; 
 
@@ -33,8 +32,9 @@ boolean isThread(TweetPointer tweetPointer){
 
 // create a new thread and return the pointer 
 ThreadPointer newThread(char* content){
-    ThreadPointer thread = (ThreadPointer) malloc (sizeof(ThreadPointer));
+    ThreadPointer thread = (ThreadPointer) malloc (sizeof(Thread));
     string_copy(content, thread->content, MAX_THREADS);
+    getCurrentDATETIME(thread->dateTime);
     thread->nextThread = NULL ; 
     return thread ; 
 }
@@ -93,7 +93,6 @@ void continueThreadAt(TweetPointer mainThread, int threadIdx, char* content) {
 // F.S : delete the thread of mainThread at idx == threadIdx
 void deleteThreadAt(TweetPointer mainThread, int threadIdx){
     if (threadIdx == 1 ){
-        printf("hehe;");
         ThreadPointer first = mainThread->firstThread;
         mainThread->firstThread = first->nextThread;
         free(first);
@@ -109,6 +108,10 @@ void deleteThreadAt(TweetPointer mainThread, int threadIdx){
 // I.S : mainThreadId is a valid thread 
 // F.S : display the tweet with ThreadId == mainThreadId 
 void displayThreadSeqIO(char* rawThreadId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     ThreadId mainThreadId;
 
     if(!string_to_integer(rawThreadId, &mainThreadId)){
@@ -116,11 +119,6 @@ void displayThreadSeqIO(char* rawThreadId){
         return;
     }
 
-    printf("\n");
-    if (!loggedUser){
-        printf("Anda belum login\n");
-        return ; 
-    }
 
     if (mainThreadId > threads.nEff || mainThreadId < 1){
         printf("Utas tidak ditemukan!\n");
@@ -132,11 +130,15 @@ void displayThreadSeqIO(char* rawThreadId){
         } else {
             ThreadPointer currThread = mainThread->firstThread;
             int count = 1 ; 
-            displayTweet(mainThread->id);
+            printf("| ID: %d\n", mainThread-> id);
+            printf("| %s\n", user-> name);
+            printf("| %s\n", mainThread->dateTime);
+            printf("| %s\n\n", mainThread -> content);
+
             while (currThread != NULL){
                 printf("   | INDEX: %d\n", count);
                 printf("   | %s\n", user->name);
-                // printf("| %s\n", tweet->datetime);
+                printf("   | %s\n", currThread->dateTime);
                 printf("   | %s\n\n",  currThread -> content);
                 currThread = currThread->nextThread;
 
@@ -151,7 +153,10 @@ void displayThreadSeqIO(char* rawThreadId){
 // I.S bebas 
 // F.S menampilkan pesan kesalahan jika parameter tidak valid atau menginsert thread baru pada parameter yang diberikan
 void continueThreadAtIOParsed(ThreadId mainThreadId, int threadIdx){
-    printf("\n");
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     if (!(isMainThreadIdValid(mainThreadId)) && mainThreadId != 1){
         printf("Utas tidak ditemukan!\n");
     } else if (!(isThreadIdxValid(mainThreadId, threadIdx-1)) && threadIdx!=1){
@@ -173,6 +178,10 @@ void continueThreadAtIOParsed(ThreadId mainThreadId, int threadIdx){
 }
 
 void continueThreadAtIO(char* rawMainThreadId, char* rawThreadIdx){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     ThreadId mainThreadId; int threadIdx;
 
     if(!string_to_integer(rawMainThreadId, &mainThreadId)){
@@ -191,6 +200,10 @@ void continueThreadAtIO(char* rawMainThreadId, char* rawThreadIdx){
 // I.S bebas 
 // F.S menampilkan pesan kesalahan jika parameter tidak valid atau menghapus thread pada parameter yang diberikan
 void deleteThreadAtIO(char* rawMainThreadId, char* rawThreadIdx){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     ThreadId mainThreadId; int threadIdx;
 
     if(!string_to_integer(rawMainThreadId, &mainThreadId)){
@@ -218,13 +231,16 @@ void deleteThreadAtIO(char* rawMainThreadId, char* rawThreadIdx){
 // I.S bebas
 // F.S menjadikan tweet dengan Id == tweetId menjadi sebuah thread 
 void makeMainThreadIO(char* rawTweetId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     TweetId tweetId;
 
     if(!string_to_integer(rawTweetId, &tweetId)){
         printf("\"%s\" bukanlah id tweet yang valid\n", rawTweetId);
         return;
     }
-
 
     printf("\n");
     if (tweetId < 1 || tweetId > tweets.nEff){
@@ -265,7 +281,7 @@ void threadToConfig(){
             do{
               printf("%s\n",currThread->content);
               printf("%s\n", userName);
-              printf("%s\n", "DATETIME");
+              printf("%s\n", currThread->dateTime);
               currThread = currThread->nextThread;
             } while (currThread != NULL);
         }
@@ -276,19 +292,31 @@ void configToThread(){
     int tweetCount = readInt(); nextLine();
 
     for(int i = 0; i < tweetCount; ++i){
-        TweetId tweet = readInt(); nextLine();
+        TweetId tweetId = readInt(); nextLine();
+        TweetPointer tweet = getTweet(tweetId);
+        makeMainThread(tweet);
 
-        int threadCount = readInt();
+        int threadCount = readInt(); nextLine();
+        ThreadPointer currThread = (ThreadPointer) malloc (sizeof(Thread));
         for(int j = 0; j < threadCount; ++j){
-            char content[MAX_THREADS];
-            readTill(content, "\n", MAX_THREADS);
+            readTill(currThread->content, "\n", MAX_THREADS); nextLine();
 
             char name[MAX_NAME];
-            readTill(name, "\n", MAX_NAME);
+            readTill(name, "\n", MAX_NAME); nextLine();
 
-            char date[1000];
-            readTill(date, "\n", 1000);
+            readTill(currThread->dateTime, "\n", 20); nextLine();
 
+            if (j == 0 ){
+                tweet->firstThread = currThread; 
+            } else {
+                if (j == threadCount -1){
+                    currThread->nextThread = NULL ; 
+                } else {
+                    ThreadPointer newThread = (ThreadPointer) malloc (sizeof(Thread));
+                    currThread->nextThread = newThread;
+                    currThread = newThread ; 
+                }
+            }
         }
     }
 }

@@ -5,13 +5,13 @@
 #include "string.h"
 #include "get_string.h"
 #include "ADT/boolean.h"
-#include "ADT/datetime.h"
+#include "getCurrentTime.h"
 
 typedef struct Draft* DraftAddress;
 typedef struct Draft{
     char content[MAX_TWEET];
     DraftAddress next;    
-    char* datetime;
+    char dateTime[MAX_DATETIME];
 } Draft;
 
 /* Create new empty Draft */
@@ -49,6 +49,7 @@ void readDraftCommandIO();
 
 /* Convert Draft data to Config */
 void draftToConfig();
+void configToDraft();
 
 /* Memberishkan draft */
 void draftCleanUpRoutine();

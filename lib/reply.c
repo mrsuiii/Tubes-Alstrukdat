@@ -4,6 +4,8 @@
 #include "string.h"
 #include "relation.h"
 #include "get_string.h"
+#include "config.h"
+#include "getCurrentTime.h"
 
 void insertLastReplies(Replies* base, ReplyNodePointer value){
     if(*base == NULL){
@@ -26,7 +28,7 @@ ReplyId createReply(char* content, UserId author, TweetId tweetId, Replies* base
     reply->id = tweet->lastReplyId;
     string_copy(content, (newSubreply->reply).content, MAX_REPLY);
     reply->author = author;
-    // TODO: Datetime
+    getCurrentDATETIME(reply->dateTime);
 
     if(base == NULL) return -1;
     insertLastReplies(base, newSubreply);
@@ -96,8 +98,7 @@ void pt(int tab){
 void displaySingleReply(ReplyPointer reply, User* author, int t){
     pt(t); printf("| ID = %d\n", reply->id);
     pt(t); printf("| %s\n", author->name);
-    // TODO: Date
-    pt(t); printf("| date\n");
+    pt(t); printf("| %s\n", reply->dateTime);
     pt(t); printf("| %s\n", reply->content);
 }
 
@@ -109,6 +110,10 @@ void displaySinglePrivateReply(ReplyPointer reply, int t){
 }
 
 void displayReplyRecurIO(ReplyNodePointer start, int tab){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     ReplyNodePointer curr = start;
     while (curr != NULL){
         ReplyPointer reply = &(curr->reply);
@@ -130,6 +135,10 @@ void displayReplyRecurIO(ReplyNodePointer start, int tab){
 }
 
 void displayReplyIO(char* rawTweetId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     TweetId tweetId;
 
     if(!string_to_integer(rawTweetId, &tweetId)){
@@ -169,6 +178,10 @@ void deleteReply(ReplyNodePointer target){
 }
 
 void createReplyIO(char* rawTweetId, char* rawReplyId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     TweetId tweetId; ReplyId replyId;
 
     if(!string_to_integer(rawTweetId, &tweetId)){
@@ -213,6 +226,10 @@ void createReplyIO(char* rawTweetId, char* rawReplyId){
 }
 
 void deleteReplyIO(char* rawTweetId, char* rawReplyId){
+    if(!loggedUser){
+        printf("Anda belum login!\n");
+        return;
+    }
     TweetId tweetId; ReplyId replyId;
 
     if(!string_to_integer(rawTweetId, &tweetId)){
@@ -254,7 +271,8 @@ void repliesToConfig(Replies replies, int parent){
     while(current){
         Reply reply = current->reply;
 
-        printf("%d %d\n%s\n%s\n", parent, reply.id, reply.content, getUser(reply.author)->name);
+        User *user = getUser(reply.author);
+        printf("%d %d\n%s\n%s\n%s\n", parent, reply.id, reply.content, user != NULL ? getUser(reply.author)->name : "UNKNOWN_USER", reply.dateTime);
 
         repliesToConfig(reply.replies, reply.id);
         current = current->next;
@@ -278,5 +296,38 @@ void replyToConfig(){
         printf("%d\n", tweet[i]->id);
         printf("%d\n", countReply(tweet[i]->id));
         repliesToConfig(tweet[i]->replies, -1);
+    }
+}
+
+void configToReply(){
+    int tweetCount = readInt(); nextLine();
+
+    for(int i = 0; i < tweetCount; ++i){
+        TweetId tweetId = readInt(); nextLine();
+
+        int maxId = 0;
+        int replyCount = readInt(); nextLine();
+        for(int j = 0; j < replyCount; ++j){
+            ReplyId parent = readInt(); nextWord();
+            ReplyId id = readInt(); nextLine();
+
+            if(id > maxId) maxId = id;
+
+            char content[MAX_REPLY];
+            readTill(content, "\n", MAX_REPLY); nextLine();
+
+            char name[MAX_USER];
+            readTill(name, "\n", MAX_USER); nextLine();
+
+            char datetime[20];
+            readTill(datetime, "\n", 20); nextLine();
+
+            ReplyPointer res;
+            createReply(content, getUserIdByName(name), tweetId, getReplies(tweetId, parent), &res);
+            res->id = id;
+            string_copy(datetime, res->dateTime, MAX_DATETIME);
+        }
+
+        getTweet(tweetId)->lastReplyId = maxId;
     }
 }

@@ -1,8 +1,8 @@
 #ifndef KELOMPOKTEMAN_H
 #define KELOMPOKTEMAN__H
 #include "dsu.h"
-#include "adt.h"
-
+#include "user.h"
+#include "relation.h"
 
 void friendGroup(DisjointSet set,int currentUser );
 

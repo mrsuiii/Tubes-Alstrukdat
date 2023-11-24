@@ -8,16 +8,78 @@
 #include "lib/string.h"
 #include "lib/draft.h"
 #include "lib/thread.h"
+#include "lib/display.h"
+#include "lib/max_heap.h"
+#include "lib/kelompokteman.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+
+boolean checkDirectoryExsistence(char* path){
+    struct stat s;
+    return !stat(path, &s) && (s.st_mode & S_IFDIR);
+}
+
+boolean checkFileExist (char *filename) {
+  struct stat s;   
+  return (stat (filename, &s) == 0);
+}
 
 int main(){
     setup();
 
-    startReadFile("./config/pengguna.config");
+    char basePath[1000], userPath[MAX_PATH], tweetPath[MAX_PATH], replyPath[MAX_PATH], draftPath[MAX_PATH], threadPath[MAX_PATH];
+    while(true){
+        printf("Masukan path konfigurasi: ");
+        get_string(basePath, 1000);
+
+        if(!checkDirectoryExsistence(basePath)){
+            printf("Directory tidak ditemukan\n");
+            continue;
+        }
+
+        char *err = "";
+
+        string_append(basePath, "/pengguna.config", userPath, MAX_PATH);
+        if(!checkFileExist(userPath)) err = "pengguna";
+
+        string_append(basePath, "/kicauan.config", tweetPath, MAX_PATH);
+        if(!checkFileExist(tweetPath)) err = "kicauan";
+
+        string_append(basePath, "/balasan.config", replyPath, MAX_PATH);
+        if(!checkFileExist(replyPath)) err = "balasan";
+
+        string_append(basePath, "/draf.config", draftPath, MAX_PATH);
+        if(!checkFileExist(draftPath)) err = "draf";
+
+        string_append(basePath, "/utas.config", threadPath, MAX_PATH);
+        if(!checkFileExist(threadPath)) err = "utas";
+
+        if(string_length(err) != 0){
+            printf("Konfigurasi %s tidak ditemukan\n", err);
+            continue;
+        } else {
+            printf("Konfigurasi berhasil dimuat\n");
+            break;
+        }
+    }
+
+    startReadFile(userPath);
     configToUser();
     configToRelation();
 
-    startReadFile("./config/kicauan.config");
+    startReadFile(tweetPath);
     configToTweet();
+
+    startReadFile(replyPath);
+    configToReply();
+
+    startReadFile(draftPath);
+    configToDraft();
+
+    startReadFile(threadPath);
+    configToThread();
+
+    printLogo();
 
     while(true){
         printf("> ");
@@ -35,8 +97,12 @@ int main(){
             break;
         } 
 
+        if(argv > 1 && string_length(argc[1]) == 0) argv = 1;
+
+        if (argv > 2 && string_length(argc[2]) == 0) argv = 2;
+
         // User
-        else if(argv == 1 && string_equal(argc[0], "DAFTAR")) signUp();
+        if(argv == 1 && string_equal(argc[0], "DAFTAR")) signUp();
         else if(argv == 1 && string_equal(argc[0], "MASUK")) signIn();
         else if(argv == 1 && string_equal(argc[0], "KELUAR")) signOut();
 
@@ -71,9 +137,11 @@ int main(){
         else if(argv == 3 && string_equal(argc[0], "SAMBUNG_UTAS")) continueThreadAtIO(argc[1], argc[2]);
         else if(argv == 3 && string_equal(argc[0], "HAPUS_TAS")) deleteThreadAtIO(argc[1], argc[2]);
         else if(argv == 2 && string_equal(argc[0], "CETAK_UTAS")) displayThreadSeqIO(argc[1]);
-
+        //bonus
+        else if(argv == 1 && string_equal(argc[0], "FYB")) showFYB();
+        else if(argv == 1 && string_equal(argc[0], "KELOMPOK_TEMAN")) showFriendGroup();
         else {
-            printf("Command \"%s\" dengan %d argumen tidak diketahui\n", argc[0], argv);
+            printf("Command \"%s%s%s\" dengan %d argumen tidak diketahui\n", GREEN, argc[0], NORMAL, argv - 1);
         }
         
     }
